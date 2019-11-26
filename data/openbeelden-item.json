@@ -1,0 +1,139 @@
+{
+  "_index": "open-beelden-beeldengeluid",
+  "_type": "rdf",
+  "_id": "oai:openimages.eu:74462",
+  "_score": null,
+  "_source": {
+    "@context": {
+      "xsi": "http://www.w3.org/2001/XMLSchema-instance",
+      "oi": "http://www.openbeelden.nl/oai/",
+      "cc": "http://creativecommons.org/ns#",
+      "dc": "http://purl.org/dc/elements/1.1/",
+      "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+      "oaipmh": "http://www.openarchives.org/OAI/2.0/",
+      "oai_oi": "http://www.openbeelden.nl/feeds/oai/",
+      "dcterms": "http://purl.org/dc/terms/"
+    },
+    "@graph": {
+      "dcterms:hasFormat": [
+        "https://www.openbeelden.nl/files/74/74474.74461.BG_9804.mp4",
+        "https://www.openbeelden.nl/files/74/74510.74461.BG_9804.m3u8",
+        "https://www.openbeelden.nl/files/74/74464.74461.BG_9804.mpeg",
+        "https://www.openbeelden.nl/files/74/74470.74461.BG_9804.ogv",
+        "https://www.openbeelden.nl/files/74/74461.BG_9804.mpg",
+        "https://www.openbeelden.nl/files/74/74478.74461.BG_9804.webm",
+        "https://www.openbeelden.nl/images/604108/Fabricageproces_van_kleurpotloden_%280_40%29.png",
+        "https://www.openbeelden.nl/files/74/74480.74461.BG_9804.ts",
+        "https://www.openbeelden.nl/files/74/74476.74461.BG_9804.mp4",
+        "https://www.openbeelden.nl/files/74/74472.74461.BG_9804.ogv"
+      ],
+      "dcterms:subject": [
+        {
+          "@value": "writing materials",
+          "@language": "en"
+        },
+        {
+          "@value": "schrijfwaren",
+          "@language": "nl"
+        },
+        {
+          "@value": "machines",
+          "@language": "nl"
+        },
+        {
+          "@value": "machines",
+          "@language": "en"
+        }
+      ],
+      "dcterms:title": [
+        {
+          "@value": "The making of coloured pencils",
+          "@language": "en"
+        },
+        {
+          "@value": "Fabricageproces van kleurpotloden",
+          "@language": "nl"
+        }
+      ],
+      "@id": "oai:openimages.eu:74462",
+      "dcterms:description": [
+        {
+          "@value": "Bioscoopjournaals waarin Nederlandse onderwerpen van een bepaalde week worden gepresenteerd.",
+          "@language": "nl"
+        },
+        {
+          "@value": "Newsreels in which Dutch subjects of a certain week are presented.",
+          "@language": "en"
+        }
+      ],
+      "cc:attributionURL": "https://www.openbeelden.nl/media/74462",
+      "cc:attributionName": {
+        "@value": "Polygoon-Profilti (producent) / Nederlands Instituut voor Beeld en Geluid (beheerder)",
+        "@language": "nl"
+      },
+      "dcterms:mediator": {
+        "@value": "Wikimedia Commons",
+        "@language": "nl"
+      },
+      "dcterms:abstract": [
+        {
+          "@value": "Aandacht voor het productieproces van kleurpotloden. SHOTS: diversen van geheel gemechaniseerd productieproces o.a. infrezen van plankjes cederhout, inspuiten van lijm in gleuven, machinaal opleggen van de stiftjes, opplakken van een tweede laag cederhout, het bijfrezen van de potloden, voorzien van een gekleurde buitenlaag door lakmachine, bedrukken potloden met typenummer door stempelmachine, slijpen van de potloden.",
+          "@language": "nl"
+        },
+        {
+          "@value": "report on the production process of coloured pencils. SHOTS: several of the fully automated production process a.o. milling of planks of cedar wood, putting glue in the grooves, sticking a second layer of cedar wood onto it, placing the pencils on it mechanically, putting a coloured outside layer with a lacquer machine, marking the pencils with the type number by a stamp machine, sharpening the pencils.",
+          "@language": "en"
+        }
+      ],
+      "dcterms:identifier": "32836",
+      "dcterms:source": {
+        "@value": "BG_9804",
+        "@language": "nl"
+      },
+      "dcterms:spatial": [
+        {
+          "@value": "Netherlands",
+          "@language": "en"
+        },
+        {
+          "@value": "Nederland",
+          "@language": "nl"
+        }
+      ],
+      "dcterms:type": "Moving Image",
+      "dcterms:date": "1976-01-01",
+      "cc:license": "https://creativecommons.org/licenses/by-sa/3.0/nl/",
+      "dcterms:language": "nl",
+      "dcterms:extent": "PT1M21S",
+      "dcterms:alternative": [
+        {
+          "@value": "Weeknummer: 76-47",
+          "@language": "nl"
+        },
+        {
+          "@value": "Week number: 76-47",
+          "@language": "en"
+        }
+      ],
+      "dcterms:creator": [
+        {
+          "@value": "Polygoon-Profilti (producer) / Netherlands Institute for Sound and Vision (curator)",
+          "@language": "en"
+        },
+        {
+          "@value": "Polygoon-Profilti (producent) / Nederlands Instituut voor Beeld en Geluid (beheerder)",
+          "@language": "nl"
+        }
+      ],
+      "dcterms:publisher": "https://www.openbeelden.nl/users/beeldengeluid"
+    },
+    "mediaType": [
+      "video"
+    ],
+    "curatedDate": "1976-01-01",
+    "playable": true
+  },
+  "sort": [
+    0
+  ]
+}
