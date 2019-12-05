@@ -2,8 +2,7 @@
 
 ## Data
 
-The `data/` directory
- contains sample data from the public [Open Beelden](https://openbeelden.nl/) collection, acquired from the ElasticSearch API via the (internal) [labs notebooks](https://github.com/beeldengeluid/labs-notebooks):
+The `src/assets/data/` directory contains sample data from the public [Open Beelden](https://openbeelden.nl/) collection, acquired from the ElasticSearch API via the (internal) [labs notebooks](https://github.com/beeldengeluid/labs-notebooks):
 
 - `openbeelden-item.json`: example item pretty printed for manual inspection
 - `openbeelden-items-1k.json`: sample data set of 1000 items (containing all meta data fields)
