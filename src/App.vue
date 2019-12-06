@@ -5,9 +5,9 @@
       <p>
         Currently showing <span class="ph1 bg-purple">{{itemsSelected.length}} items</span>, <span class="ph1 bg-orange">{{noThumbsPerRow}} per row</span>, <span v-if="showTitle">along with</span><span v-if="!showTitle">without</span> <span class="ph1 bg-green">their titles</span>.
       </p>
-      <div class="dib h2 v-mid mr4 pa1 bg-purple">
+      <div class="dib mr4 pa1 bg-purple">
         <label for="selectionEndRange">
-          <span class="mr2">Selection size</span>
+          <span class="mr2 v-top">Selection size</span>
           <input 
             id="selectionEndRange"
             type="range" 
@@ -15,13 +15,13 @@
             max="12" 
             step="1" 
             v-model="selectionEndStep" 
-            class="mr2" 
+            class="mr2 v-top" 
           >
         </label>
       </div>
-      <div class="dib h2 v-mid mr4 pa1 bg-orange">
+      <div class="dib mr4 pa1 bg-orange">
         <label for="noThumbsRange">
-          <span class="mr2">Thumbs per row</span>
+          <span class="mr2 v-top">Thumbs per row</span>
           <input 
             id="noThumbsRange"
             type="range" 
@@ -29,15 +29,15 @@
             max="50" 
             step="1" 
             v-model="noThumbsPerRow" 
-            class="mr2" 
+            class="mr2 v-top" 
           > 
-          <input type="number" v-model="noThumbsPerRow" class="w3" />
+          <input type="number" v-model="noThumbsPerRow" class="w3 v-top" />
         </label>
       </div>
-      <div class="dib h2 v-mid mr4 pa1 bg-green">
+      <div class="dib mr4 pa1 bg-green">
         <label for="showTitleCheckbox">
-          Show titles
-          <input type="checkbox" id="showTitleCheckbox" v-model="showTitle">
+          <span class="mr2 v-top">Show titles</span>
+          <input class="v-top" type="checkbox" id="showTitleCheckbox" v-model="showTitle">
         </label>
       </div>
     </div>
