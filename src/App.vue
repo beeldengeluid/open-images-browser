@@ -2,8 +2,10 @@
   <div id="app" class="ma3 mt5 tl ">
     <h1>Open Beelden Browser</h1>
     <div class="mv3">
-      <h2>Controls</h2>
-      <div class="dib mr4">
+      <p>
+        Currently showing <span class="ph1 bg-purple">{{itemsSelected.length}} items</span>, <span class="ph1 bg-orange">{{noThumbsPerRow}} per row</span>, <span v-if="showTitle">along with</span><span v-if="!showTitle">without</span> <span class="ph1 bg-green">their titles</span>.
+      </p>
+      <div class="dib h2 v-mid mr4 pa1 bg-purple">
         <label for="selectionEndRange">
           <span class="mr2">Selection size</span>
           <input 
@@ -15,11 +17,9 @@
             v-model="selectionEndStep" 
             class="mr2" 
           >
-          <span>{{selectionEnd}}</span>
-          <!-- <input type="number" v-model="selectionEnd" class="w3" /> -->
         </label>
       </div>
-      <div class="dib mr4">
+      <div class="dib h2 v-mid mr4 pa1 bg-orange">
         <label for="noThumbsRange">
           <span class="mr2">Thumbs per row</span>
           <input 
@@ -34,7 +34,7 @@
           <input type="number" v-model="noThumbsPerRow" class="w3" />
         </label>
       </div>
-      <div class="dib mr4">
+      <div class="dib h2 v-mid mr4 pa1 bg-green">
         <label for="showTitleCheckbox">
           Show titles
           <input type="checkbox" id="showTitleCheckbox" v-model="showTitle">
@@ -42,7 +42,6 @@
       </div>
     </div>
     <div class="mv3 relative">
-      <h2>Collection Items</h2>
       <div 
         class="thumbsContainer" 
       >
