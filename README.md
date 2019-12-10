@@ -1,5 +1,23 @@
 # MediaScape-kickoff
 
+## Installation
+
+install dependencies
+
+    npm install
+
+serve development version
+
+    npm run serve
+
+build production version to `/dist` directory
+
+    npm run build
+
+then serve `/dist`, e.g. using [`serve`](https://github.com/zeit/serve)
+
+    serve -s dist
+
 ## Data
 
 The `src/assets/data/` directory contains sample data from the public [Open Beelden](https://openbeelden.nl/) collection, acquired from the ElasticSearch API via the (internal) [labs notebooks](https://github.com/beeldengeluid/labs-notebooks):
