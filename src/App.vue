@@ -1,13 +1,21 @@
 <template>
-  <div id="app" class="ma3 mt5 tl ">
+  <div id="app" class="ma3 mt5 tl">
     <h1>Open Beelden Browser</h1>
     <div class="mv3">
       <p>
-        Currently showing <span class="ph1 bg-purple">{{itemsSelected.length}} items</span>, <span class="ph1 bg-orange">{{noThumbsPerRow}} per row</span>, <span v-if="showTitle">along with</span><span v-if="!showTitle">without</span> <span class="ph1 bg-green">their titles</span>.
+        Currently showing 
+        <span class="ph1 bg-purple">{{itemsSelectedSorted.length}}</span> items, 
+        <span class="ph1 bg-orange">{{noThumbsPerRow}}</span> per row
+        <span v-if="showTitle || showDate">, with their </span>
+        <span v-if="showTitle" class="ph1 bg-green">titles</span>
+        <span v-if="showTitle && showDate"> and </span>
+        <span v-if="showDate" class="ph1 bg-green">dates</span>, 
+        sorted by
+        <span class="ph1 bg-blue font-mono">{{sortFieldTitles[sortBy]}}</span>.
       </p>
-      <div class="dib mr4 pa1 bg-purple">
+      <div class="dib mr3 mt3 pa1 bg-purple">
         <label for="selectionEndRange">
-          <span class="mr2 v-top">Selection size</span>
+          <span class="mr2">Selection size</span>
           <input 
             id="selectionEndRange"
             type="range" 
@@ -15,13 +23,13 @@
             max="12" 
             step="1" 
             v-model="selectionEndStep" 
-            class="mr2 v-top" 
+            class="mr2" 
           >
         </label>
       </div>
-      <div class="dib mr4 pa1 bg-orange">
+      <div class="dib mr3 mt3 pa1 bg-orange">
         <label for="noThumbsRange">
-          <span class="mr2 v-top">Thumbs per row</span>
+          <span class="mr2">Thumbs per row</span>
           <input 
             id="noThumbsRange"
             type="range" 
@@ -29,15 +37,33 @@
             max="50" 
             step="1" 
             v-model="noThumbsPerRow" 
-            class="mr2 v-top" 
+            class="mr2" 
           > 
-          <input type="number" v-model="noThumbsPerRow" class="w3 v-top" />
+          <input type="number" v-model="noThumbsPerRow" class="w3 f7" />
         </label>
       </div>
-      <div class="dib mr4 pa1 bg-green">
+      <div class="dib mr3 mt3 pa1 bg-green">
         <label for="showTitleCheckbox">
-          <span class="mr2 v-top">Show titles</span>
-          <input class="v-top" type="checkbox" id="showTitleCheckbox" v-model="showTitle">
+          <input class="mr1" type="checkbox" id="showTitleCheckbox" v-model="showTitle">
+          <span>Show titles</span>
+        </label>
+      </div>
+      <div class="dib mr3 mt3 pa1 bg-green">
+        <label for="showDateCheckbox">
+          <input class="mr1" type="checkbox" id="showDateCheckbox" v-model="showDate">
+          <span>Show dates</span>
+        </label>
+      </div>
+      <div class="dib mr3 mt3 pa1 bg-blue">
+        Sort by
+        <label 
+          v-for="sortField in sortFields" 
+          v-bind:key="sortField"
+          :for="sortField"
+          class="pa1 font-mono" 
+        >
+          <input type="radio" :id="sortField" :value="sortField" v-model="sortBy">
+          {{sortFieldTitles[sortField]}}
         </label>
       </div>
     </div>
@@ -46,22 +72,20 @@
         class="thumbsContainer" 
       >
         <div
-          v-for="(item, index) in itemsSelected" 
-          v-bind:key="item._id"
+          v-for="item in itemsSelectedSorted" 
+          v-bind:key="item['@id']"
           :style="{ width: 100/noThumbsPerRow + '%' }"
           class="thumbWrapper dib relative overflow-hidden v-top"
         >
           <img
-            :src="thumbs[index]"
+            :src="getThumb(item)"
             :title="item['@id']"
             class="mb-1"
           >
-          <span 
-            v-if="showTitle"
-            class="absolute left-0 top-0 pa1 bg-black-50"
-          >
-            {{titles[index]}}
-          </span>
+          <div v-if="showTitle || showDate" class="absolute left-0 top-0 pa1 bg-black-50">
+            <div v-if="showTitle">{{getTitle(item)}}</div>
+            <div v-if="showDate">{{item['dcterms:date']}}</div>
+          </div>          
         </div>
       </div>
     </div>
@@ -71,55 +95,61 @@
 <script>
 import './../node_modules/tachyons/css/tachyons.min.css';
 // import _ from 'lodash';
-import dataItems from "./assets/data/openbeelden-items-hasFormat.json";
-
+import dataItems from "./assets/data/openbeelden-items-date-hasFormat-spatial-subject.json";
 
 export default {
-  name: 'Open Beelden Browser',
+  name: 'OpenBeeldenBrowser',
   data: function () {
     return {
       items: dataItems,
       noThumbsPerRow: 10,
       showTitle: true,
+      showDate: false,
       selectionBegin: 0,
       selectionEndStep: 5,
+      sortBy: '@id',
+      sortFieldTitles: {
+        '@id': 'id',
+        'dcterms:date': 'date',
+      },
     }
   },
   computed: {
     selectionEnd: function () {
       return Math.pow(2, this.selectionEndStep)
     },
-    itemsSelected: function () {
-      return dataItems.slice(this.selectionBegin,this.selectionEnd)
+    itemsSelectedSorted: function () {
+      return this.items
+              .slice(this.selectionBegin,this.selectionEnd)
+              .sort((a, b) => (a[this.sortBy] > b[this.sortBy]) ? 1 : -1)
     },
-    thumbs: function () {
-      return this.items.map(item => {
-        let hasFormat = item['dcterms:hasFormat']
-        let thumbs = hasFormat.filter(format => format.endsWith('.png'))
-        return thumbs[0]
-      })
+    sortFields: function () {
+      return Object.keys(this.sortFieldTitles)
     },
-    titles: function () {
-      return this.items.map(item => {
-        let titles = item['dcterms:title']
-        
-        if (Array.isArray(titles)) {
-
-          let titlesNL = titles.filter(title => title['@language'] == "nl")
-          if (titlesNL.length) {
-            return titlesNL[0]['@value']
-          } else {
-            let titlesEN = titles.filter(title => title['@language'] == "en")
-            if (titlesEN.length) {
-              return titlesEN[0]['@value']
-            } else {
-              return "No Title"
-            }
-          }
+  },
+  methods: {
+    getThumb(item){
+      let hasFormat = item['dcterms:hasFormat']
+      let thumbs = hasFormat.filter(format => format.endsWith('.png'))
+      return thumbs[0]
+    },
+    getTitle(item){
+      let titles = item['dcterms:title']
+      if (Array.isArray(titles)) {
+        let titlesNL = titles.filter(title => title['@language'] == "nl")
+        if (titlesNL.length) {
+          return titlesNL[0]['@value']
         } else {
-          return titles['@value']
+          let titlesEN = titles.filter(title => title['@language'] == "en")
+          if (titlesEN.length) {
+            return titlesEN[0]['@value']
+          } else {
+            return "No Title"
+          }
         }
-      })
+      } else {
+        return titles['@value']
+      }
     },
   }
 }
