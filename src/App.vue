@@ -69,26 +69,16 @@
       </div>
     </div>
     <div class="mv3 relative">
-      <div 
-        class="thumbsContainer" 
-      >
-        <div
-          v-for="item in itemsSelectedSorted" 
-          v-bind:key="item['@id']"
-          :style="{ width: 100/noThumbsPerRow + '%' }"
-          class="thumbWrapper dib relative overflow-hidden v-top"
-        >
-          <img
-            :src="getThumb(item)"
-            :title="item['@id']"
-            class="mb-1"
-          >
-          <div v-if="showTitle || showDate" class="absolute left-0 top-0 pa1 bg-black-50">
-            <div v-if="showTitle">{{getTitle(item)}}</div>
-            <div v-if="showDate">{{item['dcterms:date']}}</div>
-          </div>          
-        </div>
-      </div>
+      <CollectionItem
+        v-for="item in itemsSelectedSorted" 
+        v-bind:key="item['@id']"
+        :width= "100/noThumbsPerRow + '%'"
+        :thumbSrc= "getThumb(item)"
+        :title= "getTitle(item)"
+        :date= "item['dcterms:date']"
+        :showTitle= "showTitle"
+        :showDate= "showDate"
+      />
     </div>
   </div>
 </template>
@@ -97,6 +87,7 @@
 import './../node_modules/tachyons/css/tachyons.min.css';
 // import _ from 'lodash';
 import dataItems from "./assets/data/openbeelden-items-date-hasFormat-spatial-subject.json";
+import CollectionItem from "./components/CollectionItem";
 
 export default {
   name: 'OpenBeeldenBrowser',
@@ -114,6 +105,9 @@ export default {
         'dcterms:date': 'date',
       },
     }
+  },
+  components: {
+    CollectionItem,
   },
   computed: {
     selectionEnd: function () {
