@@ -5,12 +5,13 @@
       <p>
         Currently showing 
         <span class="ph1 bg-purple">{{itemsSelectedSorted.length}}</span> items, 
-        <span class="ph1 bg-orange">{{noThumbsPerRow}}</span> per row
+        <span class="ph1 bg-orange">{{noThumbsPerRow}}</span>
+        <span> per row</span>
         <span v-if="showTitle || showDate">, with their </span>
         <span v-if="showTitle" class="ph1 bg-green">titles</span>
         <span v-if="showTitle && showDate"> and </span>
-        <span v-if="showDate" class="ph1 bg-green">dates</span>, 
-        sorted by
+        <span v-if="showDate" class="ph1 bg-green">dates</span>
+        <span>, sorted by </span>
         <span class="ph1 bg-blue font-mono">{{sortFieldTitles[sortBy]}}</span>.
       </p>
       <div class="dib mr3 mt3 pa1 bg-purple">
