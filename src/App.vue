@@ -7,10 +7,10 @@
         <span class="ph1 bg-purple">{{itemsSelectedSorted.length}}</span> items, 
         <span class="ph1 bg-orange">{{noThumbsPerRow}}</span>
         <span> per row</span>
-        <span v-if="showTitle || showDate">, with their </span>
+        <span v-if="showTitle || showYear">, with their </span>
         <span v-if="showTitle" class="ph1 bg-green">titles</span>
-        <span v-if="showTitle && showDate"> and </span>
-        <span v-if="showDate" class="ph1 bg-green">dates</span>
+        <span v-if="showTitle && showYear"> and </span>
+        <span v-if="showYear" class="ph1 bg-green">years</span>
         <span>, sorted by </span>
         <span class="ph1 bg-blue font-mono">{{sortFieldTitles[sortBy]}}</span>.
       </p>
@@ -50,9 +50,9 @@
         </label>
       </div>
       <div class="dib mr3 mt3 pa1 bg-green">
-        <label for="showDateCheckbox">
-          <input class="mr1" type="checkbox" id="showDateCheckbox" v-model="showDate">
-          <span>Show dates</span>
+        <label for="showYearCheckbox">
+          <input class="mr1" type="checkbox" id="showYearCheckbox" v-model="showYear">
+          <span>Show years</span>
         </label>
       </div>
       <div class="dib mr3 mt3 pa1 bg-blue">
@@ -77,7 +77,7 @@
         :title= "getTitle(item)"
         :date= "item['dcterms:date']"
         :showTitle= "showTitle"
-        :showDate= "showDate"
+        :showYear= "showYear"
       />
     </div>
   </div>
@@ -95,8 +95,8 @@ export default {
     return {
       items: dataItems,
       noThumbsPerRow: 10,
-      showTitle: true,
-      showDate: false,
+      showTitle: false,
+      showYear: false,
       selectionBegin: 0,
       selectionEndStep: 5,
       sortBy: '@id',
