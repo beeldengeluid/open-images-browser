@@ -11,11 +11,11 @@
       class="thumb mb-1 pointer"
     >
     <div 
-      v-if="(showTitle || showDate) && !isExpanded" 
+      v-if="(showTitle || showYear) && !isExpanded" 
       class="absolute left-0 top-0 pa1 bg-black-50 pevents-none"
     >
       <div v-if="showTitle">{{title}}</div>
-      <div v-if="showDate">{{year}}</div>
+      <div v-if="showYear">{{year}}</div>
     </div>
     
     <div v-if="isExpanded" class="metadata-containter pa3">
@@ -37,7 +37,7 @@ export default {
       type: Boolean,
       default: false
     },
-    showDate: {
+    showYear: {
       type: Boolean,
       default: false
     },
