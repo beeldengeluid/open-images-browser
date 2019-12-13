@@ -21,7 +21,12 @@
     <div v-if="isExpanded" class="metadata-containter pa3">
       <h2 class="mt0 f4">{{title}}</h2>
       <div>{{year}}</div>
-    </div>          
+      <font-awesome-icon 
+        icon="times"
+        @click="toggleExpanded"
+        class="absolute ma3 top-0 right-0 pointer"
+      />
+    </div>
   </div>
 </template>
 
@@ -75,6 +80,11 @@ export default {
   background-color: var(--cardBgColor);
 }
 
+.expanded .metadata-containter {
+  position: relative;
+  width: 100%;
+}
+
 .pevents-none {
   pointer-events: none;
 }
@@ -84,6 +94,7 @@ export default {
     max-width: 64rem;
   }
   .expanded .metadata-containter {
+    position: initial;
     width: 50%;
   }
   .expanded .thumb {
