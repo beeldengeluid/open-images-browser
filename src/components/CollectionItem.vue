@@ -18,7 +18,7 @@
       <div v-if="showYear">{{year}}</div>
     </div>
     
-    <div v-if="isExpanded" class="metadata-containter pa3">
+    <div v-if="isExpanded" class="metadata-containter pa3 pr4">
       <h2 class="mt0 f4">{{title}}</h2>
       <div>{{year}}</div>
       <font-awesome-icon 
