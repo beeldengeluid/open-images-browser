@@ -74,6 +74,7 @@
         v-bind:key="item['@id']"
         :width= "100/noThumbsPerRow + '%'"
         :thumbSrc= "getThumb(item)"
+        :videoSrc= "getVideo(item)"
         :title= "getTitle(item)"
         :date= "item['dcterms:date']"
         :showTitle= "showTitle"
@@ -145,6 +146,11 @@ export default {
       } else {
         return titles['@value']
       }
+    },
+    getVideo(item){
+      let hasFormat = item['dcterms:hasFormat']
+      let videos = hasFormat.filter(format => format.endsWith('.mp4'))
+      return videos[0]
     },
   }
 }
