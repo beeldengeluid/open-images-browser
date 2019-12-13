@@ -35,10 +35,7 @@ export default {
   name: 'CollectionItem',
   data: function () {
     return {
-      isExpanded: {
-        type: Boolean,
-        default: false
-      },
+      isExpanded: false,
     }
   },
   props: {
