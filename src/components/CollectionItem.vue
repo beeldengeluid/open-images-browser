@@ -2,7 +2,7 @@
   <div
     :style="{ width: width }"
     :class="{ expanded: isExpanded }"
-    class="dib relative overflow-hidden v-top"
+    class="collection-item dib relative overflow-hidden v-top"
   >
     <img
       :src="thumbSrc"
@@ -60,16 +60,19 @@ export default {
 </script>
 
 <style scoped>
-.expanded {
+.collection-item {
   --itemWidth: 352px;
   --itemWidthD: 704px;
+  --cardBgColor: #444;
+}
+.expanded {
   display: flex;
   flex-wrap: wrap;
   width: 100% !important;
   max-width: var(--itemWidth);
   margin-top: 1rem;
   margin-bottom: 1rem;
-  background-color: #000;
+  background-color: var(--cardBgColor);
 }
 
 .pevents-none {
@@ -84,7 +87,7 @@ export default {
     width: 50%;
   }
   .expanded .thumb {
-    max-width: 50%;
+    max-width: 352px;
   }
 }
 
