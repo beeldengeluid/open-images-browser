@@ -33,6 +33,14 @@
 <script>
 export default {
   name: 'CollectionItem',
+  data: function () {
+    return {
+      isExpanded: {
+        type: Boolean,
+        default: false
+      },
+    }
+  },
   props: {
     width: String,
     thumbSrc: String,
@@ -43,10 +51,6 @@ export default {
       default: false
     },
     showYear: {
-      type: Boolean,
-      default: false
-    },
-    isExpanded: {
       type: Boolean,
       default: false
     },
