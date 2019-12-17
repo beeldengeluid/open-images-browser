@@ -1,4 +1,8 @@
-# MediaScape-kickoff
+# MediaScape kickoff: Open Beelden Browser
+
+Initial exploration of the [MediaScape project](https://www.vogin.nl/portfolio-item/mediascape-2019/), aimed at exploring the utility of [generous interfaces](http://www.digitalhumanities.org/dhq/vol/9/1/000205/000205.html) for audio-visual archives.
+
+Try the latest version (work in progress): https://mediascape-kickoff.phivk.now.sh/
 
 ## Installation
 
