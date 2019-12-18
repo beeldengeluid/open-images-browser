@@ -2,7 +2,7 @@
   <div
     :style="{ width: width }"
     :class="{ 'state-expanded': isExpanded }"
-    class="collection-item dib relative v-top"
+    class="collection-item dib relative v-top grow-nonexpanded"
   >
     <img
       v-if="!isExpanded"
@@ -78,6 +78,19 @@ export default {
 .collection-item {
   --itemThumbWidth: 352px;
   --cardBgColor: #444;
+}
+
+.grow-nonexpanded:not(.state-expanded) {
+  -moz-osx-font-smoothing: grayscale;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+  transition: transform 0.25s ease-out;
+}
+
+.grow-nonexpanded:not(.state-expanded):hover,
+.grow-nonexpanded:not(.state-expanded):focus {
+  transform: scale(1.05);
+  z-index: 1;
 }
 
 .state-expanded {
