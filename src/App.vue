@@ -166,6 +166,11 @@ html, body {
   color: var(--text-color);
 }
 
+@import url("https://fonts.googleapis.com/css?family=Source+Code+Pro:400,400i&display=swap");
+.font-mono {
+  font-family: "Source Code Pro", monospace;
+}
+
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
