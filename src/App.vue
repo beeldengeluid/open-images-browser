@@ -1,92 +1,96 @@
 <template>
-  <div id="app" class="ma3 mt5 tl">
-    <h1>Open Beelden Browser</h1>
-    <div class="mv3">
-      <p>
-        Currently showing 
-        <span class="ph1 bg-purple">{{itemsSelectedSorted.length}}</span> items, 
-        <span class="ph1 bg-orange">{{noThumbsPerRow}}</span>
-        <span> per row</span>
-        <span v-if="showTitle || showYear">, with their </span>
-        <span v-if="showTitle" class="ph1 bg-green">titles</span>
-        <span v-if="showTitle && showYear"> and </span>
-        <span v-if="showYear" class="ph1 bg-green">years</span>
-        <span>, sorted by </span>
-        <span class="ph1 bg-blue font-mono">{{sortFieldTitles[sortBy]}}</span>.
-      </p>
-      <div class="dib mr3 mt3 pa1 bg-purple">
-        <label for="selectionEndRange">
-          <span class="mr2">Selection size</span>
-          <input 
-            id="selectionEndRange"
-            type="range" 
-            min="1" 
-            max="12" 
-            step="1" 
-            v-model="selectionEndStep" 
-            class="mr2" 
+  <v-app id="app">
+    <v-content class="ma3 mt5 tl">
+      <h1>Open Beelden Browser</h1>
+      
+      <div class="mv3">
+        <p>
+          <span>Below you see videos from the Open Beelden Collection, </span>
+          <span>sorted by their </span><span class="ph1 bg-blue font-mono">{{sortFieldTitles[sortBy]}}</span><span>s. </span>
+          <br>
+          <span>The current selection ranges from the <span class="ph1 bg-purple">{{toOrdinal(selectionRange[0])}}</span> to the <span class="ph1 bg-purple">{{toOrdinal(selectionRange[1])}}</span> video, that's </span><span class="ph1 bg-purple">{{itemsSortedSelected.length}}</span><span> videos in total, </span> 
+          <span>displayed </span><span class="ph1 bg-orange">{{noThumbsPerRow}}</span><span> per row</span>
+          <span v-if="showTitle || showYear">, along with their </span>
+          <span v-if="showTitle" class="ph1 bg-green">titles</span>
+          <span v-if="showTitle && showYear"> and </span>
+          <span v-if="showYear" class="ph1 bg-green">years</span>
+          <span>.</span>
+        </p>
+      </div>
+      <div class="mv3">
+        <div class="dib mr3 mt3 pa1 bg-blue">
+          Sort by
+          <label 
+            v-for="sortField in sortFields" 
+            v-bind:key="sortField"
+            :for="sortField"
+            class="pa1 font-mono" 
           >
-        </label>
+            <input type="radio" :id="sortField" :value="sortField" v-model="sortBy">
+            {{sortFieldTitles[sortField]}}
+          </label>
+        </div>
+        <div class="mr3 mt5 pa1">
+          <v-range-slider
+            v-model="selectionRange"
+            :max="selectionMax"
+            thumb-label="always"
+            hide-details
+            :color="colors.purple"
+            :thumb-color="colors.purple"
+            class="align-center"
+          >
+          </v-range-slider>
+        </div>
+        <div class="dib mr3 mt3 pa1 bg-orange">
+          <label for="noThumbsRange">
+            <span class="mr2">Thumbs per row</span>
+            <input 
+              id="noThumbsRange"
+              type="range" 
+              min="1" 
+              max="50" 
+              step="1" 
+              v-model="noThumbsPerRow" 
+              class="mr2" 
+            > 
+            <input type="number" v-model="noThumbsPerRow" class="w3 f7" />
+          </label>
+        </div>
+        <div class="dib mr3 mt3 pa1 bg-green">
+          <label for="showTitleCheckbox">
+            <input class="mr1" type="checkbox" id="showTitleCheckbox" v-model="showTitle">
+            <span>Show titles</span>
+          </label>
+        </div>
+        <div class="dib mr3 mt3 pa1 bg-green">
+          <label for="showYearCheckbox">
+            <input class="mr1" type="checkbox" id="showYearCheckbox" v-model="showYear">
+            <span>Show years</span>
+          </label>
+        </div>
       </div>
-      <div class="dib mr3 mt3 pa1 bg-orange">
-        <label for="noThumbsRange">
-          <span class="mr2">Thumbs per row</span>
-          <input 
-            id="noThumbsRange"
-            type="range" 
-            min="1" 
-            max="50" 
-            step="1" 
-            v-model="noThumbsPerRow" 
-            class="mr2" 
-          > 
-          <input type="number" v-model="noThumbsPerRow" class="w3 f7" />
-        </label>
+      <div class="mv3 relative">
+        <CollectionItem
+          v-for="item in itemsSortedSelected" 
+          v-bind:key="item['@id']"
+          :width= "100/noThumbsPerRow + '%'"
+          :thumbSrc= "getThumb(item)"
+          :videoSrc= "getVideo(item)"
+          :title= "getTitle(item)"
+          :date= "item['dcterms:date']"
+          :showTitle= "showTitle"
+          :showYear= "showYear"
+        />
       </div>
-      <div class="dib mr3 mt3 pa1 bg-green">
-        <label for="showTitleCheckbox">
-          <input class="mr1" type="checkbox" id="showTitleCheckbox" v-model="showTitle">
-          <span>Show titles</span>
-        </label>
-      </div>
-      <div class="dib mr3 mt3 pa1 bg-green">
-        <label for="showYearCheckbox">
-          <input class="mr1" type="checkbox" id="showYearCheckbox" v-model="showYear">
-          <span>Show years</span>
-        </label>
-      </div>
-      <div class="dib mr3 mt3 pa1 bg-blue">
-        Sort by
-        <label 
-          v-for="sortField in sortFields" 
-          v-bind:key="sortField"
-          :for="sortField"
-          class="pa1 font-mono" 
-        >
-          <input type="radio" :id="sortField" :value="sortField" v-model="sortBy">
-          {{sortFieldTitles[sortField]}}
-        </label>
-      </div>
-    </div>
-    <div class="mv3 relative">
-      <CollectionItem
-        v-for="item in itemsSelectedSorted" 
-        v-bind:key="item['@id']"
-        :width= "100/noThumbsPerRow + '%'"
-        :thumbSrc= "getThumb(item)"
-        :videoSrc= "getVideo(item)"
-        :title= "getTitle(item)"
-        :date= "item['dcterms:date']"
-        :showTitle= "showTitle"
-        :showYear= "showYear"
-      />
-    </div>
-  </div>
+    </v-content>
+  </v-app>
 </template>
 
 <script>
 import './../node_modules/tachyons/css/tachyons.min.css';
 // import _ from 'lodash';
+import converter from 'number-to-words'
 import dataItems from "./assets/data/openbeelden-items-date-hasFormat-spatial-subject.json";
 import CollectionItem from "./components/CollectionItem";
 
@@ -97,13 +101,20 @@ export default {
       items: dataItems,
       noThumbsPerRow: 10,
       showTitle: false,
-      showYear: false,
-      selectionBegin: 0,
-      selectionEndStep: 5,
-      sortBy: '@id',
+      showYear: true,
+      selectionRange: [0, 100],
+      selectionMin: 0,
+      volume: 32,
+      sortBy: 'dcterms:date',
       sortFieldTitles: {
         '@id': 'id',
         'dcterms:date': 'date',
+      },
+      colors: {
+        'blue': '#4A90E2',
+        'purple': '#5E2CA5',
+        'orange': '#FF6300',
+        'green': '#19A974',
       },
     }
   },
@@ -111,13 +122,13 @@ export default {
     CollectionItem,
   },
   computed: {
-    selectionEnd: function () {
-      return Math.pow(2, this.selectionEndStep)
+    itemsSortedSelected: function () {
+      let sorted = this.items
+      sorted.sort((a, b) => (a[this.sortBy] > b[this.sortBy]) ? 1 : -1)
+      return sorted.slice(this.selectionRange[0], this.selectionRange[1])    
     },
-    itemsSelectedSorted: function () {
-      return this.items
-              .slice(this.selectionBegin,this.selectionEnd)
-              .sort((a, b) => (a[this.sortBy] > b[this.sortBy]) ? 1 : -1)
+    selectionMax: function () {
+      return this.items.length
     },
     sortFields: function () {
       return Object.keys(this.sortFieldTitles)
@@ -152,6 +163,9 @@ export default {
       let videos = hasFormat.filter(format => format.endsWith('.mp4'))
       return videos[0]
     },
+    toOrdinal(int){
+      return converter.toOrdinal(int)
+    },
   }
 }
 </script>
@@ -175,9 +189,5 @@ html, body {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-.mb-1 {
-  margin-bottom: -0.25rem;
 }
 </style>

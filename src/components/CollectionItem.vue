@@ -9,7 +9,7 @@
       :src="thumbSrc"
       :title="title"
       @click="toggleExpanded"
-      class="mb-1 pointer"
+      class="pointer"
     >
     <div 
       v-if="!isExpanded && (showTitle || showYear)" 
