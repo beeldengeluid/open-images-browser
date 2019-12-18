@@ -102,7 +102,7 @@ export default {
       noThumbsPerRow: 10,
       showTitle: false,
       showYear: true,
-      selectionRange: [0, 100],
+      selectionRange: [2900, 3100],
       selectionMin: 0,
       volume: 32,
       sortBy: 'dcterms:date',
