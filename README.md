@@ -28,6 +28,7 @@ The `src/assets/data/` directory contains sample data from the public [Open Beel
 
 - `openbeelden-item.json`: example item pretty printed for manual inspection
 - `openbeelden-items-1k.json`: sample data set of 1000 items (containing all meta data fields)
+- `openbeelden-sample-date-hasFormat-spatial-subject.json`: 3 pretty printed example items, containing the fields `dcterms:hasFormat`, `dcterms:date`, `dcterms:spatial`, `dcterms:subject`
 
 Full data sets of 3489 items, filtered to contain specific meta data fields (in addition to `@id` and `dcterms:title`):
 

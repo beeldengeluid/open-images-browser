@@ -1,0 +1,208 @@
+[
+  {
+    "dcterms:hasFormat": [
+      "https://www.openbeelden.nl/files/74/74474.74461.BG_9804.mp4",
+      "https://www.openbeelden.nl/files/74/74510.74461.BG_9804.m3u8",
+      "https://www.openbeelden.nl/files/74/74464.74461.BG_9804.mpeg",
+      "https://www.openbeelden.nl/files/74/74470.74461.BG_9804.ogv",
+      "https://www.openbeelden.nl/files/74/74461.BG_9804.mpg",
+      "https://www.openbeelden.nl/files/74/74478.74461.BG_9804.webm",
+      "https://www.openbeelden.nl/images/604108/Fabricageproces_van_kleurpotloden_%280_40%29.png",
+      "https://www.openbeelden.nl/files/74/74480.74461.BG_9804.ts",
+      "https://www.openbeelden.nl/files/74/74476.74461.BG_9804.mp4",
+      "https://www.openbeelden.nl/files/74/74472.74461.BG_9804.ogv"
+    ],
+    "dcterms:subject": [
+      {
+        "@value": "writing materials",
+        "@language": "en"
+      },
+      {
+        "@value": "schrijfwaren",
+        "@language": "nl"
+      },
+      {
+        "@value": "machines",
+        "@language": "nl"
+      },
+      {
+        "@value": "machines",
+        "@language": "en"
+      }
+    ],
+    "dcterms:title": [
+      {
+        "@value": "The making of coloured pencils",
+        "@language": "en"
+      },
+      {
+        "@value": "Fabricageproces van kleurpotloden",
+        "@language": "nl"
+      }
+    ],
+    "@id": "oai:openimages.eu:74462",
+    "dcterms:spatial": [
+      {
+        "@value": "Netherlands",
+        "@language": "en"
+      },
+      {
+        "@value": "Nederland",
+        "@language": "nl"
+      }
+    ],
+    "dcterms:date": "1976-01-01"
+  },
+  {
+    "dcterms:hasFormat": [
+      "https://www.openbeelden.nl/files/01/55/155538.155531.WEEKNUMMER742-HRE0001B81B.ogv",
+      "https://www.openbeelden.nl/files/01/55/155540.155531.WEEKNUMMER742-HRE0001B81B.ogv",
+      "https://www.openbeelden.nl/images/599758/Vlieg_er_eens_uit_%280_47%29.png",
+      "https://www.openbeelden.nl/files/01/55/155548.155531.WEEKNUMMER742-HRE0001B81B.ts",
+      "https://www.openbeelden.nl/files/01/55/155531.WEEKNUMMER742-HRE0001B81B.mpg",
+      "https://www.openbeelden.nl/files/01/55/155534.155531.WEEKNUMMER742-HRE0001B81B.mpeg",
+      "https://www.openbeelden.nl/files/01/55/155542.155531.WEEKNUMMER742-HRE0001B81B.mp4",
+      "https://www.openbeelden.nl/files/01/55/155546.155531.WEEKNUMMER742-HRE0001B81B.webm",
+      "https://www.openbeelden.nl/files/01/55/155544.155531.WEEKNUMMER742-HRE0001B81B.mp4",
+      "https://www.openbeelden.nl/files/01/55/155580.155531.WEEKNUMMER742_HRE0001B81B.m3u8"
+    ],
+    "dcterms:subject": [
+      {
+        "@value": "television programmes",
+        "@language": "en"
+      },
+      {
+        "@value": "EUscreen",
+        "@language": "nl"
+      },
+      {
+        "@value": "Vlieg er eens uit",
+        "@language": "en"
+      },
+      {
+        "@value": "amusementsprogramma's",
+        "@language": "nl"
+      },
+      {
+        "@value": "televisieprogramma's",
+        "@language": "nl"
+      },
+      {
+        "@value": "amusements programmes",
+        "@language": "en"
+      }
+    ],
+    "dcterms:title": [
+      {
+        "@value": "Vlieg er eens uit",
+        "@language": "nl"
+      },
+      {
+        "@value": "Vlieg er eens uit",
+        "@language": "en"
+      }
+    ],
+    "@id": "oai:openimages.eu:155532",
+    "dcterms:spatial": [
+      {
+        "@value": "Nederland",
+        "@language": "nl"
+      },
+      {
+        "@value": "Enkhuizen",
+        "@language": "en"
+      },
+      {
+        "@value": "Enkhuizen",
+        "@language": "nl"
+      },
+      {
+        "@value": "Netherlands",
+        "@language": "en"
+      }
+    ],
+    "dcterms:date": "1974-01-01"
+  },
+  {
+    "dcterms:hasFormat": [
+      "https://www.openbeelden.nl/files/09/72/972965.FRIESLAND____-FHD00Z025AM_112120_607360.mp4",
+      "https://www.openbeelden.nl/files/09/72/972968.972965.FRIESLAND____-FHD00Z025AM_112120_607360.mp4",
+      "https://www.openbeelden.nl/files/09/72/972982.972965.FRIESLAND_____FHD00Z025AM_112120_607360.m3u8",
+      "https://www.openbeelden.nl/files/09/72/972972.972965.FRIESLAND____-FHD00Z025AM_112120_607360.webm",
+      "https://www.openbeelden.nl/files/09/72/972970.972965.FRIESLAND____-FHD00Z025AM_112120_607360.mp4",
+      "https://www.openbeelden.nl/files/09/72/972974.972965.FRIESLAND____-FHD00Z025AM_112120_607360.ogv",
+      "https://www.openbeelden.nl/images/973465/Friesland_%28HD%29_%284_07%29.png",
+      "https://www.openbeelden.nl/files/09/72/972976.972965.FRIESLAND____-FHD00Z025AM_112120_607360.ogv"
+    ],
+    "dcterms:subject": [
+      {
+        "@value": "ringsteken",
+        "@language": "nl"
+      },
+      {
+        "@value": "recreatie",
+        "@language": "nl"
+      },
+      {
+        "@value": "klederdrachten",
+        "@language": "nl"
+      },
+      {
+        "@value": "platteland",
+        "@language": "nl"
+      },
+      {
+        "@value": "stadsshots",
+        "@language": "nl"
+      },
+      {
+        "@value": "kaartspelen",
+        "@language": "nl"
+      },
+      {
+        "@value": "gemeentehuizen",
+        "@language": "nl"
+      },
+      {
+        "@value": "binnenscheepvaart",
+        "@language": "nl"
+      },
+      {
+        "@value": "zeilen",
+        "@language": "nl"
+      },
+      {
+        "@value": "boerinnen",
+        "@language": "nl"
+      },
+      {
+        "@value": "sjezen",
+        "@language": "nl"
+      }
+    ],
+    "dcterms:title": {
+      "@value": "Friesland (HD)",
+      "@language": "nl"
+    },
+    "dcterms:spatial": [
+      {
+        "@value": "Nederland",
+        "@language": "nl"
+      },
+      {
+        "@value": "Friesland",
+        "@language": "nl"
+      },
+      {
+        "@value": "Sneek",
+        "@language": "nl"
+      },
+      {
+        "@value": "Leeuwarden",
+        "@language": "nl"
+      }
+    ],
+    "dcterms:date": "1922-01-01",
+    "@id": "oai:openimages.eu:972966"
+  }
+]
