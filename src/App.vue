@@ -74,7 +74,8 @@
         <CollectionItem
           v-for="item in itemsSortedSelected" 
           v-bind:key="item['@id']"
-          :width= "100/noThumbsPerRow + '%'"
+          :width= "itemWidth + 'px'"
+          :height= "itemHeight + 'px'"
           :thumbSrc= "getThumb(item)"
           :videoSrc= "getVideo(item)"
           :title= "getTitle(item)"
@@ -102,7 +103,7 @@ export default {
       noThumbsPerRow: 10,
       showTitle: false,
       showYear: true,
-      selectionRange: [2900, 3100],
+      selectionRange: [0, 1000],
       selectionMin: 0,
       volume: 32,
       sortBy: 'dcterms:date',
@@ -116,12 +117,22 @@ export default {
         'orange': '#FF6300',
         'green': '#19A974',
       },
+      clientWidth: (document.body.clientWidth || document.documentElement.clientWidth),
+      itemAspectRatio: 352 / 288,
+      itemMargin: 4,
     }
   },
   components: {
     CollectionItem,
   },
   computed: {
+    itemWidth: function () {
+      let horizontalMarkupMargin = 32
+      return (this.clientWidth - horizontalMarkupMargin) / this.noThumbsPerRow - this.itemMargin
+    },
+    itemHeight: function () {
+      return this.itemWidth / this.itemAspectRatio
+    },
     itemsSortedSelected: function () {
       let sorted = this.items
       sorted.sort((a, b) => (a[this.sortBy] > b[this.sortBy]) ? 1 : -1)

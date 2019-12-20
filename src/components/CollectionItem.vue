@@ -1,40 +1,50 @@
 <template>
   <div
-    :style="{ width: width }"
+    :style="{ width: width, height: height }"
     :class="{ 'state-expanded': isExpanded }"
-    class="collection-item dib relative v-top grow-nonexpanded"
+    class="collection-item dib relative v-top grow-nonexpanded mr1 mb1"
   >
-    <img
-      v-if="!isExpanded"
-      :src="thumbSrc"
-      :title="title"
-      @click="toggleExpanded"
-      class="pointer"
+    <v-lazy
+      :options="{
+        threshold: .5
+      }"
+      transition="fade-transition"
+      class="dib"
     >
-    <div 
-      v-if="!isExpanded && (showTitle || showYear)" 
-      class="absolute left-0 top-0 pa1 bg-black-50 pevents-none"
-    >
-      <div v-if="showTitle">{{title}}</div>
-      <div v-if="showYear">{{year}}</div>
-    </div>
-    <video 
-      v-if="isExpanded"
-      :src="videoSrc"
-      :poster="thumbSrc"
-      controls
-      width="100%"
-      class="mwItemThumbWidth outline-0 bg-black">
-    </video>
-    <div v-if="isExpanded" class="relative static-notsmall w-100 w-50-notsmall pa3 pr4">
-      <h2 class="mt0 f4">{{title}}</h2>
-      <div>{{year}}</div>
-      <font-awesome-icon 
-        icon="times"
-        @click="toggleExpanded"
-        class="absolute ma3 top-0 right-0 pointer"
-      />
-    </div>
+      <div>
+        <img
+          v-if="!isExpanded"
+          :src="thumbSrc"
+          :title="title"
+          @click="toggleExpanded"
+          class="pointer"
+        >
+        <div 
+          v-if="!isExpanded && (showTitle || showYear)" 
+          class="absolute left-0 top-0 pa1 bg-black-50 pevents-none"
+        >
+          <div v-if="showTitle">{{title}}</div>
+          <div v-if="showYear">{{year}}</div>
+        </div>
+        <video 
+          v-if="isExpanded"
+          :src="videoSrc"
+          :poster="thumbSrc"
+          controls
+          width="100%"
+          class="mwItemThumbWidth outline-0 bg-black">
+        </video>
+        <div v-if="isExpanded" class="relative static-notsmall w-100 w-50-notsmall pa3 pr4">
+          <h2 class="mt0 f4">{{title}}</h2>
+          <div>{{year}}</div>
+          <font-awesome-icon 
+            icon="times"
+            @click="toggleExpanded"
+            class="absolute ma3 top-0 right-0 pointer"
+          />
+        </div>
+      </div>
+    </v-lazy>
   </div>
 </template>
 
@@ -48,6 +58,7 @@ export default {
   },
   props: {
     width: String,
+    height: String,
     thumbSrc: String,
     videoSrc: String,
     title: String,
