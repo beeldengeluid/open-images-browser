@@ -108,6 +108,7 @@ export default {
   display: flex;
   flex-wrap: wrap;
   width: 100% !important;
+  height: auto !important;
   margin-top: 1rem;
   margin-bottom: 1rem;
   background-color: var(--cardBgColor);
