@@ -6,7 +6,7 @@
       <div class="mv3">
         <p>
           <span>Below you see videos from the Open Beelden Collection, </span>
-          <span>sorted ascending by their </span><span class="ph1 bg-purple font-mono">{{sortFieldTitles[sortBy]}}</span><span>s. </span>
+          <span>sorted ascending by their </span><span class="ph1 bg-purple font-mono">{{sortBy}}</span><span>s. </span>
           <br>
           <span>The current selection includes </span><span class="ph1 bg-blue">{{itemsSortedSelected.length}}</span><span> videos, ranging from the </span><span class="ph1 bg-blue">{{toOrdinal(selectionRange[0])}}</span> to the <span class="ph1 bg-blue">{{toOrdinal(selectionRange[1])}}</span><span> video, </span>
           <span>displayed </span><span class="ph1 bg-orange">{{noThumbsPerRow}}</span><span> per row</span>
@@ -28,7 +28,7 @@
               class="pa1 font-mono" 
             >
               <input type="radio" :id="sortField" :value="sortField" v-model="sortBy">
-              {{sortFieldTitles[sortField]}}
+              {{sortField}}
             </label>
           </div>
           <div class="dib mr3 mt4 w-100">
@@ -81,13 +81,13 @@
       <div class="mv3 relative">
         <CollectionItem
           v-for="item in itemsSortedSelected" 
-          v-bind:key="item['@id']"
+          v-bind:key="item['id']"
           :width= "itemWidth + 'px'"
           :height= "itemHeight + 'px'"
-          :thumbSrc= "getThumb(item)"
-          :videoSrc= "getVideo(item)"
-          :title= "getTitle(item)"
-          :date= "item['dcterms:date']"
+          :thumbSrc= "item['thumbSrc']"
+          :videoSrc= "item['videoSrc']"
+          :title= "item['title']"
+          :date= "item['date']"
           :showTitle= "showTitle"
           :showYear= "showYear"
         />
@@ -100,7 +100,7 @@
 import './../node_modules/tachyons/css/tachyons.min.css';
 // import _ from 'lodash';
 import converter from 'number-to-words'
-import dataItems from "./assets/data/openbeelden-items-date-hasFormat-spatial-subject.json";
+import dataItems from "./assets/data/openbeelden-items-clean.json";
 import CollectionItem from "./components/CollectionItem";
 
 export default {
@@ -114,11 +114,8 @@ export default {
       selectionRange: [1500, 2500],
       selectionMin: 0,
       volume: 32,
-      sortBy: 'dcterms:date',
-      sortFieldTitles: {
-        '@id': 'id',
-        'dcterms:date': 'date',
-      },
+      sortBy: 'date',
+      sortFields: ['id','date'],
       colors: {
         'blue': '#4A90E2',
         'purple': '#5E2CA5',
@@ -149,39 +146,8 @@ export default {
     selectionMax: function () {
       return this.items.length
     },
-    sortFields: function () {
-      return Object.keys(this.sortFieldTitles)
-    },
   },
   methods: {
-    getThumb(item){
-      let hasFormat = item['dcterms:hasFormat']
-      let thumbs = hasFormat.filter(format => format.endsWith('.png'))
-      return thumbs[0]
-    },
-    getTitle(item){
-      let titles = item['dcterms:title']
-      if (Array.isArray(titles)) {
-        let titlesNL = titles.filter(title => title['@language'] == "nl")
-        if (titlesNL.length) {
-          return titlesNL[0]['@value']
-        } else {
-          let titlesEN = titles.filter(title => title['@language'] == "en")
-          if (titlesEN.length) {
-            return titlesEN[0]['@value']
-          } else {
-            return "No Title"
-          }
-        }
-      } else {
-        return titles['@value']
-      }
-    },
-    getVideo(item){
-      let hasFormat = item['dcterms:hasFormat']
-      let videos = hasFormat.filter(format => format.endsWith('.mp4'))
-      return videos[0]
-    },
     toOrdinal(int){
       return converter.toOrdinal(int)
     },
