@@ -8,7 +8,7 @@
           <span>Below you see videos from the Open Beelden Collection, </span>
           <span>sorted ascending by their </span><span class="ph1 bg-purple font-mono">{{sortBy}}</span><span>s. </span>
           <br>
-          <span>The current selection includes </span><span class="ph1 bg-blue">{{itemsSortedSelected.length}}</span><span> videos, ranging from the </span><span class="ph1 bg-blue">{{toOrdinal(selectionRange[0])}}</span> to the <span class="ph1 bg-blue">{{toOrdinal(selectionRange[1])}}</span><span> video, </span>
+          <span>The current selection includes </span><span class="ph1 bg-blue">{{itemsSortedSelected.length}}</span><span> videos, ranging from the </span><span class="ph1 indigo">{{toOrdinal(selectionRange[0])}}</span> to the <span class="ph1 indigo">{{toOrdinal(selectionRange[1])}}</span><span> video, </span>
           <span>displayed </span><span class="ph1 bg-orange">{{noThumbsPerRow}}</span><span> per row</span>
           <span v-if="showTitle || showYear">, along with their </span>
           <span v-if="showTitle" class="ph1 bg-green">titles</span>
@@ -19,7 +19,7 @@
       </div>
       <div class="mv3">
         <div class="flex items-end">
-          <div class="dib mr3 mt3 pa1 bg-purple w5 min-w-13rem">
+          <div class="dib mr3 mt3 pa1 bg-purple w5 min-w-13rem mb1">
             Sort by
             <label 
               v-for="sortField in sortFields" 
@@ -37,9 +37,9 @@
               :max="selectionMax"
               thumb-label="always"
               hide-details
-              :color="colors.blue"
-              :thumb-color="colors.blue"
-              :track-color="colors.purple"
+              :color="'light-blue'"
+              :thumb-color="'indigo'"
+              :track-color="'deep-purple'"
               class="align-center"
             >
               <template v-slot:prepend>
