@@ -1,0 +1,70 @@
+[
+  {
+    "id": "oai:openimages.eu:74462",
+    "date": "1976-01-01",
+    "url": "https://www.openbeelden.nl/media/74462",
+    "title": "Fabricageproces van kleurpotloden",
+    "thumbSrc": "https://www.openbeelden.nl/images/604108/Fabricageproces_van_kleurpotloden_%280_40%29.png",
+    "videoSrc": "https://www.openbeelden.nl/files/74/74474.74461.BG_9804.mp4",
+    "subjects": [
+      "schrijfwaren",
+      "machines"
+    ],
+    "creators": [
+      "Polygoon-Profilti (producent) / Nederlands Instituut voor Beeld en Geluid (beheerder)"
+    ],
+    "spatials": [
+      "Nederland"
+    ]
+  },
+  {
+    "id": "oai:openimages.eu:155532",
+    "date": "1974-01-01",
+    "url": "https://www.openbeelden.nl/media/155532",
+    "title": "Vlieg er eens uit",
+    "thumbSrc": "https://www.openbeelden.nl/images/599758/Vlieg_er_eens_uit_%280_47%29.png",
+    "videoSrc": "https://www.openbeelden.nl/files/01/55/155542.155531.WEEKNUMMER742-HRE0001B81B.mp4",
+    "subjects": [
+      "EUscreen",
+      "amusementsprogramma's",
+      "televisieprogramma's"
+    ],
+    "creators": [
+      "Polygoon-Profilti (producent) / Nederlands Instituut voor Beeld en Geluid (beheerder)"
+    ],
+    "spatials": [
+      "Nederland",
+      "Enkhuizen"
+    ]
+  },
+  {
+    "id": "oai:openimages.eu:972966",
+    "date": "1922-01-01",
+    "url": "https://www.openbeelden.nl/media/972966",
+    "title": "Friesland (HD)",
+    "thumbSrc": "https://www.openbeelden.nl/images/973465/Friesland_%28HD%29_%284_07%29.png",
+    "videoSrc": "https://www.openbeelden.nl/files/09/72/972965.FRIESLAND____-FHD00Z025AM_112120_607360.mp4",
+    "subjects": [
+      "ringsteken",
+      "recreatie",
+      "klederdrachten",
+      "platteland",
+      "stadsshots",
+      "kaartspelen",
+      "gemeentehuizen",
+      "binnenscheepvaart",
+      "zeilen",
+      "boerinnen",
+      "sjezen"
+    ],
+    "creators": [
+      "Producent onbekend / Nederlands Instituut voor Beeld en Geluid (beheerder)"
+    ],
+    "spatials": [
+      "Nederland",
+      "Friesland",
+      "Sneek",
+      "Leeuwarden"
+    ]
+  }
+]
