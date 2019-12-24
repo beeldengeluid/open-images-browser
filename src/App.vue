@@ -5,11 +5,12 @@
       
       <div class="mv3">
         <p>
-          <span>Below you see videos from the Open Beelden Collection, </span>
-          <span>sorted ascending by their </span><span class="ph1 bg-purple font-mono">{{sortBy}}</span><span>s. </span>
+          <span>Below you see videos from the Open Beelden Collection, sorted by </span>
+          <span class="ph1 bg-purple font-mono">{{sortBy}}</span><span> in </span><span class="ph1 bg-purple">{{sortAscending ? 'ascending' : 'descending'}}</span> order.
           <br>
-          <span>The current selection includes </span><span class="ph1 bg-blue">{{itemsSortedSelected.length}}</span><span> videos, ranging from the </span><span class="ph1 indigo">{{toOrdinal(selectionRange[0])}}</span> to the <span class="ph1 indigo">{{toOrdinal(selectionRange[1])}}</span><span> video, </span>
-          <span>displayed </span><span class="ph1 bg-orange">{{noThumbsPerRow}}</span><span> per row</span>
+          <span>The current selection contains </span><span class="ph1 bg-blue">{{itemsSortedSelected.length}}</span><span> out of {{this.items.length}} videos, ranging from the </span><span class="ph1 indigo">{{toOrdinal(selectionRange[0])}}</span> to the <span class="ph1 indigo">{{toOrdinal(selectionRange[1])}}</span>.
+          <br>
+          <span>Videos are displayed </span><span class="ph1 bg-orange">{{noThumbsPerRow}}</span><span> per row</span>
           <span v-if="showTitle || showYear">, along with their </span>
           <span v-if="showTitle" class="ph1 bg-green">titles</span>
           <span v-if="showTitle && showYear"> and </span>
@@ -43,9 +44,9 @@
               class="align-center"
             >
               <template v-slot:prepend>
-                <v-avatar class="bg-purple" size="33">
-                  <v-icon >keyboard_arrow_right</v-icon>
-                </v-avatar>
+                <v-btn fab x-small color="deep-purple">
+                  <v-icon @click="toggleSortAscending">{{sortAscending ? 'keyboard_arrow_right' : 'keyboard_arrow_left'}}</v-icon>
+                </v-btn>
               </template>
             </v-range-slider>
           </div>
@@ -113,9 +114,9 @@ export default {
       showYear: true,
       selectionRange: [1500, 2500],
       selectionMin: 0,
-      volume: 32,
       sortBy: 'date',
       sortFields: ['id','date'],
+      sortAscending: true,
       colors: {
         'blue': '#4A90E2',
         'purple': '#5E2CA5',
@@ -140,7 +141,11 @@ export default {
     },
     itemsSortedSelected: function () {
       let sorted = this.items
-      sorted.sort((a, b) => (a[this.sortBy] > b[this.sortBy]) ? 1 : -1)
+      if (this.sortAscending) {
+        sorted.sort((a, b) => (a[this.sortBy] > b[this.sortBy]) ? 1 : -1)
+      } else {
+        sorted.sort((a, b) => (a[this.sortBy] < b[this.sortBy]) ? 1 : -1)
+      }
       return sorted.slice(this.selectionRange[0], this.selectionRange[1])    
     },
     selectionMax: function () {
@@ -150,6 +155,9 @@ export default {
   methods: {
     toOrdinal(int){
       return converter.toOrdinal(int)
+    },
+    toggleSortAscending(){
+      this.sortAscending = ! this.sortAscending
     },
   }
 }
