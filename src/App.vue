@@ -6,9 +6,9 @@
       <div class="mv3">
         <p>
           <span>Below you see videos from the Open Beelden Collection, </span>
-          <span>sorted by their </span><span class="ph1 bg-blue font-mono">{{sortFieldTitles[sortBy]}}</span><span>s. </span>
+          <span>sorted ascending by their </span><span class="ph1 bg-purple font-mono">{{sortFieldTitles[sortBy]}}</span><span>s. </span>
           <br>
-          <span>The current selection ranges from the <span class="ph1 bg-purple">{{toOrdinal(selectionRange[0])}}</span> to the <span class="ph1 bg-purple">{{toOrdinal(selectionRange[1])}}</span> video, that's </span><span class="ph1 bg-purple">{{itemsSortedSelected.length}}</span><span> videos in total, </span> 
+          <span>The current selection includes </span><span class="ph1 bg-blue">{{itemsSortedSelected.length}}</span><span> videos, ranging from the </span><span class="ph1 bg-blue">{{toOrdinal(selectionRange[0])}}</span> to the <span class="ph1 bg-blue">{{toOrdinal(selectionRange[1])}}</span><span> video, </span>
           <span>displayed </span><span class="ph1 bg-orange">{{noThumbsPerRow}}</span><span> per row</span>
           <span v-if="showTitle || showYear">, along with their </span>
           <span v-if="showTitle" class="ph1 bg-green">titles</span>
@@ -18,29 +18,37 @@
         </p>
       </div>
       <div class="mv3">
-        <div class="dib mr3 mt3 pa1 bg-blue">
-          Sort by
-          <label 
-            v-for="sortField in sortFields" 
-            v-bind:key="sortField"
-            :for="sortField"
-            class="pa1 font-mono" 
-          >
-            <input type="radio" :id="sortField" :value="sortField" v-model="sortBy">
-            {{sortFieldTitles[sortField]}}
-          </label>
-        </div>
-        <div class="mr3 mt5 pa1">
-          <v-range-slider
-            v-model="selectionRange"
-            :max="selectionMax"
-            thumb-label="always"
-            hide-details
-            :color="colors.purple"
-            :thumb-color="colors.purple"
-            class="align-center"
-          >
-          </v-range-slider>
+        <div class="flex items-end">
+          <div class="dib mr3 mt3 pa1 bg-purple w5 min-w-13rem">
+            Sort by
+            <label 
+              v-for="sortField in sortFields" 
+              v-bind:key="sortField"
+              :for="sortField"
+              class="pa1 font-mono" 
+            >
+              <input type="radio" :id="sortField" :value="sortField" v-model="sortBy">
+              {{sortFieldTitles[sortField]}}
+            </label>
+          </div>
+          <div class="dib mr3 mt4 w-100">
+            <v-range-slider
+              v-model="selectionRange"
+              :max="selectionMax"
+              thumb-label="always"
+              hide-details
+              :color="colors.blue"
+              :thumb-color="colors.blue"
+              :track-color="colors.purple"
+              class="align-center"
+            >
+              <template v-slot:prepend>
+                <v-avatar class="bg-purple" size="33">
+                  <v-icon >keyboard_arrow_right</v-icon>
+                </v-avatar>
+              </template>
+            </v-range-slider>
+          </div>
         </div>
         <div class="dib mr3 mt3 pa1 bg-orange">
           <label for="noThumbsRange">
@@ -103,7 +111,7 @@ export default {
       noThumbsPerRow: 10,
       showTitle: false,
       showYear: true,
-      selectionRange: [0, 1000],
+      selectionRange: [1500, 2500],
       selectionMin: 0,
       volume: 32,
       sortBy: 'dcterms:date',
@@ -200,5 +208,9 @@ html, body {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.min-w-13rem {
+  min-width: 13rem;
 }
 </style>
