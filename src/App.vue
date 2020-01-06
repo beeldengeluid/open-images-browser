@@ -5,10 +5,12 @@
       
       <div class="mv3">
         <p>
-          <span>Below you see videos from the Open Beelden Collection, sorted by </span>
-          <span class="ph1 bg-purple font-mono">{{sortBy}}</span><span> in </span><span class="ph1 bg-purple">{{sortAscending ? 'ascending' : 'descending'}}</span> order.
+          <span>Below you see videos from the Open Beelden Collection.</span>
           <br>
-          <span>The current selection contains </span><span class="ph1 bg-blue">{{itemsSortedSelected.length}}</span><span> out of {{this.items.length}} videos, ranging from the </span><span class="ph1 indigo">{{toOrdinal(selectionRange[0])}}</span> to the <span class="ph1 indigo">{{toOrdinal(selectionRange[1])}}</span>.
+          <span>The current selection, ranging from </span><span class="ph1 indigo">{{yearSelectionRange[0]}}</span> to <span class="ph1 indigo">{{yearSelectionRange[1]}}</span>
+          <span> contains </span><span class="ph1 bg-blue">{{itemsSelectedSorted.length}}</span><span> out of {{this.items.length}} videos.</span>
+          <br>
+          <span>Videos are sorted by </span><span class="ph1 bg-purple font-mono">{{sortBy}}</span><span> in </span><span class="ph1 bg-purple">{{sortAscending ? 'ascending' : 'descending'}} <v-icon @click="toggleSortAscending" small>{{sortAscending ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</v-icon> </span> order.
           <br>
           <span>Videos are displayed </span><span class="ph1 bg-orange">{{noThumbsPerRow}}</span><span> per row</span>
           <span v-if="showTitle || showYear">, along with their </span>
@@ -19,8 +21,22 @@
         </p>
       </div>
       <div class="mv3">
-        <div class="flex items-end">
-          <div class="dib mr3 mt3 pa1 bg-purple w5 min-w-13rem mb1">
+        <div class="mr3 mt5 w-100">
+          <v-range-slider
+            v-model="yearSelectionRange"
+            :min="yearMin"
+            :max="yearMax"
+            thumb-label="always"
+            hide-details
+            :color="'light-blue'"
+            :thumb-color="'indigo'"
+            :track-color="'grey'"
+            class="align-center"
+          >
+          </v-range-slider>
+        </div>
+        <div class="dib mr3 mt3">
+          <div class="dib mr3 mt3 pa1 bg-purple min-w-13rem">
             Sort by
             <label 
               v-for="sortField in sortFields" 
@@ -32,24 +48,9 @@
               {{sortField}}
             </label>
           </div>
-          <div class="dib mr3 mt4 w-100">
-            <v-range-slider
-              v-model="selectionRange"
-              :max="selectionMax"
-              thumb-label="always"
-              hide-details
-              :color="'light-blue'"
-              :thumb-color="'indigo'"
-              :track-color="'deep-purple'"
-              class="align-center"
-            >
-              <template v-slot:prepend>
-                <v-btn fab x-small color="deep-purple">
-                  <v-icon @click="toggleSortAscending">{{sortAscending ? 'keyboard_arrow_right' : 'keyboard_arrow_left'}}</v-icon>
-                </v-btn>
-              </template>
-            </v-range-slider>
-          </div>
+          <v-btn fab x-small color="deep-purple">
+            <v-icon @click="toggleSortAscending">{{sortAscending ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</v-icon>
+          </v-btn>
         </div>
         <div class="dib mr3 mt3 pa1 bg-orange">
           <label for="noThumbsRange">
@@ -81,7 +82,7 @@
       </div>
       <div class="mv3 relative">
         <CollectionItem
-          v-for="item in itemsSortedSelected" 
+          v-for="item in itemsSelectedSorted" 
           v-bind:key="item['id']"
           :width= "itemWidth + 'px'"
           :height= "itemHeight + 'px'"
@@ -112,8 +113,7 @@ export default {
       noThumbsPerRow: 10,
       showTitle: false,
       showYear: true,
-      selectionRange: [1500, 2500],
-      selectionMin: 0,
+      yearSelectionRange: [1970, 1980],
       sortBy: 'date',
       sortFields: ['id','date'],
       sortAscending: true,
@@ -139,17 +139,28 @@ export default {
     itemHeight: function () {
       return this.itemWidth / this.itemAspectRatio
     },
-    itemsSortedSelected: function () {
-      let sorted = this.items
+    itemsSelectedSorted: function () {
+      // filter based on selectionRange
+      let selected = this.items.filter(
+        i => this.dateToYear(i['date']) >= this.yearSelectionRange[0] &&
+             this.dateToYear(i['date']) <= this.yearSelectionRange[1]
+      )
+      // sort
       if (this.sortAscending) {
-        sorted.sort((a, b) => (a[this.sortBy] > b[this.sortBy]) ? 1 : -1)
+        selected.sort((a, b) => (a[this.sortBy] > b[this.sortBy]) ? 1 : -1)
       } else {
-        sorted.sort((a, b) => (a[this.sortBy] < b[this.sortBy]) ? 1 : -1)
+        selected.sort((a, b) => (a[this.sortBy] < b[this.sortBy]) ? 1 : -1)
       }
-      return sorted.slice(this.selectionRange[0], this.selectionRange[1])    
+      return selected
     },
     selectionMax: function () {
       return this.items.length
+    },
+    yearMin: function () {
+      return Math.min(... this.items.map(i => i['date'].slice(0, 4)))
+    },
+    yearMax: function () {
+      return Math.max(... this.items.map(i => i['date'].slice(0, 4)))
     },
   },
   methods: {
@@ -159,6 +170,9 @@ export default {
     toggleSortAscending(){
       this.sortAscending = ! this.sortAscending
     },
+    dateToYear(date){
+      return date.slice(0,4)
+    }
   }
 }
 </script>
