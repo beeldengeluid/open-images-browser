@@ -1,11 +1,18 @@
 <template>
   <v-app id="app">
     <v-content class="ma3 mt5 tl">
-      <h1>Open Beelden Browser</h1>
+      <h1>Open Images Browser</h1>
       
       <div class="mv3">
         <p>
-          <span>Below you see videos from the Open Beelden Collection.</span>
+          <span>Below you see videos from the </span> 
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on }">
+              <a href="https://openbeelden.nl/" target="_blank" v-on="on">Open Images Collection ↗︎</a>
+            </template>
+            <span>Open Images is an open media platform that offers online access to audiovisual archive material to stimulate creative reuse.</span>
+          </v-tooltip>
+          <span>.</span>
           <br>
           <span>The current selection, ranging from </span><span class="ph1 indigo">{{yearSelectionRange[0]}}</span> to <span class="ph1 indigo">{{yearSelectionRange[1]}}</span>
           <span> contains </span><span class="ph1 bg-blue">{{itemsSelectedSorted.length}}</span><span> out of {{this.items.length}} videos.</span>
@@ -196,6 +203,10 @@ html, body {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  color: var(--text-color) !important;
 }
 
 .min-w-13rem {
