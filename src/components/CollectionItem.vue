@@ -35,13 +35,69 @@
           class="mwItemThumbWidth outline-0 bg-black">
         </video>
         <div v-if="isExpanded" class="relative static-notsmall w-100 w-50-notsmall pa3 pr4">
-          <h2 class="mt0 f4">{{title}}</h2>
-          <div>{{year}}</div>
+          <h2 class="mt0 f4">{{title}} <span class="fw1">({{year}})</span></h2>
+          <div>
+            <span v-if="subjects.length">Subjects:</span>
+            <v-chip-group
+              column
+            >
+              <v-chip 
+                v-for="subject in subjects" 
+                :key="subject"
+                label
+                outlined
+                small
+                class="ma1"
+              >
+                <span>{{ subject }}</span>
+              </v-chip>
+            </v-chip-group>
+          </div>
+          <div>
+            <span v-if="locations.length">Locations:</span>
+            <v-chip-group
+              column
+            >
+              <v-chip 
+                v-for="location in locations" 
+                :key="location"
+                label
+                outlined
+                small
+                class="ma1"
+              >
+                <span>{{ location }}</span>
+              </v-chip>
+            </v-chip-group>
+          </div>
+          <div>
+            <span v-if="creators.length">Creators:</span>
+            <v-chip-group
+              column
+            >
+              <v-chip 
+                v-for="creator in creators" 
+                :key="creator"
+                label
+                outlined
+                small
+                class="ma1"
+              >
+                <span>{{ creator }}</span>
+              </v-chip>
+            </v-chip-group>
+          </div>
           <font-awesome-icon 
             icon="times"
             @click="toggleExpanded"
             class="absolute ma3 top-0 right-0 pointer"
           />
+          <a 
+            :href="url" 
+            target="_blank"
+          >
+            See item on Open Images ↗︎
+          </a>
         </div>
       </div>
     </v-lazy>
@@ -63,6 +119,10 @@ export default {
     videoSrc: String,
     title: String,
     date: String,
+    url: String,
+    subjects: Array,
+    creators: Array,
+    locations: Array,
     showTitle: {
       type: Boolean,
       default: false

@@ -89,16 +89,20 @@
       </div>
       <div class="mv3 relative">
         <CollectionItem
-          v-for="item in itemsSelectedSorted" 
-          v-bind:key="item['id']"
-          :width= "itemWidth + 'px'"
-          :height= "itemHeight + 'px'"
-          :thumbSrc= "item['thumbSrc']"
-          :videoSrc= "item['videoSrc']"
-          :title= "item['title']"
-          :date= "item['date']"
-          :showTitle= "showTitle"
-          :showYear= "showYear"
+          v-for = "item in itemsSelectedSorted" 
+          :key       = "item['id']"
+          :width     = "itemWidth + 'px'"
+          :height    = "itemHeight + 'px'"
+          :thumbSrc  = "item['thumbSrc']"
+          :videoSrc  = "item['videoSrc']"
+          :title     = "item['title']"
+          :date      = "item['date']"
+          :url       = "item['url']"
+          :subjects  = "item['subjects']"
+          :creators  = "item['creators']"
+          :locations = "item['locations']"
+          :showTitle = "showTitle"
+          :showYear  = "showYear"
         />
       </div>
     </v-content>
