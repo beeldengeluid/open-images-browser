@@ -43,21 +43,21 @@
           </v-range-slider>
         </div>
         <div class="dib mr3 mt3">
-          <div class="dib mr3 mt3 pa1 bg-purple min-w-13rem">
-            Sort by
-            <label 
-              v-for="sortField in sortFields" 
-              v-bind:key="sortField"
-              :for="sortField"
-              class="pa1 font-mono" 
+          <div class="dib mr3 mt3 pa1 flex items-center">
+            <span class="mr2">Sort by</span>
+            <v-chip-group
+              v-model="sortBy"
+              active-class="deep-purple "
+              mandatory
             >
-              <input type="radio" :id="sortField" :value="sortField" v-model="sortBy">
-              {{sortField}}
-            </label>
+              <v-chip v-for="sortField in sortFields" :key="sortField" :value="sortField">
+                {{ sortField }}
+              </v-chip>
+            </v-chip-group>
+            <v-btn fab x-small color="deep-purple">
+              <v-icon @click="toggleSortAscending">{{sortAscending ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</v-icon>
+            </v-btn>
           </div>
-          <v-btn fab x-small color="deep-purple">
-            <v-icon @click="toggleSortAscending">{{sortAscending ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</v-icon>
-          </v-btn>
         </div>
         <div class="dib mr3 mt3 pa1 bg-orange">
           <label for="noThumbsRange">
@@ -220,9 +220,5 @@ html, body {
 
 a {
   color: var(--text-color) !important;
-}
-
-.min-w-13rem {
-  min-width: 13rem;
 }
 </style>
