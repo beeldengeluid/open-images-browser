@@ -2,7 +2,7 @@
   <div
     :style="{ width: width, height: height }"
     :class="{ 'is-expanded': isExpanded }"
-    class="collection-item mr1 mb1"
+    class="collection-item grow-nonexpanded mr1 mb1"
   >
     <v-lazy
       :options="{ threshold: .1 }"
@@ -135,15 +135,15 @@ export default {
   --cardBgColor: #444;
 }
 
-.grow-nonexpanded:not(.state-expanded) {
+.grow-nonexpanded:not(.is-expanded) {
   -moz-osx-font-smoothing: grayscale;
   backface-visibility: hidden;
   transform: translateZ(0);
   transition: transform 0.25s ease-out;
 }
 
-.grow-nonexpanded:not(.state-expanded):hover,
-.grow-nonexpanded:not(.state-expanded):focus {
+.grow-nonexpanded:not(.is-expanded):hover,
+.grow-nonexpanded:not(.is-expanded):focus {
   transform: scale(1.05);
   z-index: 1;
 }
