@@ -80,11 +80,7 @@
             See item on Open Images ↗︎
           </a>
         </div>
-        <font-awesome-icon 
-          icon="times"
-          @click="toggleExpanded"
-          class="absolute ma3 top-0 right-0 pointer"
-        />
+        <v-icon @click="toggleExpanded" class="absolute ma3 top-0 right-0 pointer">close</v-icon>
       </div>
     </div>
 
