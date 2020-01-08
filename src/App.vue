@@ -93,7 +93,6 @@
           :key           = "item['id']"
           :width         = "itemWidth + 'px'"
           :height        = "itemHeight + 'px'"
-          :videoMaxWidth = "videoMaxWidth"
           :thumbSrc      = "item['thumbSrc']"
           :videoSrc      = "item['videoSrc']"
           :title         = "item['title']"
@@ -112,7 +111,7 @@
 
 <script>
 import './../node_modules/tachyons/css/tachyons.min.css';
-// import _ from 'lodash';
+import _ from 'lodash';
 import converter from 'number-to-words'
 import dataItems from "./assets/data/openbeelden-items-clean.json";
 import CollectionItem from "./components/CollectionItem";
@@ -135,10 +134,9 @@ export default {
         'orange': '#FF6300',
         'green': '#19A974',
       },
-      clientWidth: (document.body.clientWidth || document.documentElement.clientWidth),
       itemAspectRatio: 352 / 288,
       itemMargin: 4,
-      videoMaxWidth: 320,
+      clientWidth: this.getClientWidth(),
     }
   },
   components: {
@@ -166,9 +164,6 @@ export default {
       }
       return selected
     },
-    selectionMax: function () {
-      return this.items.length
-    },
     yearMin: function () {
       return Math.min(... this.items.map(i => i['date'].slice(0, 4)))
     },
@@ -185,8 +180,20 @@ export default {
     },
     dateToYear(date){
       return date.slice(0,4)
-    }
-  }
+    },
+    getClientWidth(){
+      return document.body.clientWidth || document.documentElement.clientWidth
+    },
+    onResize(){
+      this.clientWidth = this.getClientWidth()
+    },
+  },
+  created() {
+    window.addEventListener("resize", _.debounce(this.onResize), 400)
+  },
+  destroyed() {
+    window.removeEventListener("resize", this.onResize)
+  },
 }
 </script>
 

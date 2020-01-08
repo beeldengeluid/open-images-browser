@@ -97,12 +97,12 @@ export default {
   data: function () {
     return {
       isExpanded: false,
+      videoMaxWidth: 320,
     }
   },
   props: {
     width: String,
     height: String,
-    videoMaxWidth: Number,
     thumbSrc: String,
     videoSrc: String,
     title: String,
