@@ -30,66 +30,71 @@
         </p>
       </div>
       <div class="mv3">
-        <div class="mr3 mt5 w-100">
+        <div class="dflex flex-wrap items-center mt5">
           <v-range-slider
             v-model="yearSelectionRange"
             :min="yearMin"
             :max="yearMax"
-            thumb-label="always"
-            hide-details
             :color="'light-blue'"
             :thumb-color="'indigo'"
-            :track-color="'grey'"
-            class="align-center"
+            thumb-label="always"
+            hide-details
+            class="mr4 min-w-50"
           >
+            <template v-slot:prepend><span class="mt1">{{yearMin}}</span></template>
+            <template v-slot:append><span class="mt1">{{yearMax}}</span></template>
           </v-range-slider>
-        </div>
-        <div class="dflex items-center justify-between flex-wrap">
-          <div class="dib mr3">
-            <div class="dib dflex items-center">
-              <span class="mr2">Sort by</span>
-              <v-chip-group
-                v-model="sortBy"
-                active-class="deep-purple darken-4"
-                mandatory
-              >
-                <v-chip v-for="sortField in sortFields" :key="sortField" :value="sortField">
-                  {{ sortField }}
-                </v-chip>
-              </v-chip-group>
-              <v-btn fab x-small color="deep-purple">
-                <v-icon @click="toggleSortAscending">{{sortAscending ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</v-icon>
-              </v-btn>
-            </div>
-          </div>
-          <div class="dib pa1 bg-orange">
-            <label for="noThumbsRange">
-              <span class="mr2">Thumbs per row</span>
-              <input 
-                id="noThumbsRange"
-                type="range" 
-                min="1" 
-                max="50" 
-                step="1" 
-                v-model="noThumbsPerRow" 
-                class="mr2" 
-              > 
-              <input type="number" v-model="noThumbsPerRow" class="w3 f7" />
-            </label>
-          </div>
-          <div class="dflex items-center">
-            <span class="pr2">Display</span>
+          <div class="dib dflex items-center">
+            <span class="mr2 fw7">Sort by</span>
             <v-chip-group
-              v-model="displayFieldsSelected"
-              active-class="green darken-4"
-              multiple
+              v-model="sortBy"
+              active-class="deep-purple darken-4"
+              mandatory
             >
-              <v-chip v-for="displayField in displayFields" :key="displayField" :value="displayField">
-                {{displayField}}
+              <v-chip v-for="sortField in sortFields" :key="sortField" :value="sortField">
+                {{ sortField }}
               </v-chip>
             </v-chip-group>
+            <v-btn fab x-small color="deep-purple mr2">
+              <v-icon @click="toggleSortAscending">{{sortAscending ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</v-icon>
+            </v-btn>
           </div>
         </div>
+        <div class="dflex items-center justify-between flex-wrap">
+          <div class="dib">
+            
+          </div>
+        </div>
+        <div class="dflex mt4 flex-wrap items-center justify-between">
+            <v-slider
+              v-model="noThumbsPerRow"
+              append-icon="zoom_out"
+              prepend-icon="zoom_in"
+              @click:append="noThumbsPerRow++"
+              @click:prepend="noThumbsPerRow--"
+              label="items per row"
+              min="1" 
+              max="50" 
+              step="1"
+              color="orange"
+              thumb-color="orange"
+              thumb-label="always"
+              hide-details
+              class="mr4"
+            ></v-slider>
+            <div class="dflex items-center">
+              <span class="pr2 fw7">Display</span>
+              <v-chip-group
+                v-model="displayFieldsSelected"
+                active-class="green darken-4"
+                multiple
+              >
+                <v-chip v-for="displayField in displayFields" :key="displayField" :value="displayField">
+                  {{displayField}}
+                </v-chip>
+              </v-chip-group>
+            </div>
+          </div>
       </div>
       <div class="mv3 relative dflex flex-wrap">
         <CollectionItem
@@ -228,5 +233,14 @@ a {
 
 .dflex {
   display: flex;
+}
+
+.min-w-50 {
+  min-width: 50%;
+}
+
+.theme--dark.v-label {
+  color: #fff !important;
+  font-weight: 700;
 }
 </style>
