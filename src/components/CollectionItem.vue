@@ -17,11 +17,11 @@
             class="pointer"
           >
           <div 
-            v-if="showTitle || showYear" 
+            v-if="displayTitle || displayYear" 
             class="absolute left-0 top-0 pa1 bg-black-50 pevents-none"
           >
-            <div v-if="showTitle">{{title}}</div>
-            <div v-if="showYear">{{year}}</div>
+            <div v-if="displayTitle">{{title}}</div>
+            <div v-if="displayYear">{{year}}</div>
           </div>
         </div>
       </div>
@@ -107,11 +107,11 @@ export default {
     subjects: Array,
     creators: Array,
     locations: Array,
-    showTitle: {
+    displayTitle: {
       type: Boolean,
       default: false
     },
-    showYear: {
+    displayYear: {
       type: Boolean,
       default: false
     },

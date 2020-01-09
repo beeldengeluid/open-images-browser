@@ -20,10 +20,12 @@
           <span>Videos are sorted by </span><span class="ph1 bg-purple font-mono">{{sortBy}}</span><span> in </span><span class="ph1 bg-purple">{{sortAscending ? 'ascending' : 'descending'}} <v-icon @click="toggleSortAscending" small>{{sortAscending ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</v-icon> </span> order.
           <br>
           <span>Videos are displayed </span><span class="ph1 bg-orange">{{noThumbsPerRow}}</span><span> per row</span>
-          <span v-if="showTitle || showYear">, along with their </span>
-          <span v-if="showTitle" class="ph1 bg-green">titles</span>
-          <span v-if="showTitle && showYear"> and </span>
-          <span v-if="showYear" class="ph1 bg-green">years</span>
+          <span v-if="displayFieldsSelected.length">, along with their </span>
+          <span v-for="(field, index) in displayFieldsSelected" :key="field">
+            <span v-if="displayFieldsSelected.length > 1 && index < displayFieldsSelected.length - 2">, </span>
+            <span v-if="displayFieldsSelected.length > 1 && index == displayFieldsSelected.length - 1"> &amp; </span>
+            <span class="ph1 green darken white--text">{{field}}</span>
+          </span>
           <span>.</span>
         </p>
       </div>
@@ -42,67 +44,69 @@
           >
           </v-range-slider>
         </div>
-        <div class="dib mr3 mt3">
-          <div class="dib mr3 mt3 pa1 flex items-center">
-            <span class="mr2">Sort by</span>
+        <div class="dflex items-center justify-between flex-wrap">
+          <div class="dib mr3">
+            <div class="dib dflex items-center">
+              <span class="mr2">Sort by</span>
+              <v-chip-group
+                v-model="sortBy"
+                active-class="deep-purple darken-4"
+                mandatory
+              >
+                <v-chip v-for="sortField in sortFields" :key="sortField" :value="sortField">
+                  {{ sortField }}
+                </v-chip>
+              </v-chip-group>
+              <v-btn fab x-small color="deep-purple">
+                <v-icon @click="toggleSortAscending">{{sortAscending ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</v-icon>
+              </v-btn>
+            </div>
+          </div>
+          <div class="dib pa1 bg-orange">
+            <label for="noThumbsRange">
+              <span class="mr2">Thumbs per row</span>
+              <input 
+                id="noThumbsRange"
+                type="range" 
+                min="1" 
+                max="50" 
+                step="1" 
+                v-model="noThumbsPerRow" 
+                class="mr2" 
+              > 
+              <input type="number" v-model="noThumbsPerRow" class="w3 f7" />
+            </label>
+          </div>
+          <div class="dflex items-center">
+            <span class="pr2">Display</span>
             <v-chip-group
-              v-model="sortBy"
-              active-class="deep-purple "
-              mandatory
+              v-model="displayFieldsSelected"
+              active-class="green darken-4"
+              multiple
             >
-              <v-chip v-for="sortField in sortFields" :key="sortField" :value="sortField">
-                {{ sortField }}
+              <v-chip v-for="displayField in displayFields" :key="displayField" :value="displayField">
+                {{displayField}}
               </v-chip>
             </v-chip-group>
-            <v-btn fab x-small color="deep-purple">
-              <v-icon @click="toggleSortAscending">{{sortAscending ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</v-icon>
-            </v-btn>
           </div>
         </div>
-        <div class="dib mr3 mt3 pa1 bg-orange">
-          <label for="noThumbsRange">
-            <span class="mr2">Thumbs per row</span>
-            <input 
-              id="noThumbsRange"
-              type="range" 
-              min="1" 
-              max="50" 
-              step="1" 
-              v-model="noThumbsPerRow" 
-              class="mr2" 
-            > 
-            <input type="number" v-model="noThumbsPerRow" class="w3 f7" />
-          </label>
-        </div>
-        <div class="dib mr3 mt3 pa1 bg-green">
-          <label for="showTitleCheckbox">
-            <input class="mr1" type="checkbox" id="showTitleCheckbox" v-model="showTitle">
-            <span>Show titles</span>
-          </label>
-        </div>
-        <div class="dib mr3 mt3 pa1 bg-green">
-          <label for="showYearCheckbox">
-            <input class="mr1" type="checkbox" id="showYearCheckbox" v-model="showYear">
-            <span>Show years</span>
-          </label>
-        </div>
       </div>
-      <div class="mv3 relative flex flex-wrap">
+      <div class="mv3 relative dflex flex-wrap">
         <CollectionItem
           v-for = "item in itemsSelectedSorted" 
-          :key           = "item['id']"
-          :width         = "itemWidth + 'px'"
-          :height        = "itemHeight + 'px'"
-          :thumbSrc      = "item['thumbSrc']"
-          :videoSrc      = "item['videoSrc']"
-          :title         = "item['title']"
-          :date          = "item['date']"
-          :url           = "item['url']"
-          :subjects      = "item['subjects']"
-          :creators      = "item['creators']"
-          :locations     = "item['locations']"
-          :showTitle     = "showTitle"
-          :showYear      = "showYear"
+          :key          = "item['id']"
+          :width        = "itemWidth + 'px'"
+          :height       = "itemHeight + 'px'"
+          :thumbSrc     = "item['thumbSrc']"
+          :videoSrc     = "item['videoSrc']"
+          :title        = "item['title']"
+          :date         = "item['date']"
+          :url          = "item['url']"
+          :subjects     = "item['subjects']"
+          :creators     = "item['creators']"
+          :locations    = "item['locations']"
+          :displayTitle = "displayFieldsSelected.includes('title')"
+          :displayYear  = "displayFieldsSelected.includes('year')"
         />
       </div>
     </v-content>
@@ -122,8 +126,8 @@ export default {
     return {
       items: dataItems,
       noThumbsPerRow: 10,
-      showTitle: false,
-      showYear: true,
+      displayFields: ['title', 'year'],
+      displayFieldsSelected: ['year'],
       yearSelectionRange: [1970, 1980],
       sortBy: 'date',
       sortFields: ['id','date'],
@@ -220,5 +224,9 @@ html, body {
 
 a {
   color: var(--text-color) !important;
+}
+
+.dflex {
+  display: flex;
 }
 </style>
