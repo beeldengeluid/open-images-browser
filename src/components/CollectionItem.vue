@@ -2,30 +2,23 @@
   <div
     :style="{ width: width, height: height }"
     :class="{ 'is-expanded': isExpanded }"
-    class="collection-item grow-nonexpanded mr1 mb1"
+    class="collection-item relative grow-nonexpanded mr1 mb1"
   >
-    <v-lazy
-      :options="{ threshold: .1 }"
-      transition="fade-transition"
-    >
-      <div>
-        <div v-if="!isExpanded" class="relative"> <!-- the collapsed version -->
+    <div @click="toggleExpanded" v-if="!isExpanded" class="h-100 grey darken-3 pointer"> <!-- the collapsed version -->
+      <v-lazy :options="{ threshold: .1 }" transition="fade-transition" class="h-100">
+        <div>
           <img
+            v-if="displayThumb"
             :src="thumbSrc"
             :title="title"
-            @click="toggleExpanded"
-            class="pointer"
           >
-          <div 
-            v-if="displayTitle || displayYear" 
-            class="absolute left-0 top-0 pa1 bg-black-50 pevents-none"
-          >
+          <div v-if="displayTitle || displayYear" class="absolute left-0 top-0 pa1 bg-black-50 pevents-none">
             <div v-if="displayTitle">{{title}}</div>
             <div v-if="displayYear">{{year}}</div>
           </div>
         </div>
-      </div>
-    </v-lazy>
+      </v-lazy>
+    </div>
 
     <div v-if="isExpanded" class="flex expansion-container"> <!-- the expanded version -->
       <div class="expansion-left tc bg-black">
@@ -38,47 +31,41 @@
           class="outline-0 bg-black">
         </video>
       </div>
-      <div class="expansion-right pa3 pr4 relative">
+      <div class="expansion-right pa3 pr4 relative grey darken-3">
         <h2 class="mt0 f4">{{title}} <span class="fw1">({{year}})</span></h2>
         <div v-if="subjects.length" class="mv2">
-          <span class="fw6"><v-icon small>local_offer</v-icon><span class="v-mid"> {{subjects.length}} Subject<span v-if="subjects.length > 1">s</span></span></span>
+          <span class="fw6">
+            <v-icon small>local_offer</v-icon>
+            <span class="v-mid"> {{subjects.length}} Subject<span v-if="subjects.length > 1">s</span></span>
+          </span>
           <v-chip-group column>
-            <v-chip 
-              v-for="subject in subjects" 
-              :key="subject"
-              label
-              outlined
-            >
+            <v-chip  v-for="subject in subjects" :key="subject" label outlined>
               <span>{{ subject }}</span>
             </v-chip>
           </v-chip-group>
         </div>
         <div v-if="locations.length" class="mv2">
-          <span class="fw6"><v-icon small>room</v-icon><span class="v-mid"> {{locations.length}} Location<span v-if="locations.length > 1">s</span></span></span>
+          <span class="fw6">
+            <v-icon small>room</v-icon>
+            <span class="v-mid"> {{locations.length}} Location<span v-if="locations.length > 1">s</span></span>
+          </span>
           <v-chip-group column>
-            <v-chip 
-              v-for="location in locations" 
-              :key="location"
-              label
-              outlined
-            >
+            <v-chip  v-for="location in locations" :key="location" label outlined>
               <span>{{ location }}</span>
             </v-chip>
           </v-chip-group>
         </div>
         <div v-if="creators.length" class="mv2">
-          <span class="fw6"><v-icon small>videocam</v-icon><span class="v-mid"> {{creators.length}} Creator</span><span v-if="creators.length > 1">s</span></span>
-            <div 
-              v-for="creator in creators" 
-              :key="creator"
-            >
-              {{ creator }}
-            </div>
+          <span class="fw6">
+            <v-icon small>videocam</v-icon>
+            <span class="v-mid"> {{creators.length}} Creator</span><span v-if="creators.length > 1">s</span>
+          </span>
+          <div v-for="creator in creators" :key="creator">
+            {{ creator }}
+          </div>
         </div>
         <div class="mt3">
-          <a :href="url" target="_blank">
-            See item on Open Images ↗︎
-          </a>
+          <a :href="url" target="_blank">See item on Open Images ↗︎</a>
         </div>
         <v-icon @click="toggleExpanded" class="absolute ma3 top-0 right-0 pointer">close</v-icon>
       </div>
@@ -114,6 +101,10 @@ export default {
     displayYear: {
       type: Boolean,
       default: false
+    },
+    displayThumb: {
+      type: Boolean,
+      default: true
     },
   },
   computed: {
@@ -166,7 +157,6 @@ export default {
   width: 100%;
 }
 .is-expanded .expansion-container .expansion-right {
-  background-color: var(--cardBgColor);
   width: 100%;
 }
 

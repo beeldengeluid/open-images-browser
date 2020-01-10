@@ -23,9 +23,9 @@
           <span>Videos are displayed </span><span class="ph1 orange white--text">{{noThumbsPerRow}}</span><span> per row</span>
           <span v-if="displayFieldsSelected.length">, along with their </span>
           <span v-for="(field, index) in displayFieldsSelected" :key="field">
-            <span v-if="displayFieldsSelected.length > 1 && index < displayFieldsSelected.length - 2">, </span>
             <span v-if="displayFieldsSelected.length > 1 && index == displayFieldsSelected.length - 1"> &amp; </span>
             <span class="ph1 green white--text">{{field}}</span>
+            <span v-if="displayFieldsSelected.length > 1 && index < displayFieldsSelected.length - 2">, </span>
           </span>
           <span>.</span>
         </p>
@@ -115,6 +115,7 @@
           :locations    = "item['locations']"
           :displayTitle = "displayFieldsSelected.includes('title')"
           :displayYear  = "displayFieldsSelected.includes('year')"
+          :displayThumb = "displayFieldsSelected.includes('thumb')"
         />
       </div>
     </v-content>
@@ -134,8 +135,8 @@ export default {
     return {
       items: dataItems,
       noThumbsPerRow: 10,
-      displayFields: ['title', 'year'],
-      displayFieldsSelected: ['year'],
+      displayFields: ['title', 'year', 'thumb'],
+      displayFieldsSelected: ['thumb', 'year'],
       yearSelectionRange: [1970, 1980],
       sortBy: 'date',
       sortFields: ['id','date', 'title'],
