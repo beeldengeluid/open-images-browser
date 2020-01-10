@@ -135,7 +135,7 @@ export default {
       displayFieldsSelected: ['year'],
       yearSelectionRange: [1970, 1980],
       sortBy: 'date',
-      sortFields: ['id','date'],
+      sortFields: ['id','date', 'title'],
       sortAscending: true,
       colors: {
         'blue': '#4A90E2',
