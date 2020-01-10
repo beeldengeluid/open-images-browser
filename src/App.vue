@@ -5,7 +5,7 @@
       
       <div class="mv3">
         <p>
-          <span>Below you see videos from the </span> 
+          <span>Below you can explore videos from the </span> 
           <v-tooltip bottom>
             <template v-slot:activator="{ on }">
               <a href="https://openbeelden.nl/" target="_blank" v-on="on">Open Images Collection ↗︎</a>
@@ -13,18 +13,19 @@
             <span>Open Images is an open media platform that offers online access to audiovisual archive material to stimulate creative reuse.</span>
           </v-tooltip>
           <span>.</span>
+        </p>
+        <p>
+          <span>The current selection, ranging from </span><span class="ph1 blue white--text">{{yearSelectionRange[0]}}</span> to <span class="ph1 blue white--text">{{yearSelectionRange[1]}}</span>
+          <span> contains </span><span class="ph1 indigo white--text">{{itemsSelectedSorted.length}}</span><span> out of {{this.items.length}} videos.</span>
           <br>
-          <span>The current selection, ranging from </span><span class="ph1 indigo">{{yearSelectionRange[0]}}</span> to <span class="ph1 indigo">{{yearSelectionRange[1]}}</span>
-          <span> contains </span><span class="ph1 bg-blue">{{itemsSelectedSorted.length}}</span><span> out of {{this.items.length}} videos.</span>
+          <span>Videos are sorted by </span><span class="ph1 deep-purple font-mono">{{sortBy}}</span><span> in </span><span class="ph1 deep-purple">{{sortAscending ? 'ascending' : 'descending'}} <v-icon @click="toggleSortAscending" small>{{sortAscending ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</v-icon> </span> order.
           <br>
-          <span>Videos are sorted by </span><span class="ph1 bg-purple font-mono">{{sortBy}}</span><span> in </span><span class="ph1 bg-purple">{{sortAscending ? 'ascending' : 'descending'}} <v-icon @click="toggleSortAscending" small>{{sortAscending ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</v-icon> </span> order.
-          <br>
-          <span>Videos are displayed </span><span class="ph1 bg-orange">{{noThumbsPerRow}}</span><span> per row</span>
+          <span>Videos are displayed </span><span class="ph1 orange white--text">{{noThumbsPerRow}}</span><span> per row</span>
           <span v-if="displayFieldsSelected.length">, along with their </span>
           <span v-for="(field, index) in displayFieldsSelected" :key="field">
             <span v-if="displayFieldsSelected.length > 1 && index < displayFieldsSelected.length - 2">, </span>
             <span v-if="displayFieldsSelected.length > 1 && index == displayFieldsSelected.length - 1"> &amp; </span>
-            <span class="ph1 green darken white--text">{{field}}</span>
+            <span class="ph1 green white--text">{{field}}</span>
           </span>
           <span>.</span>
         </p>
@@ -35,8 +36,8 @@
             v-model="yearSelectionRange"
             :min="yearMin"
             :max="yearMax"
-            :color="'light-blue'"
-            :thumb-color="'indigo'"
+            :color="'indigo'"
+            :thumb-color="'blue'"
             thumb-label="always"
             hide-details
             class="mr4 min-w-50"
@@ -48,8 +49,9 @@
             <span class="mr2 fw7">Sort by</span>
             <v-chip-group
               v-model="sortBy"
-              active-class="deep-purple darken-4"
+              active-class="deep-purple"
               mandatory
+              class="fw5 font-mono"
             >
               <v-chip v-for="sortField in sortFields" :key="sortField" :value="sortField">
                 {{ sortField }}
@@ -86,8 +88,9 @@
               <span class="pr2 fw7">Display</span>
               <v-chip-group
                 v-model="displayFieldsSelected"
-                active-class="green darken-4"
+                active-class="green"
                 multiple
+                class="fw5 font-mono"
               >
                 <v-chip v-for="displayField in displayFields" :key="displayField" :value="displayField">
                   {{displayField}}
@@ -137,12 +140,6 @@ export default {
       sortBy: 'date',
       sortFields: ['id','date', 'title'],
       sortAscending: true,
-      colors: {
-        'blue': '#4A90E2',
-        'purple': '#5E2CA5',
-        'orange': '#FF6300',
-        'green': '#19A974',
-      },
       itemAspectRatio: 352 / 288,
       itemMargin: 4,
       clientWidth: this.getClientWidth(),
