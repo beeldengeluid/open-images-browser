@@ -16,6 +16,17 @@
         </p>
         <p>
           <span>The current selection, ranging from </span><span class="ph1 blue white--text">{{yearSelectionRange[0]}}</span> to <span class="ph1 blue white--text">{{yearSelectionRange[1]}}</span>
+          <span v-if="locationFilter">, filtered for <v-chip
+                color="teal"
+                text-color="white"
+                close
+                close-icon="cancel"
+                @click:close="closeLocationFilter()"
+                label small
+              >
+                <v-icon left small>room</v-icon>
+                <strong>{{ locationFilter }}</strong>
+              </v-chip>,</span>
           <span> contains </span><span class="ph1 indigo white--text">{{itemsSelectedSorted.length}}</span><span> out of {{this.items.length}} videos.</span>
           <br>
           <span>Videos are sorted by </span><span class="ph1 deep-purple font-mono">{{sortBy}}</span><span> in </span><span class="ph1 deep-purple">{{sortAscending ? 'ascending' : 'descending'}} <v-icon @click="toggleSortAscending" small>{{sortAscending ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</v-icon> </span> order.
@@ -98,24 +109,45 @@
               </v-chip-group>
             </div>
           </div>
+          <div class="dflex flex-wrap mv3 items-center">
+            <span class="pr2 fw7"><v-icon left>filter_list</v-icon>Filters</span>
+            <v-chip-group class="fw5 font-mono">
+              <v-chip
+                v-if="locationFilter"
+                color="teal"
+                text-color="white"
+                close
+                close-icon="cancel"
+                @click:close="closeLocationFilter()"
+                label
+              >
+                <v-icon left>room</v-icon>
+                <strong class="mr1">{{ locationFilter }}</strong>
+                <span>({{locationsForYearSelection[locationFilter]}})</span>
+              </v-chip>
+            </v-chip-group>
+          </div>
       </div>
       <div class="mv3 relative dflex flex-wrap">
         <CollectionItem
           v-for = "item in itemsSelectedSorted" 
-          :key          = "item['id']"
-          :width        = "itemWidth + 'px'"
-          :height       = "itemHeight + 'px'"
-          :thumbSrc     = "item['thumbSrc']"
-          :videoSrc     = "item['videoSrc']"
-          :title        = "item['title']"
-          :date         = "item['date']"
-          :url          = "item['url']"
-          :subjects     = "item['subjects']"
-          :creators     = "item['creators']"
-          :locations    = "item['locations']"
-          :displayTitle = "displayFieldsSelected.includes('title')"
-          :displayYear  = "displayFieldsSelected.includes('year')"
-          :displayThumb = "displayFieldsSelected.includes('thumb')"
+          :key            = "item['id']"
+          :width          = "itemWidth + 'px'"
+          :height         = "itemHeight + 'px'"
+          :thumbSrc       = "item['thumbSrc']"
+          :videoSrc       = "item['videoSrc']"
+          :title          = "item['title']"
+          :date           = "item['date']"
+          :url            = "item['url']"
+          :subjects       = "item['subjects']"
+          :creators       = "item['creators']"
+          :locations      = "item['locations']"
+          :displayTitle   = "displayFieldsSelected.includes('title')"
+          :displayYear    = "displayFieldsSelected.includes('year')"
+          :displayThumb   = "displayFieldsSelected.includes('thumb')"
+          :locationFilter = "locationFilter"
+          :locationsForYearSelection = "locationsForYearSelection"
+          v-on:toggle-location-filter = "onToggleLocationFilter"
         />
       </div>
     </v-content>
@@ -134,13 +166,14 @@ export default {
   data: function () {
     return {
       items: dataItems,
-      noThumbsPerRow: 10,
+      yearSelectionRange: [1975, 1985],
+      sortFields: ['id','date', 'title'],
+      sortBy: 'date',
       displayFields: ['title', 'year', 'thumb'],
       displayFieldsSelected: ['thumb', 'year'],
-      yearSelectionRange: [1970, 1980],
-      sortBy: 'date',
-      sortFields: ['id','date', 'title'],
       sortAscending: true,
+      locationFilter: 'Nederland',
+      noThumbsPerRow: 10,
       itemAspectRatio: 352 / 288,
       itemMargin: 4,
       clientWidth: this.getClientWidth(),
@@ -157,11 +190,13 @@ export default {
     itemHeight: function () {
       return this.itemWidth / this.itemAspectRatio
     },
+    itemsFilteredByYear: function () {
+      return this.items.filter(i => this.filterByYear(i))
+    },
     itemsSelectedSorted: function () {
-      // filter based on selectionRange
-      let selected = this.items.filter(
-        i => this.dateToYear(i['date']) >= this.yearSelectionRange[0] &&
-             this.dateToYear(i['date']) <= this.yearSelectionRange[1]
+      // filter
+      let selected = this.itemsFilteredByYear.filter(
+        i => this.filterByLocation(i)
       )
       // sort
       if (this.sortAscending) {
@@ -176,6 +211,10 @@ export default {
     },
     yearMax: function () {
       return Math.max(... this.items.map(i => i['date'].slice(0, 4)))
+    },
+    locationsForYearSelection: function () {
+      let locations =  _.flatMap(this.itemsFilteredByYear, i => i['locations']) 
+      return _.countBy(locations)
     },
   },
   methods: {
@@ -193,6 +232,23 @@ export default {
     },
     onResize(){
       this.clientWidth = this.getClientWidth()
+    },
+    onToggleLocationFilter: function (filterValue) {
+      if (this.locationFilter == filterValue) {
+        this.closeLocationFilter()
+      } else {
+        this.locationFilter = filterValue
+      }
+    },
+    closeLocationFilter: function () {
+      this.locationFilter = undefined
+    },
+    filterByYear: function (item) {
+      return this.dateToYear(item['date']) >= this.yearSelectionRange[0] &&
+             this.dateToYear(item['date']) <= this.yearSelectionRange[1]
+    },
+    filterByLocation: function (item) {
+      return item['locations'].includes(this.locationFilter) || this.locationFilter == undefined
     },
   },
   created() {
@@ -240,5 +296,13 @@ a {
 .theme--dark.v-label {
   color: #fff !important;
   font-weight: 700;
+}
+
+/* 
+fix to be released shortly:
+https://github.com/vuetifyjs/vuetify/commit/4f151bbdf4388e76d92920ca19c6271c022e6c3f
+*/
+.v-chip.v-size--small .v-icon.v-chip__close {
+  font-size: 18px;
 }
 </style>

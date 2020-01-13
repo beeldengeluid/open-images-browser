@@ -38,8 +38,8 @@
             <v-icon small>local_offer</v-icon>
             <span class="v-mid"> {{subjects.length}} Subject<span v-if="subjects.length > 1">s</span></span>
           </span>
-          <v-chip-group column>
-            <v-chip  v-for="subject in subjects" :key="subject" label outlined>
+          <v-chip-group column class="font-mono">
+            <v-chip  v-for="subject in subjects" :key="subject" label>
               <span>{{ subject }}</span>
             </v-chip>
           </v-chip-group>
@@ -49,9 +49,22 @@
             <v-icon small>room</v-icon>
             <span class="v-mid"> {{locations.length}} Location<span v-if="locations.length > 1">s</span></span>
           </span>
-          <v-chip-group column>
-            <v-chip  v-for="location in locations" :key="location" label outlined>
-              <span>{{ location }}</span>
+          <v-chip-group 
+            v-model="locationFilter"
+            active-class="teal white--text" 
+            column 
+            class="font-mono"
+          >
+            <v-chip  
+              v-for="location in locations" 
+              :key="location" 
+              @click="$emit('toggle-location-filter', location)"
+              :value="location"
+              label
+            >
+              <strong class="mr1">{{ location }}</strong>
+              <span>({{locationsForYearSelection[location]}})</span>
+              <v-icon right>{{location == locationFilter ? 'cancel' : 'filter_list'}} </v-icon>
             </v-chip>
           </v-chip-group>
         </div>
@@ -106,6 +119,8 @@ export default {
       type: Boolean,
       default: true
     },
+    locationFilter: String,
+    locationsForYearSelection: Array,
   },
   computed: {
     year: function () {
