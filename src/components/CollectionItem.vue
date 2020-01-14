@@ -4,13 +4,14 @@
     :class="{ 'is-expanded': isExpanded }"
     class="collection-item relative grow-nonexpanded mr1 mb1"
   >
-    <div @click="toggleExpanded" v-if="!isExpanded" class="h-100 grey darken-3 pointer"> <!-- the collapsed version -->
+    <div @click="toggleExpanded" v-if="!isExpanded" class="h-100 bg-black pointer"> <!-- the collapsed version -->
       <v-lazy :options="{ threshold: .1 }" transition="fade-transition" class="h-100">
         <div>
           <img
             v-if="displayThumb"
             :src="thumbSrc"
             :title="title"
+            class="absolute top-0 bottom-0 m-auto"
           >
           <div v-if="displayTitle || displayYear" class="absolute left-0 top-0 pa1 bg-black-50 pevents-none">
             <div v-if="displayTitle">{{title}}</div>
@@ -193,4 +194,7 @@ export default {
   }
 }
 
+.m-auto{
+  margin: auto;
+}
 </style>
