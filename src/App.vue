@@ -85,7 +85,7 @@
               prepend-icon="zoom_in"
               @click:append="noThumbsPerRow++"
               @click:prepend="noThumbsPerRow--"
-              label="items per row"
+              label="Items per row"
               min="1" 
               max="50" 
               step="1"
