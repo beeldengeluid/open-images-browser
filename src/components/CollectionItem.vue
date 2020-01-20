@@ -39,9 +39,22 @@
             <v-icon small>local_offer</v-icon>
             <span class="v-mid"> {{subjects.length}} Subject<span v-if="subjects.length > 1">s</span></span>
           </span>
-          <v-chip-group column class="font-mono">
-            <v-chip  v-for="subject in subjects" :key="subject" label>
-              <span>{{ subject }}</span>
+          <v-chip-group 
+            v-model="subjectFilter"
+            active-class="cyan darken-1 white--text" 
+            column 
+            class="font-mono"
+          >
+            <v-chip  
+              v-for="subject in subjects" 
+              :key="subject" 
+              @click="$emit('toggle-subject-filter', subject)"
+              :value="subject"
+              label
+            >
+              <strong class="mr1">{{ subject }}</strong>
+              <span>({{subjectsForYearSelection[subject]}})</span>
+              <v-icon right>{{subject == subjectFilter ? 'cancel' : 'filter_list'}} </v-icon>
             </v-chip>
           </v-chip-group>
         </div>
@@ -121,7 +134,9 @@ export default {
       default: true
     },
     locationFilter: String,
-    locationsForYearSelection: Array,
+    subjectFilter: String,
+    locationsForYearSelection: Object,
+    subjectsForYearSelection: Object,
   },
   computed: {
     year: function () {

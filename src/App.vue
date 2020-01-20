@@ -16,17 +16,34 @@
         </p>
         <p>
           <span>The current selection, ranging from </span><span class="ph1 blue white--text">{{yearSelectionRange[0]}}</span> to <span class="ph1 blue white--text">{{yearSelectionRange[1]}}</span>
-          <span v-if="locationFilter">, filtered for <v-chip
-                color="teal"
-                text-color="white"
-                close
-                close-icon="cancel"
-                @click:close="closeLocationFilter()"
-                label small
-              >
-                <v-icon left small>room</v-icon>
-                <strong>{{ locationFilter }}</strong>
-              </v-chip>,</span>
+          <span v-if="locationFilter || subjectFilter">, filtered for </span>
+          <span v-if="locationFilter">
+            <v-chip
+              color="teal"
+              text-color="white"
+              close
+              close-icon="cancel"
+              @click:close="closeLocationFilter()"
+              label small
+            >
+              <v-icon left small>room</v-icon>
+              <strong>{{ locationFilter }}</strong>
+            </v-chip>,
+          </span>
+          <span v-if="subjectFilter">
+            <v-chip
+              v-if="subjectFilter"
+              color="cyan darken-1"
+              text-color="white"
+              close
+              close-icon="cancel"
+              @click:close="closeSubjectFilter()"
+              label small
+            >
+              <v-icon left small>local_offer</v-icon>
+              <strong>{{ subjectFilter }}</strong>
+            </v-chip>,
+          </span>
           <span> contains </span><span class="ph1 indigo white--text">{{itemsSelectedSorted.length}}</span><span> out of {{this.items.length}} videos.</span>
           <br>
           <span>Videos are sorted by </span><span class="ph1 deep-purple font-mono">{{sortBy}}</span><span> in </span><span class="ph1 deep-purple">{{sortAscending ? 'ascending' : 'descending'}} <v-icon @click="toggleSortAscending" small>{{sortAscending ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</v-icon> </span> order.
@@ -125,6 +142,19 @@
                 <strong class="mr1">{{ locationFilter }}</strong>
                 <span>({{locationsForYearSelection[locationFilter]}})</span>
               </v-chip>
+              <v-chip
+                v-if="subjectFilter"
+                color="cyan darken-1"
+                text-color="white"
+                close
+                close-icon="cancel"
+                @click:close="closeSubjectFilter()"
+                label
+              >
+                <v-icon left>local_offer</v-icon>
+                <strong class="mr1">{{ subjectFilter }}</strong>
+                <span>({{subjectsForYearSelection[subjectFilter]}})</span>
+              </v-chip>
             </v-chip-group>
           </div>
       </div>
@@ -146,8 +176,11 @@
           :displayYear    = "displayFieldsSelected.includes('year')"
           :displayThumb   = "displayFieldsSelected.includes('thumb')"
           :locationFilter = "locationFilter"
+          :subjectFilter  = "subjectFilter"
           :locationsForYearSelection = "locationsForYearSelection"
+          :subjectsForYearSelection  = "subjectsForYearSelection"
           v-on:toggle-location-filter = "onToggleLocationFilter"
+          v-on:toggle-subject-filter = "onToggleSubjectFilter"
         />
       </div>
     </v-content>
@@ -173,6 +206,7 @@ export default {
       displayFieldsSelected: ['thumb', 'year'],
       sortAscending: true,
       locationFilter: 'Nederland',
+      subjectFilter: 'steden',
       noThumbsPerRow: 10,
       itemAspectRatio: 352 / 288,
       itemMargin: 4,
@@ -196,7 +230,7 @@ export default {
     itemsSelectedSorted: function () {
       // filter
       let selected = this.itemsFilteredByYear.filter(
-        i => this.filterByLocation(i)
+        i => this.filterByLocation(i) && this.filterBySubject(i)
       )
       // sort
       if (this.sortAscending) {
@@ -215,6 +249,10 @@ export default {
     locationsForYearSelection: function () {
       let locations =  _.flatMap(this.itemsFilteredByYear, i => i['locations']) 
       return _.countBy(locations)
+    },
+    subjectsForYearSelection: function () {
+      let subjects =  _.flatMap(this.itemsFilteredByYear, i => i['subjects']) 
+      return _.countBy(subjects)
     },
   },
   methods: {
@@ -240,8 +278,18 @@ export default {
         this.locationFilter = filterValue
       }
     },
+    onToggleSubjectFilter: function (filterValue) {
+      if (this.subjectFilter == filterValue) {
+        this.closeSubjectFilter()
+      } else {
+        this.subjectFilter = filterValue
+      }
+    },
     closeLocationFilter: function () {
       this.locationFilter = undefined
+    },
+    closeSubjectFilter: function () {
+      this.subjectFilter = undefined
     },
     filterByYear: function (item) {
       return this.dateToYear(item['date']) >= this.yearSelectionRange[0] &&
@@ -249,6 +297,9 @@ export default {
     },
     filterByLocation: function (item) {
       return item['locations'].includes(this.locationFilter) || this.locationFilter == undefined
+    },
+    filterBySubject: function (item) {
+      return item['subjects'].includes(this.subjectFilter) || this.subjectFilter == undefined
     },
   },
   created() {
