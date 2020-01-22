@@ -59,36 +59,45 @@
         </p>
       </div>
       <div class="mv3">
-        <div class="dflex flex-wrap items-center mt5">
+        <v-sparkline
+          :value="Object.values(this.decadeCounts)"
+          :padding="1"
+          :auto-line-width="true"
+          :fill="false"
+          :type="'bar'"
+          :label-size="4"
+          class="mh5 mb-15px"
+        ></v-sparkline>
+        <div class="dflex flex-wrap items-center">
           <v-range-slider
             v-model="yearSelectionRange"
-            :min="yearMin"
-            :max="yearMax"
+            :min="decadeMin"
+            :max="decadeMax"
             :color="'indigo'"
             :thumb-color="'blue'"
             thumb-label="always"
             hide-details
-            class="mr4 min-w-50"
+            class="min-w-50"
           >
-            <template v-slot:prepend><span class="mt1">{{yearMin}}</span></template>
-            <template v-slot:append><span class="mt1">{{yearMax}}</span></template>
+            <template v-slot:prepend><span class="mt1">{{decadeMin}}</span></template>
+            <template v-slot:append><span class="mt1">{{decadeMax}}</span></template>
           </v-range-slider>
-          <div class="dib dflex items-center">
-            <span class="mr2 fw7">Sort by</span>
-            <v-chip-group
-              v-model="sortBy"
-              active-class="deep-purple"
-              mandatory
-              class="fw5 font-mono"
-            >
-              <v-chip v-for="sortField in sortFields" :key="sortField" :value="sortField">
-                {{ sortField }}
-              </v-chip>
-            </v-chip-group>
-            <v-btn fab x-small color="deep-purple mr2">
-              <v-icon @click="toggleSortAscending">{{sortAscending ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</v-icon>
-            </v-btn>
-          </div>
+        </div>
+        <div class="dib dflex items-center">
+          <span class="mr2 fw7">Sort by</span>
+          <v-chip-group
+            v-model="sortBy"
+            active-class="deep-purple"
+            mandatory
+            class="fw5 font-mono"
+          >
+            <v-chip v-for="sortField in sortFields" :key="sortField" :value="sortField">
+              {{ sortField }}
+            </v-chip>
+          </v-chip-group>
+          <v-btn fab x-small color="deep-purple mr2">
+            <v-icon @click="toggleSortAscending">{{sortAscending ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</v-icon>
+          </v-btn>
         </div>
         <div class="dflex items-center justify-between flex-wrap">
           <div class="dib">
@@ -140,7 +149,7 @@
               >
                 <v-icon left>room</v-icon>
                 <strong class="mr1">{{ locationFilter }}</strong>
-                <span>({{locationsForYearSelection[locationFilter]}})</span>
+                <span>({{locationCountsForYearSelection[locationFilter]}})</span>
               </v-chip>
               <v-chip
                 v-if="subjectFilter"
@@ -153,7 +162,7 @@
               >
                 <v-icon left>local_offer</v-icon>
                 <strong class="mr1">{{ subjectFilter }}</strong>
-                <span>({{subjectsForYearSelection[subjectFilter]}})</span>
+                <span>({{subjectCountsForYearSelection[subjectFilter]}})</span>
               </v-chip>
             </v-chip-group>
           </div>
@@ -177,10 +186,10 @@
           :displayThumb   = "displayFieldsSelected.includes('thumb')"
           :locationFilter = "locationFilter"
           :subjectFilter  = "subjectFilter"
-          :locationsForYearSelection = "locationsForYearSelection"
-          :subjectsForYearSelection  = "subjectsForYearSelection"
+          :locationCountsForYearSelection = "locationCountsForYearSelection"
+          :subjectCountsForYearSelection  = "subjectCountsForYearSelection"
           v-on:toggle-location-filter = "onToggleLocationFilter"
-          v-on:toggle-subject-filter = "onToggleSubjectFilter"
+          v-on:toggle-subject-filter  = "onToggleSubjectFilter"
         />
       </div>
     </v-content>
@@ -199,7 +208,7 @@ export default {
   data: function () {
     return {
       items: dataItems,
-      yearSelectionRange: [1975, 1985],
+      yearSelectionRange: [1960, 1980],
       sortFields: ['id','date', 'title'],
       sortBy: 'date',
       displayFields: ['title', 'year', 'thumb'],
@@ -246,13 +255,24 @@ export default {
     yearMax: function () {
       return Math.max(... this.items.map(i => i['date'].slice(0, 4)))
     },
-    locationsForYearSelection: function () {
+    decadeMin: function () {
+      return Math.floor(this.yearMin / 10) * 10
+    },
+    decadeMax: function () {
+      return Math.floor(this.yearMax / 10) * 10
+    },
+    locationCountsForYearSelection: function () {
       let locations =  _.flatMap(this.itemsFilteredByYear, i => i['locations']) 
       return _.countBy(locations)
     },
-    subjectsForYearSelection: function () {
+    subjectCountsForYearSelection: function () {
       let subjects =  _.flatMap(this.itemsFilteredByYear, i => i['subjects']) 
       return _.countBy(subjects)
+    },
+    decadeCounts: function () {
+      return _.countBy(this.items, function (i) {
+        return i['date'].slice(0,3)+'0s'
+      })
     },
   },
   methods: {
@@ -355,5 +375,21 @@ https://github.com/vuetifyjs/vuetify/commit/4f151bbdf4388e76d92920ca19c6271c022e
 */
 .v-chip.v-size--small .v-icon.v-chip__close {
   font-size: 18px;
+}
+
+/* horizontally align range slider with bar chart*/
+.v-input__append-outer, .v-input__prepend-outer {
+  width: 4rem;
+  justify-content: center;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+.mb-15px{
+  margin-bottom: -15px;
+}
+
+.theme--dark.v-sparkline g {
+    fill: rgba(255, 255, 255, 0.1) !important;
 }
 </style>
