@@ -59,31 +59,25 @@
         </p>
       </div>
       <div class="mv3">
-        <v-sparkline
-          :value="Object.values(this.decadeCounts)"
-          :padding="1"
-          :auto-line-width="true"
-          :fill="false"
-          :type="'bar'"
-          :label-size="4"
-          class="mh5 mb-15px"
-        ></v-sparkline>
-        <div class="dflex flex-wrap items-center">
+        <apexcharts 
+          width="100%"
+          type="bar"
+          :options="chartOptions" 
+          :series="chartSeries"
+        ></apexcharts>
+        <div class="dflex flex-wrap items-center fit-barchart">
           <v-range-slider
             v-model="yearSelectionRange"
             :min="decadeMin"
-            :max="decadeMax"
+            :max="decadeMax+10"
             :color="'indigo'"
             :thumb-color="'blue'"
             thumb-label="always"
             hide-details
             class="min-w-50"
-          >
-            <template v-slot:prepend><span class="mt1">{{decadeMin}}</span></template>
-            <template v-slot:append><span class="mt1">{{decadeMax}}</span></template>
-          </v-range-slider>
+          ></v-range-slider>
         </div>
-        <div class="dib dflex items-center">
+        <div class="mt3 dib dflex items-center">
           <span class="mr2 fw7">Sort by</span>
           <v-chip-group
             v-model="sortBy"
@@ -202,6 +196,7 @@ import _ from 'lodash';
 import converter from 'number-to-words'
 import dataItems from "./assets/data/openbeelden-items-clean.json";
 import CollectionItem from "./components/CollectionItem";
+import VueApexCharts from 'vue-apexcharts'
 
 export default {
   name: 'OpenBeeldenBrowser',
@@ -220,10 +215,34 @@ export default {
       itemAspectRatio: 352 / 288,
       itemMargin: 4,
       clientWidth: this.getClientWidth(),
+      chartOptions: {
+        chart: {
+          id: 'vuechart-example',
+        },
+        xaxis: {
+          categories: []
+        },
+        plotOptions: {
+          bar: {
+            dataLabels: {
+              position: 'top', // top, center, bottom
+            },
+          }
+        },
+        dataLabels: {
+          enabled: true,
+          offsetY: -20,
+        },
+      },
+      chartSeries: [{
+        name: 'decadeSeries',
+        data: []
+      }]
     }
   },
   components: {
     CollectionItem,
+    apexcharts: VueApexCharts,
   },
   computed: {
     itemWidth: function () {
@@ -270,9 +289,24 @@ export default {
       return _.countBy(subjects)
     },
     decadeCounts: function () {
-      return _.countBy(this.items, function (i) {
+      // get decades present in data
+      let decadesPresent =  _.countBy(this.items, function (i) {
         return i['date'].slice(0,3)+'0s'
       })
+      
+      // add intermediary decades
+      let decadesAll = _.range(this.decadeMin, this.decadeMax, 10).map(d => d + 's')
+      decadesAll.map(d => {
+        if (!Object.keys(decadesPresent).includes(d)) {
+          decadesPresent[d] = 0
+        }
+      })
+
+      const decadesSorted = {};
+      Object.keys(decadesPresent).sort().forEach(function(key) {
+        decadesSorted[key] = decadesPresent[key];
+      });
+      return decadesSorted
     },
   },
   methods: {
@@ -321,8 +355,19 @@ export default {
     filterBySubject: function (item) {
       return item['subjects'].includes(this.subjectFilter) || this.subjectFilter == undefined
     },
+    updateChart: function () {
+      this.chartOptions = {...this.chartOptions, ...{
+        xaxis: {
+          categories: Object.keys(this.decadeCounts)
+        }
+      }}
+      this.chartSeries = [{...this.chartSeries, ...{
+        data: Object.values(this.decadeCounts)
+      }}]
+    }
   },
   created() {
+    this.updateChart()
     window.addEventListener("resize", _.debounce(this.onResize), 400)
   },
   destroyed() {
@@ -385,9 +430,20 @@ https://github.com/vuetifyjs/vuetify/commit/4f151bbdf4388e76d92920ca19c6271c022e
   margin-right: 0 !important;
 }
 
-.mb-15px{
-  margin-bottom: -15px;
+
+
+.fit-barchart {
+  margin-top: -88px;
+  margin-left: 37px;
+  margin-right: 2px; 
 }
+
+@media screen and ( min-width: 448px) {
+  .fit-barchart {
+    margin-top: -68px;
+  }  
+}
+
 
 .theme--dark.v-sparkline g {
     fill: rgba(255, 255, 255, 0.1) !important;
