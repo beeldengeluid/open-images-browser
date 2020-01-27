@@ -53,7 +53,7 @@
               label
             >
               <strong class="mr1">{{ subject }}</strong>
-              <span>({{subjectsForYearSelection[subject]}})</span>
+              <span>({{subjectCountsForYearSelection[subject]}})</span>
               <v-icon right>{{subject == subjectFilter ? 'cancel' : 'filter_list'}} </v-icon>
             </v-chip>
           </v-chip-group>
@@ -77,7 +77,7 @@
               label
             >
               <strong class="mr1">{{ location }}</strong>
-              <span>({{locationsForYearSelection[location]}})</span>
+              <span>({{locationCountsForYearSelection[location]}})</span>
               <v-icon right>{{location == locationFilter ? 'cancel' : 'filter_list'}} </v-icon>
             </v-chip>
           </v-chip-group>
@@ -135,8 +135,8 @@ export default {
     },
     locationFilter: String,
     subjectFilter: String,
-    locationsForYearSelection: Object,
-    subjectsForYearSelection: Object,
+    locationCountsForYearSelection: Object,
+    subjectCountsForYearSelection: Object,
   },
   computed: {
     year: function () {
