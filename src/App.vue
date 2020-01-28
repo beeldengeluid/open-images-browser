@@ -216,18 +216,24 @@ export default {
           toolbar: { tools: { download: false } },
           type: 'bar',
           events: {
-            click: (event, chartContext, config) => {
+            dataPointSelection: (event, chartContext, config) => {
               if (config.dataPointIndex >= 0) {
                 this.onDecadeClick(config.dataPointIndex)
               }
             }
           }
         },
-        colors:['#999'],
+        colors: ['#666'],
         theme: { mode: 'dark' },
-        plotOptions: { bar: { columnWidth: '98%' } },
+        plotOptions: {
+          bar: {
+            columnWidth: '98%',
+            distributed: true,
+          }
+        },
         yaxis: { show: false },
         grid: { show: false },
+        legend: { show: false },
         dataLabels: { enabled: false },
         responsive: [
           {
@@ -240,7 +246,7 @@ export default {
           }
         ]
       },
-      chartSeries: []
+      chartSeries: [],
     }
   },
   components: {
@@ -370,10 +376,19 @@ export default {
       }]
     },
     onDecadeClick: function (dataPointIndex) {
+      // set yearSelectionRange
       let decade = Object.keys(this.decadeCounts)[dataPointIndex]
       let decadeYearMin = parseInt(decade.slice(0,4))
       let decadeYearMax = decadeYearMin + 10
       this.yearSelectionRange = [decadeYearMin, decadeYearMax]
+
+      // color bars to show state 
+      let colorList = Array.from(Object.keys(this.decadeCounts))
+                        .fill('#666')
+                        .fill('#3f51b5', dataPointIndex, dataPointIndex+1)
+      this.chartOptions = {...this.chartOptions, ...{
+        colors: colorList
+      }}
     },
   },
   created() {
