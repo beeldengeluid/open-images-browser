@@ -61,10 +61,10 @@
       <div class="mv3">
         <apexcharts 
           width="100%"
-          type="bar"
           :options="chartOptions" 
           :series="chartSeries"
-        ></apexcharts>
+          class="apex-bar-chart"
+        ></apexcharts>  
         <div class="dflex flex-wrap items-center fit-barchart">
           <v-range-slider
             v-model="yearSelectionRange"
@@ -77,7 +77,7 @@
             class="min-w-50"
           ></v-range-slider>
         </div>
-        <div class="mt3 dib dflex items-center">
+        <div class="mt4 dib dflex items-center">
           <span class="mr2 fw7">Sort by</span>
           <v-chip-group
             v-model="sortBy"
@@ -92,11 +92,6 @@
           <v-btn fab x-small color="deep-purple mr2">
             <v-icon @click="toggleSortAscending">{{sortAscending ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</v-icon>
           </v-btn>
-        </div>
-        <div class="dflex items-center justify-between flex-wrap">
-          <div class="dib">
-            
-          </div>
         </div>
         <div class="dflex mt4 flex-wrap items-center justify-between">
             <v-slider
@@ -217,27 +212,27 @@ export default {
       clientWidth: this.getClientWidth(),
       chartOptions: {
         chart: {
-          id: 'vuechart-example',
+          id: 'decade-bar-chart',
+          toolbar: { tools: { download: false } },
+          type: 'bar',
         },
-        xaxis: {
-          categories: []
-        },
-        plotOptions: {
-          bar: {
-            dataLabels: {
-              position: 'top', // top, center, bottom
-            },
+        colors:['#999'],
+        theme: { mode: 'dark' },
+        yaxis: { show: false },
+        grid: { show: false },
+        dataLabels: { enabled: false },
+        responsive: [
+          {
+            breakpoint: 9999,
+            options: { chart: { height: '300' } }
+          },
+          {
+            breakpoint: 800,
+            options: { chart: { height: '200' } }
           }
-        },
-        dataLabels: {
-          enabled: true,
-          offsetY: -20,
-        },
+        ]
       },
-      chartSeries: [{
-        name: 'decadeSeries',
-        data: []
-      }]
+      chartSeries: []
     }
   },
   components: {
@@ -355,15 +350,16 @@ export default {
     filterBySubject: function (item) {
       return item['subjects'].includes(this.subjectFilter) || this.subjectFilter == undefined
     },
-    updateChart: function () {
+    updateChart: function () {      
       this.chartOptions = {...this.chartOptions, ...{
         xaxis: {
           categories: Object.keys(this.decadeCounts)
         }
       }}
-      this.chartSeries = [{...this.chartSeries, ...{
-        data: Object.values(this.decadeCounts)
-      }}]
+      this.chartSeries = [{
+        name: 'Item count',
+        data: Object.values(this.decadeCounts),
+      }]
     }
   },
   created() {
@@ -422,30 +418,18 @@ https://github.com/vuetifyjs/vuetify/commit/4f151bbdf4388e76d92920ca19c6271c022e
   font-size: 18px;
 }
 
-/* horizontally align range slider with bar chart*/
-.v-input__append-outer, .v-input__prepend-outer {
-  width: 4rem;
-  justify-content: center;
-  margin-left: 0 !important;
-  margin-right: 0 !important;
-}
-
-
-
 .fit-barchart {
   margin-top: -88px;
-  margin-left: 37px;
+  margin-left: 4px;
   margin-right: 2px; 
 }
-
 @media screen and ( min-width: 448px) {
   .fit-barchart {
     margin-top: -68px;
   }  
 }
 
-
-.theme--dark.v-sparkline g {
-    fill: rgba(255, 255, 255, 0.1) !important;
+.apexcharts-canvas.apexcharts-theme-dark {
+    background: none;
 }
 </style>
