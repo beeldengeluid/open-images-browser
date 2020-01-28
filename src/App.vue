@@ -215,9 +215,15 @@ export default {
           id: 'decade-bar-chart',
           toolbar: { tools: { download: false } },
           type: 'bar',
+          events: {
+            click: (event, chartContext, config) => {
+              this.onDecadeClick(config.dataPointIndex)
+            }
+          }
         },
         colors:['#999'],
         theme: { mode: 'dark' },
+        plotOptions: { bar: { columnWidth: '98%' } },
         yaxis: { show: false },
         grid: { show: false },
         dataLabels: { enabled: false },
@@ -360,7 +366,13 @@ export default {
         name: 'Item count',
         data: Object.values(this.decadeCounts),
       }]
-    }
+    },
+    onDecadeClick: function (dataPointIndex) {
+      let decade = Object.keys(this.decadeCounts)[dataPointIndex]
+      let decadeYearMin = parseInt(decade.slice(0,4))
+      let decadeYearMax = decadeYearMin + 10
+      this.yearSelectionRange = [decadeYearMin, decadeYearMax]
+    },
   },
   created() {
     this.updateChart()
