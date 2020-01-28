@@ -217,7 +217,9 @@ export default {
           type: 'bar',
           events: {
             click: (event, chartContext, config) => {
-              this.onDecadeClick(config.dataPointIndex)
+              if (config.dataPointIndex >= 0) {
+                this.onDecadeClick(config.dataPointIndex)
+              }
             }
           }
         },
