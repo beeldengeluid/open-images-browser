@@ -15,7 +15,7 @@
           <span>.</span>
         </p>
         <p>
-          <span>The current selection, ranging from </span><span class="ph1 blue white--text">{{yearSelectionRange[0]}}</span> to <span class="ph1 blue white--text">{{yearSelectionRange[1]}}</span>
+          <span>The current selection, ranging from </span><span class="ph1 blue white--text">{{selectedYearRange[0]}}</span> to <span class="ph1 blue white--text">{{selectedYearRange[1]}}</span>
           <span v-if="locationFilter || subjectFilter">, filtered for </span>
           <span v-if="locationFilter">
             <v-chip
@@ -64,20 +64,8 @@
           :options="chartOptions" 
           :series="chartSeries"
           class="apex-bar-chart"
-        ></apexcharts>  
-        <div class="dflex flex-wrap items-center fit-barchart">
-          <v-range-slider
-            v-model="yearSelectionRange"
-            :min="decadeMin"
-            :max="decadeMax+10"
-            :color="'indigo'"
-            :thumb-color="'blue'"
-            thumb-label="always"
-            hide-details
-            class="min-w-50"
-          ></v-range-slider>
-        </div>
-        <div class="mt4 dib dflex items-center">
+        ></apexcharts>
+        <div class="dib dflex items-center">
           <span class="mr2 fw7">Sort by</span>
           <v-chip-group
             v-model="sortBy"
@@ -198,7 +186,8 @@ export default {
   data: function () {
     return {
       items: dataItems,
-      yearSelectionRange: [1960, 1980],
+      selectedYearRange: [1970, 1979],
+      selectedDecadeIndex: 6,
       sortFields: ['id','date', 'title'],
       sortBy: 'date',
       displayFields: ['title', 'year', 'thumb'],
@@ -210,6 +199,10 @@ export default {
       itemAspectRatio: 352 / 288,
       itemMargin: 4,
       clientWidth: this.getClientWidth(),
+      colors: {
+        gray: '#666',
+        indigo: '#3f51b5',
+      },
       chartOptions: {
         chart: {
           id: 'decade-bar-chart',
@@ -355,8 +348,8 @@ export default {
       this.subjectFilter = undefined
     },
     filterByYear: function (item) {
-      return this.dateToYear(item['date']) >= this.yearSelectionRange[0] &&
-             this.dateToYear(item['date']) <= this.yearSelectionRange[1]
+      return this.dateToYear(item['date']) >= this.selectedYearRange[0] &&
+             this.dateToYear(item['date']) <= this.selectedYearRange[1]
     },
     filterByLocation: function (item) {
       return item['locations'].includes(this.locationFilter) || this.locationFilter == undefined
@@ -368,7 +361,8 @@ export default {
       this.chartOptions = {...this.chartOptions, ...{
         xaxis: {
           categories: Object.keys(this.decadeCounts)
-        }
+        },
+        colors: this.getColorList(),
       }}
       this.chartSeries = [{
         name: 'Item count',
@@ -376,19 +370,24 @@ export default {
       }]
     },
     onDecadeClick: function (dataPointIndex) {
-      // set yearSelectionRange
+      // set year range
       let decade = Object.keys(this.decadeCounts)[dataPointIndex]
       let decadeYearMin = parseInt(decade.slice(0,4))
       let decadeYearMax = decadeYearMin + 9
-      this.yearSelectionRange = [decadeYearMin, decadeYearMax]
+      this.selectedYearRange = [decadeYearMin, decadeYearMax]
+      // set decade
+      this.selectedDecadeIndex = dataPointIndex
 
       // color bars to show state 
-      let colorList = Array.from(Object.keys(this.decadeCounts))
-                        .fill('#666')
-                        .fill('#3f51b5', dataPointIndex, dataPointIndex+1)
+      let colorList = this.getColorList()
       this.chartOptions = {...this.chartOptions, ...{
         colors: colorList
       }}
+    },
+    getColorList: function () {
+      return Array.from(Object.keys(this.decadeCounts))
+              .fill(this.colors.gray)
+              .fill(this.colors.indigo, this.selectedDecadeIndex, this.selectedDecadeIndex+1)
     },
   },
   created() {
