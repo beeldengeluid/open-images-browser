@@ -379,7 +379,7 @@ export default {
       // set yearSelectionRange
       let decade = Object.keys(this.decadeCounts)[dataPointIndex]
       let decadeYearMin = parseInt(decade.slice(0,4))
-      let decadeYearMax = decadeYearMin + 10
+      let decadeYearMax = decadeYearMin + 9
       this.yearSelectionRange = [decadeYearMin, decadeYearMax]
 
       // color bars to show state 
