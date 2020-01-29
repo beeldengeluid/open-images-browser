@@ -15,7 +15,7 @@
           <span>.</span>
         </p>
         <p>
-          <span>The current selection, ranging from </span><span class="ph1 blue white--text">{{yearSelectionRange[0]}}</span> to <span class="ph1 blue white--text">{{yearSelectionRange[1]}}</span>
+          <span>The current selection, ranging from </span><span class="ph1 blue white--text">{{selectedYearRange[0]}}</span> to <span class="ph1 blue white--text">{{selectedYearRange[1]}}</span>
           <span v-if="locationFilter || subjectFilter">, filtered for </span>
           <span v-if="locationFilter">
             <v-chip
@@ -59,30 +59,12 @@
         </p>
       </div>
       <div class="mv3">
-        <v-sparkline
-          :value="Object.values(this.decadeCounts)"
-          :padding="1"
-          :auto-line-width="true"
-          :fill="false"
-          :type="'bar'"
-          :label-size="4"
-          class="mh5 mb-15px"
-        ></v-sparkline>
-        <div class="dflex flex-wrap items-center">
-          <v-range-slider
-            v-model="yearSelectionRange"
-            :min="decadeMin"
-            :max="decadeMax"
-            :color="'indigo'"
-            :thumb-color="'blue'"
-            thumb-label="always"
-            hide-details
-            class="min-w-50"
-          >
-            <template v-slot:prepend><span class="mt1">{{decadeMin}}</span></template>
-            <template v-slot:append><span class="mt1">{{decadeMax}}</span></template>
-          </v-range-slider>
-        </div>
+        <apexcharts 
+          width="100%"
+          :options="chartOptions" 
+          :series="chartSeries"
+          class="apex-bar-chart"
+        ></apexcharts>
         <div class="dib dflex items-center">
           <span class="mr2 fw7">Sort by</span>
           <v-chip-group
@@ -98,11 +80,6 @@
           <v-btn fab x-small color="deep-purple mr2">
             <v-icon @click="toggleSortAscending">{{sortAscending ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</v-icon>
           </v-btn>
-        </div>
-        <div class="dflex items-center justify-between flex-wrap">
-          <div class="dib">
-            
-          </div>
         </div>
         <div class="dflex mt4 flex-wrap items-center justify-between">
             <v-slider
@@ -202,13 +179,15 @@ import _ from 'lodash';
 import converter from 'number-to-words'
 import dataItems from "./assets/data/openbeelden-items-clean.json";
 import CollectionItem from "./components/CollectionItem";
+import VueApexCharts from 'vue-apexcharts'
 
 export default {
   name: 'OpenBeeldenBrowser',
   data: function () {
     return {
       items: dataItems,
-      yearSelectionRange: [1960, 1980],
+      selectedYearRange: [1970, 1979],
+      selectedDecadeIndex: 6,
       sortFields: ['id','date', 'title'],
       sortBy: 'date',
       displayFields: ['title', 'year', 'thumb'],
@@ -220,10 +199,52 @@ export default {
       itemAspectRatio: 352 / 288,
       itemMargin: 4,
       clientWidth: this.getClientWidth(),
+      colors: {
+        gray: '#666',
+        indigo: '#3f51b5',
+      },
+      chartOptions: {
+        chart: {
+          id: 'decade-bar-chart',
+          toolbar: { tools: { download: false } },
+          type: 'bar',
+          events: {
+            dataPointSelection: (event, chartContext, config) => {
+              if (config.dataPointIndex >= 0) {
+                this.onDecadeClick(config.dataPointIndex)
+              }
+            }
+          }
+        },
+        colors: ['#666'],
+        theme: { mode: 'dark' },
+        plotOptions: {
+          bar: {
+            columnWidth: '98%',
+            distributed: true,
+          }
+        },
+        yaxis: { show: false },
+        grid: { show: false },
+        legend: { show: false },
+        dataLabels: { enabled: false },
+        responsive: [
+          {
+            breakpoint: 9999,
+            options: { chart: { height: '300' } }
+          },
+          {
+            breakpoint: 800,
+            options: { chart: { height: '200' } }
+          }
+        ]
+      },
+      chartSeries: [],
     }
   },
   components: {
     CollectionItem,
+    apexcharts: VueApexCharts,
   },
   computed: {
     itemWidth: function () {
@@ -270,9 +291,24 @@ export default {
       return _.countBy(subjects)
     },
     decadeCounts: function () {
-      return _.countBy(this.items, function (i) {
+      // get decades present in data
+      let decadesPresent =  _.countBy(this.items, function (i) {
         return i['date'].slice(0,3)+'0s'
       })
+      
+      // add intermediary decades
+      let decadesAll = _.range(this.decadeMin, this.decadeMax, 10).map(d => d + 's')
+      decadesAll.map(d => {
+        if (!Object.keys(decadesPresent).includes(d)) {
+          decadesPresent[d] = 0
+        }
+      })
+
+      const decadesSorted = {};
+      Object.keys(decadesPresent).sort().forEach(function(key) {
+        decadesSorted[key] = decadesPresent[key];
+      });
+      return decadesSorted
     },
   },
   methods: {
@@ -312,8 +348,8 @@ export default {
       this.subjectFilter = undefined
     },
     filterByYear: function (item) {
-      return this.dateToYear(item['date']) >= this.yearSelectionRange[0] &&
-             this.dateToYear(item['date']) <= this.yearSelectionRange[1]
+      return this.dateToYear(item['date']) >= this.selectedYearRange[0] &&
+             this.dateToYear(item['date']) <= this.selectedYearRange[1]
     },
     filterByLocation: function (item) {
       return item['locations'].includes(this.locationFilter) || this.locationFilter == undefined
@@ -321,8 +357,41 @@ export default {
     filterBySubject: function (item) {
       return item['subjects'].includes(this.subjectFilter) || this.subjectFilter == undefined
     },
+    updateChart: function () {      
+      this.chartOptions = {...this.chartOptions, ...{
+        xaxis: {
+          categories: Object.keys(this.decadeCounts)
+        },
+        colors: this.getColorList(),
+      }}
+      this.chartSeries = [{
+        name: 'Item count',
+        data: Object.values(this.decadeCounts),
+      }]
+    },
+    onDecadeClick: function (dataPointIndex) {
+      // set year range
+      let decade = Object.keys(this.decadeCounts)[dataPointIndex]
+      let decadeYearMin = parseInt(decade.slice(0,4))
+      let decadeYearMax = decadeYearMin + 9
+      this.selectedYearRange = [decadeYearMin, decadeYearMax]
+      // set decade
+      this.selectedDecadeIndex = dataPointIndex
+
+      // color bars to show state 
+      let colorList = this.getColorList()
+      this.chartOptions = {...this.chartOptions, ...{
+        colors: colorList
+      }}
+    },
+    getColorList: function () {
+      return Array.from(Object.keys(this.decadeCounts))
+              .fill(this.colors.gray)
+              .fill(this.colors.indigo, this.selectedDecadeIndex, this.selectedDecadeIndex+1)
+    },
   },
   created() {
+    this.updateChart()
     window.addEventListener("resize", _.debounce(this.onResize), 400)
   },
   destroyed() {
@@ -377,19 +446,18 @@ https://github.com/vuetifyjs/vuetify/commit/4f151bbdf4388e76d92920ca19c6271c022e
   font-size: 18px;
 }
 
-/* horizontally align range slider with bar chart*/
-.v-input__append-outer, .v-input__prepend-outer {
-  width: 4rem;
-  justify-content: center;
-  margin-left: 0 !important;
-  margin-right: 0 !important;
+.fit-barchart {
+  margin-top: -88px;
+  margin-left: 4px;
+  margin-right: 2px; 
+}
+@media screen and ( min-width: 448px) {
+  .fit-barchart {
+    margin-top: -68px;
+  }  
 }
 
-.mb-15px{
-  margin-bottom: -15px;
-}
-
-.theme--dark.v-sparkline g {
-    fill: rgba(255, 255, 255, 0.1) !important;
+.apexcharts-canvas.apexcharts-theme-dark {
+    background: none;
 }
 </style>
