@@ -458,6 +458,6 @@ https://github.com/vuetifyjs/vuetify/commit/4f151bbdf4388e76d92920ca19c6271c022e
 }
 
 .apexcharts-canvas.apexcharts-theme-dark {
-    background: none;
+    background: none !important;
 }
 </style>
