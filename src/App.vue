@@ -19,11 +19,8 @@
           <span v-if="locationFilter || subjectFilter">, filtered for </span>
           <span v-if="locationFilter">
             <v-chip
-              color="teal"
-              text-color="white"
-              close
-              close-icon="cancel"
-              @click:close="closeLocationFilter()"
+              color="teal" text-color="white"
+              @click:close="closeLocationFilter()" close close-icon="cancel"
               label small
             >
               <v-icon left small>room</v-icon>
@@ -33,11 +30,8 @@
           <span v-if="subjectFilter">
             <v-chip
               v-if="subjectFilter"
-              color="cyan darken-1"
-              text-color="white"
-              close
-              close-icon="cancel"
-              @click:close="closeSubjectFilter()"
+              color="cyan darken-1" text-color="white"
+              @click:close="closeSubjectFilter()" close close-icon="cancel"
               label small
             >
               <v-icon left small>local_offer</v-icon>
@@ -46,7 +40,10 @@
           </span>
           <span> contains </span><span class="ph1 indigo white--text">{{itemsSelectedSorted.length}}</span><span> out of {{this.items.length}} videos.</span>
           <br>
-          <span>Videos are sorted by </span><span class="ph1 deep-purple font-mono">{{sortBy}}</span><span> in </span><span class="ph1 deep-purple">{{sortAscending ? 'ascending' : 'descending'}} <v-icon @click="toggleSortAscending" small>{{sortAscending ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</v-icon> </span> order.
+          <span>Videos are sorted by </span><span class="ph1 deep-purple font-mono">{{sortBy}}</span><span> in </span>
+          <span class="ph1 deep-purple">{{sortAscending ? 'ascending' : 'descending'}} 
+            <v-icon @click="toggleSortAscending" small>{{sortAscending ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</v-icon> 
+          </span> order.
           <br>
           <span>Videos are displayed </span><span class="ph1 orange white--text">{{noThumbsPerRow}}</span><span> per row</span>
           <span v-if="displayFieldsSelected.length">, along with their </span>
@@ -59,20 +56,10 @@
         </p>
       </div>
       <div class="mv3">
-        <apexcharts 
-          width="100%"
-          :options="chartOptions" 
-          :series="chartSeries"
-          class="apex-bar-chart"
-        ></apexcharts>
+        <apexcharts  width="100%" :options="chartOptions"  :series="chartSeries" class="apex-bar-chart"></apexcharts>
         <div class="dib dflex items-center">
           <span class="mr2 fw7">Sort by</span>
-          <v-chip-group
-            v-model="sortBy"
-            active-class="deep-purple"
-            mandatory
-            class="fw5 font-mono"
-          >
+          <v-chip-group v-model="sortBy" active-class="deep-purple" mandatory class="fw5 font-mono">
             <v-chip v-for="sortField in sortFields" :key="sortField" :value="sortField">
               {{ sortField }}
             </v-chip>
@@ -82,67 +69,48 @@
           </v-btn>
         </div>
         <div class="dflex mt4 flex-wrap items-center justify-between">
-            <v-slider
-              v-model="noThumbsPerRow"
-              append-icon="zoom_out"
-              prepend-icon="zoom_in"
-              @click:append="noThumbsPerRow++"
-              @click:prepend="noThumbsPerRow--"
-              label="Items per row"
-              min="1" 
-              max="50" 
-              step="1"
-              color="orange"
-              thumb-color="orange"
-              thumb-label="always"
-              hide-details
-              class="mr4"
-            ></v-slider>
-            <div class="dflex items-center">
-              <span class="pr2 fw7">Display</span>
-              <v-chip-group
-                v-model="displayFieldsSelected"
-                active-class="green"
-                multiple
-                class="fw5 font-mono"
-              >
-                <v-chip v-for="displayField in displayFields" :key="displayField" :value="displayField">
-                  {{displayField}}
-                </v-chip>
-              </v-chip-group>
-            </div>
-          </div>
-          <div class="dflex flex-wrap mv3 items-center">
-            <span class="pr2 fw7"><v-icon left>filter_list</v-icon>Filters</span>
-            <v-chip-group class="fw5 font-mono">
-              <v-chip
-                v-if="locationFilter"
-                color="teal"
-                text-color="white"
-                close
-                close-icon="cancel"
-                @click:close="closeLocationFilter()"
-                label
-              >
-                <v-icon left>room</v-icon>
-                <strong class="mr1">{{ locationFilter }}</strong>
-                <span>({{locationCountsForYearSelection[locationFilter]}})</span>
-              </v-chip>
-              <v-chip
-                v-if="subjectFilter"
-                color="cyan darken-1"
-                text-color="white"
-                close
-                close-icon="cancel"
-                @click:close="closeSubjectFilter()"
-                label
-              >
-                <v-icon left>local_offer</v-icon>
-                <strong class="mr1">{{ subjectFilter }}</strong>
-                <span>({{subjectCountsForYearSelection[subjectFilter]}})</span>
+          <v-slider
+            v-model="noThumbsPerRow"
+            append-icon="zoom_out"
+            prepend-icon="zoom_in"
+            @click:append="noThumbsPerRow++"
+            @click:prepend="noThumbsPerRow--"
+            min="1" max="50" step="1"
+            label="Items per row"
+            color="orange" thumb-color="orange" thumb-label="always"
+            hide-details
+            class="mr4"
+          ></v-slider>
+          <div class="dflex items-center">
+            <span class="pr2 fw7">Display</span>
+            <v-chip-group v-model="displayFieldsSelected" active-class="green" multiple class="fw5 font-mono">
+              <v-chip v-for="displayField in displayFields" :key="displayField" :value="displayField">
+                {{displayField}}
               </v-chip>
             </v-chip-group>
           </div>
+        </div>
+        <div class="dflex flex-wrap mv3 items-center">
+          <span class="pr2 fw7"><v-icon left>filter_list</v-icon>Filters</span>
+          <v-chip-group class="fw5 font-mono">
+            <v-chip
+              v-if="locationFilter"
+              @click:close="closeLocationFilter()" close close-icon="cancel"
+              color="teal" text-color="white" label
+            >
+              <v-icon left>room</v-icon><strong class="mr1">{{ locationFilter }}</strong>
+              <span>({{locationCountsForYearSelection[locationFilter]}})</span>
+            </v-chip>
+            <v-chip
+              v-if="subjectFilter"
+              @click:close="closeSubjectFilter()" close close-icon="cancel"
+              color="cyan darken-1" text-color="white" label
+            >
+              <v-icon left>local_offer</v-icon><strong class="mr1">{{ subjectFilter }}</strong>
+              <span>({{subjectCountsForYearSelection[subjectFilter]}})</span>
+            </v-chip>
+          </v-chip-group>
+        </div>
       </div>
       <div class="mv3 relative dflex flex-wrap">
         <CollectionItem
@@ -170,14 +138,7 @@
         />
       </div>
       <back-to-top>
-        <v-btn
-          color="red"
-          absolute
-          bottom
-          right
-          fab
-          title="Back to top"
-        >
+        <v-btn color="red" title="Back to top" absolute bottom right fab>
           <v-icon>keyboard_arrow_up</v-icon>
         </v-btn>
       </back-to-top>
