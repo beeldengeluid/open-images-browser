@@ -169,6 +169,18 @@
           v-on:toggle-subject-filter  = "onToggleSubjectFilter"
         />
       </div>
+      <back-to-top>
+        <v-btn
+          color="red"
+          absolute
+          bottom
+          right
+          fab
+          title="Back to top"
+        >
+          <v-icon>keyboard_arrow_up</v-icon>
+        </v-btn>
+      </back-to-top>
     </v-content>
   </v-app>
 </template>
@@ -180,9 +192,15 @@ import converter from 'number-to-words'
 import dataItems from "./assets/data/openbeelden-items-clean.json";
 import CollectionItem from "./components/CollectionItem";
 import VueApexCharts from 'vue-apexcharts'
+import BackToTop from 'vue-backtotop'
 
 export default {
   name: 'OpenBeeldenBrowser',
+  components: {
+    CollectionItem,
+    apexcharts: VueApexCharts,
+    BackToTop
+  },
   data: function () {
     return {
       items: dataItems,
@@ -241,10 +259,6 @@ export default {
       },
       chartSeries: [],
     }
-  },
-  components: {
-    CollectionItem,
-    apexcharts: VueApexCharts,
   },
   computed: {
     itemWidth: function () {
