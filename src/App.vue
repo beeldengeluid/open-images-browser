@@ -138,10 +138,13 @@
         />
       </div>
       <back-to-top>
-        <v-btn color="red" title="Back to top" absolute bottom right fab>
+        <v-btn light title="Back to top" absolute bottom right fab>
           <v-icon>keyboard_arrow_up</v-icon>
         </v-btn>
       </back-to-top>
+      <v-snackbar v-model="snackbar.state" :timeout="snackbar.timeout" color='grey lighten-4 grey grey--text text--darken-4'>
+        <span v-html="snackbar.markup"></span>
+      </v-snackbar>
     </v-content>
   </v-app>
 </template>
@@ -219,6 +222,11 @@ export default {
         ]
       },
       chartSeries: [],
+      snackbar:{
+        state: false,
+        text: "",
+        timeout: 4000,
+      }
     }
   },
   computed: {
@@ -364,6 +372,48 @@ export default {
               .fill(this.colors.gray)
               .fill(this.colors.indigo, this.selectedDecadeIndex, this.selectedDecadeIndex+1)
     },
+    showSnackbar (markup) {
+      this.snackbar.state = false
+      this.$nextTick(() => {
+        this.snackbar.markup = markup
+        this.snackbar.state = true
+      })
+    },
+  },
+  watch: {
+    sortBy: function (newValue) {
+      this.showSnackbar(`${this.sortAscending ? '☝️' : '👇'} Sorting by <strong>${newValue}</strong>`)
+    },
+    selectedDecadeIndex: function (newValue) {
+      this.showSnackbar(`✅ Selected <strong>${Object.keys(this.decadeCounts)[newValue]}</strong> decade`)
+    },
+    sortAscending: function (newValue) {
+      this.showSnackbar(`${newValue ? '☝️' : '👇'} Sorting in <strong>${newValue ? 'ascending' : 'descending'}</strong> order`)
+    },
+    locationFilter: function (newValue) {
+      if (newValue) {
+        this.showSnackbar(`📍 Filtering for location: <strong>${newValue}</strong>`)
+      } else {
+        this.showSnackbar('❌ Removed <strong>location</strong> filter')
+      }
+    },
+    subjectFilter: function (newValue) {
+      if (newValue) {
+        this.showSnackbar(`🏷 Filtering for subject: <strong>${newValue}</strong>`)
+      } else {
+        this.showSnackbar('❌ Removed <strong>subject</strong> filter')
+      }
+    },
+    displayFieldsSelected: function (newValue, oldValue) {
+      let added = _.difference(newValue, oldValue)
+      if (added.length) {
+        this.showSnackbar(`👀 Displaying <strong>${added}</strong>`)
+      } else {
+        let removed = _.difference(oldValue, newValue)
+        this.showSnackbar(`🙈 Not displaying <strong>${removed}</strong>`)
+      }
+    },
+    
   },
   created() {
     this.updateChart()
