@@ -16,16 +16,22 @@
         </p>
         <p>
           <span>The current selection, ranging from </span><span class="ph1 blue white--text">{{selectedYearRange[0]}}</span> to <span class="ph1 blue white--text">{{selectedYearRange[1]}}</span>
-          <span v-if="locationFilter || subjectFilter">, filtered for </span>
-          <span v-if="locationFilter">
-            <v-chip
-              color="teal" text-color="white"
-              @click:close="closeLocationFilter()" close close-icon="cancel"
-              label small
+          <span v-if="locationFilters.length || subjectFilter">, filtered for </span>
+          <span v-if="locationFilters.length">
+            <v-chip-group
+              prev-icon="keyboard_arrow_left" next-icon="keyboard_arrow_right"  
+              class="font-mono dib-i v-mid"
             >
-              <v-icon left small>room</v-icon>
-              <strong>{{ locationFilter }}</strong>
-            </v-chip>,
+              <v-chip  
+                v-for="locationFilter in locationFilters" :key="locationFilter"
+                :value="locationFilter"
+                @click:close="onToggleLocationFilter(locationFilter)" close close-icon="cancel"
+                label small class="teal white--text"
+              >
+                <strong class="mr1">{{ locationFilter }}</strong>
+                <span>({{locationCountsForYearSelection[locationFilter]}})</span>
+              </v-chip>
+            </v-chip-group>
           </span>
           <span v-if="subjectFilter">
             <v-chip
@@ -57,6 +63,24 @@
       </div>
       <div class="mv3">
         <apexcharts  width="100%" :options="chartOptions"  :series="chartSeries" class="apex-bar-chart"></apexcharts>
+        <div>
+          <v-chip-group
+            prev-icon="keyboard_arrow_left" next-icon="keyboard_arrow_right" 
+            multiple class="font-mono"
+          >
+            <v-chip  
+              v-for="location in locationsForYearSelection" :key="location.name"
+              @click="onToggleLocationFilter(location.name)"
+              :value="location.name"
+              :class="locationFilters.includes(location.name) ? 'teal white--text' : ''"
+              label small
+            >
+              <strong class="mr1">{{ location.name }}</strong>
+              <span>({{locationCountsForYearSelection[location.name]}})</span>
+              <v-icon right small>{{locationFilters.includes(location.name) ? 'cancel' : 'filter_list'}} </v-icon>
+            </v-chip>
+          </v-chip-group>
+        </div>
         <div class="dib dflex items-center">
           <span class="mr2 fw7">Sort by</span>
           <v-chip-group v-model="sortBy" active-class="deep-purple" mandatory class="fw5 font-mono">
@@ -94,14 +118,6 @@
           <span class="pr2 fw7"><v-icon left>filter_list</v-icon>Filters</span>
           <v-chip-group class="fw5 font-mono">
             <v-chip
-              v-if="locationFilter"
-              @click:close="closeLocationFilter()" close close-icon="cancel"
-              color="teal" text-color="white" label
-            >
-              <v-icon left>room</v-icon><strong class="mr1">{{ locationFilter }}</strong>
-              <span>({{locationCountsForYearSelection[locationFilter]}})</span>
-            </v-chip>
-            <v-chip
               v-if="subjectFilter"
               @click:close="closeSubjectFilter()" close close-icon="cancel"
               color="cyan darken-1" text-color="white" label
@@ -129,7 +145,7 @@
           :displayTitle   = "displayFieldsSelected.includes('title')"
           :displayYear    = "displayFieldsSelected.includes('year')"
           :displayThumb   = "displayFieldsSelected.includes('thumb')"
-          :locationFilter = "locationFilter"
+          :locationFilters = "locationFilters"
           :subjectFilter  = "subjectFilter"
           :locationCountsForYearSelection = "locationCountsForYearSelection"
           :subjectCountsForYearSelection  = "subjectCountsForYearSelection"
@@ -175,7 +191,7 @@ export default {
       displayFields: ['title', 'year', 'thumb'],
       displayFieldsSelected: ['thumb', 'year'],
       sortAscending: true,
-      locationFilter: 'Nederland',
+      locationFilters: ['Nederland'],
       subjectFilter: 'steden',
       noThumbsPerRow: 10,
       itemAspectRatio: 352 / 288,
@@ -269,6 +285,17 @@ export default {
       let locations =  _.flatMap(this.itemsFilteredByYear, i => i['locations']) 
       return _.countBy(locations)
     },
+    locationsForYearSelection: function () {
+      let locations = 
+        Object.keys(this.locationCountsForYearSelection)
+          .map( key => {
+            return {
+              'name': key,
+              'count': this.locationCountsForYearSelection[key]
+            }
+          })
+      return _.orderBy(locations, ['count', 'name'], ['desc',  'asc'])
+    },
     subjectCountsForYearSelection: function () {
       let subjects =  _.flatMap(this.itemsFilteredByYear, i => i['subjects']) 
       return _.countBy(subjects)
@@ -311,11 +338,19 @@ export default {
       this.clientWidth = this.getClientWidth()
     },
     onToggleLocationFilter: function (filterValue) {
-      if (this.locationFilter == filterValue) {
-        this.closeLocationFilter()
+      if (this.locationFilters.includes(filterValue)) {
+        this.removeLocationFilter(filterValue)
       } else {
-        this.locationFilter = filterValue
+        this.addLocationFilter(filterValue)
       }
+    },
+    addLocationFilter (filterValue) {
+      this.locationFilters.push(filterValue)
+      this.showSnackbar(`📍 Added location filter <strong>${filterValue}</strong>`)
+    },
+    removeLocationFilter (filterValue) {
+      _.pull(this.locationFilters, filterValue)
+      this.showSnackbar(`❌ Removed location filter <strong>${filterValue}</strong>`)
     },
     onToggleSubjectFilter: function (filterValue) {
       if (this.subjectFilter == filterValue) {
@@ -323,9 +358,6 @@ export default {
       } else {
         this.subjectFilter = filterValue
       }
-    },
-    closeLocationFilter: function () {
-      this.locationFilter = undefined
     },
     closeSubjectFilter: function () {
       this.subjectFilter = undefined
@@ -335,7 +367,7 @@ export default {
              this.dateToYear(item['date']) <= this.selectedYearRange[1]
     },
     filterByLocation: function (item) {
-      return item['locations'].includes(this.locationFilter) || this.locationFilter == undefined
+      return this.locationFilters.every(lf => item['locations'].includes(lf)) || !this.locationFilters.length
     },
     filterBySubject: function (item) {
       return item['subjects'].includes(this.subjectFilter) || this.subjectFilter == undefined
@@ -390,13 +422,19 @@ export default {
     sortAscending: function (newValue) {
       this.showSnackbar(`${newValue ? '☝️' : '👇'} Sorting in <strong>${newValue ? 'ascending' : 'descending'}</strong> order`)
     },
-    locationFilter: function (newValue) {
-      if (newValue) {
-        this.showSnackbar(`📍 Filtering for location: <strong>${newValue}</strong>`)
-      } else {
-        this.showSnackbar('❌ Removed <strong>location</strong> filter')
-      }
-    },
+    /* for some weird reason newValue & oldValue have the same value in this watch funciton, 
+       therefore trigger correct notifations in onToggleLocationFilter() */
+    // locationFilters: function (newValue, oldValue) {
+    //   console.log('oldValue', oldValue)
+    //   console.log('newValue', newValue)
+    //   let added = _.difference(newValue, oldValue)
+    //   if (added.length) {
+    //     this.showSnackbar(`📍 Added location filter <strong>${added[0]}</strong>`)
+    //   } else {
+    //     let removed = _.difference(oldValue, newValue)
+    //     this.showSnackbar(`❌ Removed location filter <strong>${removed}</strong>`)
+    //   }
+    // },
     subjectFilter: function (newValue) {
       if (newValue) {
         this.showSnackbar(`🏷 Filtering for subject: <strong>${newValue}</strong>`)
@@ -413,7 +451,6 @@ export default {
         this.showSnackbar(`🙈 Not displaying <strong>${removed}</strong>`)
       }
     },
-    
   },
   created() {
     this.updateChart()
@@ -484,5 +521,9 @@ https://github.com/vuetifyjs/vuetify/commit/4f151bbdf4388e76d92920ca19c6271c022e
 
 .apexcharts-canvas.apexcharts-theme-dark {
     background: none !important;
+}
+
+.dib-i {
+  display: inline-block !important;
 }
 </style>

@@ -63,22 +63,22 @@
             <v-icon small>room</v-icon>
             <span class="v-mid"> {{locations.length}} Location<span v-if="locations.length > 1">s</span></span>
           </span>
-          <v-chip-group 
-            v-model="locationFilter"
-            active-class="teal white--text" 
+          <div v-for="locFilter in locationFilters" :key="locFilter">{{locFilter}}</div>
+          <v-chip-group
+            multiple
             column 
             class="font-mono"
           >
             <v-chip  
-              v-for="location in locations" 
-              :key="location" 
-              @click="$emit('toggle-location-filter', location)"
+              v-for="location in locations" :key="location" 
               :value="location"
+              @click="toggleLocationFilter(location)"
               label
+              :class="locationFilters.includes(location) ? 'teal white--text' : ''"
             >
               <strong class="mr1">{{ location }}</strong>
               <span>({{locationCountsForYearSelection[location]}})</span>
-              <v-icon right>{{location == locationFilter ? 'cancel' : 'filter_list'}} </v-icon>
+              <v-icon right>{{locationFilters.includes(location) ? 'cancel' : 'filter_list'}} </v-icon>
             </v-chip>
           </v-chip-group>
         </div>
@@ -133,7 +133,7 @@ export default {
       type: Boolean,
       default: true
     },
-    locationFilter: String,
+    locationFilters: Array,
     subjectFilter: String,
     locationCountsForYearSelection: Object,
     subjectCountsForYearSelection: Object,
@@ -141,13 +141,17 @@ export default {
   computed: {
     year: function () {
       return this.date.slice(0,4)
-    }
+    },
   },
   methods: {
     toggleExpanded: function () {
       this.isExpanded = !this.isExpanded
-    }
-  }
+    },
+    toggleLocationFilter (locationFilter) {
+      this.$emit('toggle-location-filter', locationFilter)
+      this.$forceUpdate()
+    },
+  },
 }
 </script>
 
