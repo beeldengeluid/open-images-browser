@@ -29,7 +29,7 @@
                 label small class="teal white--text"
               >
                 <strong class="mr1">{{ locationFilter }}</strong>
-                <span>({{locationCountsForYearSelection[locationFilter]}})</span>
+                <span>{{locationCountsForYearSelection[locationFilter]}}</span>
               </v-chip>
             </v-chip-group>
           </span>
@@ -45,7 +45,7 @@
                 label small class="cyan white--text"
               >
                 <strong class="mr1">{{ subjectFilter }}</strong>
-                <span>({{subjectCountsForYearSelection[subjectFilter]}})</span>
+                <span>{{subjectCountsForYearSelection[subjectFilter]}}</span>
               </v-chip>
             </v-chip-group>,
           </span>
@@ -69,38 +69,44 @@
       <div class="mv3">
         <apexcharts  width="100%" :options="chartOptions"  :series="chartSeries" class="apex-bar-chart"></apexcharts>
         <div>
-          <v-chip-group
-            prev-icon="keyboard_arrow_left" next-icon="keyboard_arrow_right" 
-            multiple class="font-mono"
-          >
-            <v-chip  
-              v-for="location in locationsForYearSelection" :key="location.name"
-              @click="onToggleLocationFilter(location.name)"
-              :value="location.name"
-              :class="locationFilters.includes(location.name) ? 'teal white--text' : ''"
-              label small
+          <div class="dflex items-center justify-start">
+            <div class="fw7 w5">Locations in decade</div>
+            <v-chip-group
+              prev-icon="keyboard_arrow_left" next-icon="keyboard_arrow_right" 
+              multiple class="font-mono filterGroupWidth"
             >
-              <strong class="mr1">{{ location.name }}</strong>
-              <span>({{locationCountsForYearSelection[location.name]}})</span>
-              <v-icon right small>{{locationFilters.includes(location.name) ? 'cancel' : 'filter_list'}} </v-icon>
-            </v-chip>
-          </v-chip-group>
-          <v-chip-group
-            prev-icon="keyboard_arrow_left" next-icon="keyboard_arrow_right" 
-            multiple class="font-mono"
-          >
-            <v-chip  
-              v-for="subject in subjectsForYearSelection" :key="subject.name"
-              @click="onToggleSubjectFilter(subject.name)"
-              :value="subject.name"
-              :class="subjectFilters.includes(subject.name) ? 'cyan white--text' : ''"
-              label small
+              <v-chip  
+                v-for="location in locationsForYearSelection" :key="location.name"
+                @click="onToggleLocationFilter(location.name)"
+                :value="location.name"
+                :class="locationFilters.includes(location.name) ? 'teal white--text' : ''"
+                label small
+              >
+                <strong class="mr1">{{ location.name }}</strong>
+                <span>{{locationCountsForYearSelection[location.name]}}</span>
+                <v-icon right small>{{locationFilters.includes(location.name) ? 'cancel' : 'filter_list'}} </v-icon>
+              </v-chip>
+            </v-chip-group>
+          </div>
+          <div class="dflex items-center justify-start">
+            <div class="fw7 w5">Subjects in decade</div>
+            <v-chip-group
+              prev-icon="keyboard_arrow_left" next-icon="keyboard_arrow_right" 
+              multiple class="font-mono filterGroupWidth"
             >
-              <strong class="mr1">{{ subject.name }}</strong>
-              <span>({{subjectCountsForYearSelection[subject.name]}})</span>
-              <v-icon right small>{{subjectFilters.includes(subject.name) ? 'cancel' : 'filter_list'}} </v-icon>
-            </v-chip>
-          </v-chip-group>
+              <v-chip  
+                v-for="subject in subjectsForYearSelection" :key="subject.name"
+                @click="onToggleSubjectFilter(subject.name)"
+                :value="subject.name"
+                :class="subjectFilters.includes(subject.name) ? 'cyan white--text' : ''"
+                label small
+              >
+                <strong class="mr1">{{ subject.name }}</strong>
+                <span>{{subjectCountsForYearSelection[subject.name]}}</span>
+                <v-icon right small>{{subjectFilters.includes(subject.name) ? 'cancel' : 'filter_list'}} </v-icon>
+              </v-chip>
+            </v-chip-group>
+          </div>
         </div>
         <div class="dib dflex items-center">
           <span class="mr2 fw7">Sort by</span>
@@ -201,6 +207,7 @@ export default {
       sortAscending: true,
       locationFilters: ['Nederland'],
       subjectFilters: [],
+      filterGroupLimit: 50,
       noThumbsPerRow: 10,
       itemAspectRatio: 352 / 288,
       itemMargin: 4,
@@ -302,7 +309,7 @@ export default {
               'count': this.locationCountsForYearSelection[key]
             }
           })
-      return _.orderBy(locations, ['count', 'name'], ['desc',  'asc'])
+      return _.orderBy(locations, ['count', 'name'], ['desc',  'asc']).slice(0, this.filterGroupLimit)
     },
     subjectCountsForYearSelection: function () {
       let subjects =  _.flatMap(this.itemsFilteredByYear, i => i['subjects']) 
@@ -317,7 +324,7 @@ export default {
               'count': this.subjectCountsForYearSelection[key]
             }
           })
-      return _.orderBy(subjects, ['count', 'name'], ['desc',  'asc'])
+      return _.orderBy(subjects, ['count', 'name'], ['desc',  'asc']).slice(0, this.filterGroupLimit)
     },
     decadeCounts: function () {
       // get decades present in data
@@ -549,5 +556,9 @@ https://github.com/vuetifyjs/vuetify/commit/4f151bbdf4388e76d92920ca19c6271c022e
 
 .dib-i {
   display: inline-block !important;
+}
+
+.filterGroupWidth {
+  width: calc(100% - 160px);
 }
 </style>
