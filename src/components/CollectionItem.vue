@@ -63,7 +63,6 @@
             <v-icon small>room</v-icon>
             <span class="v-mid"> {{locations.length}} Location<span v-if="locations.length > 1">s</span></span>
           </span>
-          <div v-for="locFilter in locationFilters" :key="locFilter">{{locFilter}}</div>
           <v-chip-group
             multiple
             column 
