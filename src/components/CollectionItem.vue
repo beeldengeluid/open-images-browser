@@ -36,25 +36,24 @@
         <h2 class="mt0 f4">{{title}} <span class="fw1">({{year}})</span></h2>
         <div v-if="subjects.length" class="mv2">
           <span class="fw6">
-            <v-icon small>local_offer</v-icon>
+            <v-icon small>room</v-icon>
             <span class="v-mid"> {{subjects.length}} Subject<span v-if="subjects.length > 1">s</span></span>
           </span>
-          <v-chip-group 
-            v-model="subjectFilter"
-            active-class="cyan darken-1 white--text" 
+          <v-chip-group
+            multiple
             column 
             class="font-mono"
           >
             <v-chip  
-              v-for="subject in subjects" 
-              :key="subject" 
-              @click="$emit('toggle-subject-filter', subject)"
+              v-for="subject in subjects" :key="subject" 
               :value="subject"
+              @click="toggleSubjectFilter(subject)"
               label
+              :class="subjectFilters.includes(subject) ? 'teal white--text' : ''"
             >
               <strong class="mr1">{{ subject }}</strong>
               <span>({{subjectCountsForYearSelection[subject]}})</span>
-              <v-icon right>{{subject == subjectFilter ? 'cancel' : 'filter_list'}} </v-icon>
+              <v-icon right>{{subjectFilters.includes(subject) ? 'cancel' : 'filter_list'}} </v-icon>
             </v-chip>
           </v-chip-group>
         </div>
@@ -133,7 +132,7 @@ export default {
       default: true
     },
     locationFilters: Array,
-    subjectFilter: String,
+    subjectFilters: Array,
     locationCountsForYearSelection: Object,
     subjectCountsForYearSelection: Object,
   },
@@ -148,6 +147,10 @@ export default {
     },
     toggleLocationFilter (locationFilter) {
       this.$emit('toggle-location-filter', locationFilter)
+      this.$forceUpdate()
+    },
+    toggleSubjectFilter (subjectFilter) {
+      this.$emit('toggle-subject-filter', subjectFilter)
       this.$forceUpdate()
     },
   },
