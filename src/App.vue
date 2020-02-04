@@ -70,7 +70,7 @@
         <apexcharts  width="100%" :options="chartOptions"  :series="chartSeries" class="apex-bar-chart"></apexcharts>
         <div>
           <div class="dflex items-center justify-start">
-            <div class="fw7 w5">Locations in decade</div>
+            <div class="fw7 w5">Top locations in decade</div>
             <v-chip-group
               prev-icon="keyboard_arrow_left" next-icon="keyboard_arrow_right" 
               multiple class="font-mono filterGroupWidth"
@@ -89,7 +89,7 @@
             </v-chip-group>
           </div>
           <div class="dflex items-center justify-start">
-            <div class="fw7 w5">Subjects in decade</div>
+            <div class="fw7 w5">Top subjects in decade</div>
             <v-chip-group
               prev-icon="keyboard_arrow_left" next-icon="keyboard_arrow_right" 
               multiple class="font-mono filterGroupWidth"
@@ -559,6 +559,6 @@ https://github.com/vuetifyjs/vuetify/commit/4f151bbdf4388e76d92920ca19c6271c022e
 }
 
 .filterGroupWidth {
-  width: calc(100% - 160px);
+  width: calc(100% - 180px);
 }
 </style>
