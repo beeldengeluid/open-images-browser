@@ -375,7 +375,7 @@ export default {
       this.showSnackbar(`📍 Added location filter <strong>${filterValue}</strong>`)
     },
     removeLocationFilter (filterValue) {
-      _.pull(this.locationFilters, filterValue)
+      this.locationFilters = this.locationFilters.filter(lf => lf !== filterValue)
       this.showSnackbar(`❌ Removed location filter <strong>${filterValue}</strong>`)
     },
     onToggleSubjectFilter: function (filterValue) {
@@ -390,7 +390,7 @@ export default {
       this.showSnackbar(`🏷 Added subject filter <strong>${filterValue}</strong>`)
     },
     removeSubjectFilter (filterValue) {
-      _.pull(this.subjectFilters, filterValue)
+      this.subjectFilters = this.subjectFilters.filter(lf => lf !== filterValue)
       this.showSnackbar(`❌ Removed subject filter <strong>${filterValue}</strong>`)
     },
     filterByYear: function (item) {
