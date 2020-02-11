@@ -68,7 +68,7 @@
       </div>
       <div class="mv3">
         <apexcharts  width="100%" :options="chartOptions"  :series="chartSeries" class="apex-bar-chart"></apexcharts>
-        <div>
+        <div class="db dn-l">
           <div class="dflex items-center justify-start">
             <div class="fw7 w5">Top locations in decade</div>
             <v-chip-group
@@ -142,31 +142,70 @@
           </div>
         </div>
       </div>
-      <div class="mv3 relative dflex flex-wrap">
-        <CollectionItem
-          v-for = "item in itemsSelectedSorted" 
-          :key            = "item['id']"
-          :width          = "itemWidth + 'px'"
-          :height         = "itemHeight + 'px'"
-          :thumbSrc       = "item['thumbSrc']"
-          :videoSrc       = "item['videoSrc']"
-          :title          = "item['title']"
-          :date           = "item['date']"
-          :url            = "item['url']"
-          :subjects       = "item['subjects']"
-          :creators       = "item['creators']"
-          :locations      = "item['locations']"
-          :displayTitle   = "displayFieldsSelected.includes('title')"
-          :displayYear    = "displayFieldsSelected.includes('year')"
-          :displayThumb   = "displayFieldsSelected.includes('thumb')"
-          :locationFilters = "locationFilters"
-          :subjectFilters  = "subjectFilters"
-          :locationCountsForYearSelection = "locationCountsForYearSelection"
-          :subjectCountsForYearSelection  = "subjectCountsForYearSelection"
-          v-on:toggle-location-filter = "onToggleLocationFilter"
-          v-on:toggle-subject-filter  = "onToggleSubjectFilter"
-        />
-      </div>
+      <v-container fluid>
+        <v-row>
+          <v-col cols="auto" class="dn db-l">
+            <h3>Top locations in decade</h3>
+            <div v-for="location in locationsForYearSelection" :key="location.name">
+              <v-chip
+                @click="onToggleLocationFilter(location.name)"
+                :value="location.name"
+                :class="locationFilters.includes(location.name) ? 'cyan white--text' : ''"
+                label small
+                class="font-mono"
+              >
+                <strong class="mr1">{{ location.name }}</strong>
+                <span>{{locationCountsForYearSelection[location.name]}}</span>
+                <v-icon right small>{{locationFilters.includes(location.name) ? 'cancel' : 'filter_list'}} </v-icon>
+              </v-chip>
+            </div>
+          </v-col>
+          <v-col cols="auto" class="dn db-l">
+            <h3>Top subjects in decade</h3>
+            <div v-for="subject in subjectsForYearSelection" :key="subject.name">
+              <v-chip
+                @click="onToggleSubjectFilter(subject.name)"
+                :value="subject.name"
+                :class="subjectFilters.includes(subject.name) ? 'cyan white--text' : ''"
+                label small
+                class="font-mono"
+              >
+                <strong class="mr1">{{ subject.name }}</strong>
+                <span>{{subjectCountsForYearSelection[subject.name]}}</span>
+                <v-icon right small>{{subjectFilters.includes(subject.name) ? 'cancel' : 'filter_list'}} </v-icon>
+              </v-chip>
+            </div>
+          </v-col>
+          <v-col>
+            <div class="mv3 relative dflex flex-wrap">
+              <CollectionItem
+                v-for = "item in itemsSelectedSorted" 
+                :key             = "item['id']"
+                :width           = "itemWidth + 'px'"
+                :height          = "itemHeight + 'px'"
+                :thumbSrc        = "item['thumbSrc']"
+                :videoSrc        = "item['videoSrc']"
+                :title           = "item['title']"
+                :date            = "item['date']"
+                :url             = "item['url']"
+                :subjects        = "item['subjects']"
+                :creators        = "item['creators']"
+                :locations       = "item['locations']"
+                :displayTitle    = "displayFieldsSelected.includes('title')"
+                :displayYear     = "displayFieldsSelected.includes('year')"
+                :displayThumb    = "displayFieldsSelected.includes('thumb')"
+                :locationFilters = "locationFilters"
+                :subjectFilters  = "subjectFilters"
+                :locationCountsForYearSelection = "locationCountsForYearSelection"
+                :subjectCountsForYearSelection  = "subjectCountsForYearSelection"
+                v-on:toggle-location-filter = "onToggleLocationFilter"
+                v-on:toggle-subject-filter  = "onToggleSubjectFilter"
+              />
+            </div>
+          </v-col>
+        </v-row>
+      </v-container>
+      
       <back-to-top>
         <v-btn light title="Back to top" absolute bottom right fab>
           <v-icon>keyboard_arrow_up</v-icon>
