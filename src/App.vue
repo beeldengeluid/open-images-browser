@@ -371,12 +371,12 @@ export default {
       }
     },
     addLocationFilter (filterValue) {
-      this.locationFilters.push(filterValue)
-      this.showSnackbar(`📍 Added location filter <strong>${filterValue}</strong>`)
+      /* for unclear reason .push() doesn't register correctly in the watch() 
+         function, so using .concat() instead */
+      this.locationFilters = this.locationFilters.concat([filterValue])
     },
     removeLocationFilter (filterValue) {
       this.locationFilters = this.locationFilters.filter(lf => lf !== filterValue)
-      this.showSnackbar(`❌ Removed location filter <strong>${filterValue}</strong>`)
     },
     onToggleSubjectFilter: function (filterValue) {
       if (this.subjectFilters.includes(filterValue)) {
@@ -386,12 +386,12 @@ export default {
       }
     },
     addSubjectFilter (filterValue) {
-      this.subjectFilters.push(filterValue)
-      this.showSnackbar(`🏷 Added subject filter <strong>${filterValue}</strong>`)
+      /* for unclear reason .push() doesn't register correctly in the watch() 
+         function, so using .concat() instead */
+      this.subjectFilters = this.subjectFilters.concat([filterValue])
     },
     removeSubjectFilter (filterValue) {
       this.subjectFilters = this.subjectFilters.filter(lf => lf !== filterValue)
-      this.showSnackbar(`❌ Removed subject filter <strong>${filterValue}</strong>`)
     },
     filterByYear: function (item) {
       return this.dateToYear(item['date']) >= this.selectedYearRange[0] &&
@@ -453,24 +453,22 @@ export default {
     sortAscending: function (newValue) {
       this.showSnackbar(`${newValue ? '☝️' : '👇'} Sorting in <strong>${newValue ? 'ascending' : 'descending'}</strong> order`)
     },
-    /* for some weird reason newValue & oldValue have the same value in this watch funciton, 
-       therefore trigger correct notifations in onToggleLocationFilter() */
-    // locationFilters: function (newValue, oldValue) {
-    //   console.log('oldValue', oldValue)
-    //   console.log('newValue', newValue)
-    //   let added = _.difference(newValue, oldValue)
-    //   if (added.length) {
-    //     this.showSnackbar(`📍 Added location filter <strong>${added[0]}</strong>`)
-    //   } else {
-    //     let removed = _.difference(oldValue, newValue)
-    //     this.showSnackbar(`❌ Removed location filter <strong>${removed}</strong>`)
-    //   }
-    // },
-    subjectFilter: function (newValue) {
-      if (newValue) {
-        this.showSnackbar(`🏷 Filtering for subject: <strong>${newValue}</strong>`)
+    locationFilters: function (newValue, oldValue) {
+      let added = _.difference(newValue, oldValue)
+      if (added.length) {
+        this.showSnackbar(`📍 Added location filter <strong>${added[0]}</strong>`)
       } else {
-        this.showSnackbar('❌ Removed <strong>subject</strong> filter')
+        let removed = _.difference(oldValue, newValue)
+        this.showSnackbar(`❌ Removed location filter <strong>${removed}</strong>`)
+      }
+    },
+    subjectFilters: function (newValue, oldValue) {
+      let added = _.difference(newValue, oldValue)
+      if (added.length) {
+        this.showSnackbar(`🏷 Added subject filter <strong>${added[0]}</strong>`)
+      } else {
+        let removed = _.difference(oldValue, newValue)
+        this.showSnackbar(`❌ Removed subject filter <strong>${removed}</strong>`)
       }
     },
     displayFieldsSelected: function (newValue, oldValue) {
