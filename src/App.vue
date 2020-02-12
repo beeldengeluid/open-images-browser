@@ -143,7 +143,7 @@
       <v-container fluid>
         <v-row>
           <v-col cols="auto" class="dn db-l">
-            <h3>Locations in selection <span class="fw1">{{locationsForSelection.length}}</span></h3>
+            <h3 class="mb3">Locations in selection <span class="fw1">{{locationsForSelection.length}}</span></h3>
             <div v-for="location in locationsForSelection" :key="location.name">
               <v-chip
                 @click="onToggleLocationFilter(location.name)"
@@ -166,7 +166,7 @@
             </v-btn>
           </v-col>
           <v-col cols="auto" class="dn db-l">
-            <h3>Subjects in selection <span class="fw1">{{subjectsForSelection.length}}</span></h3>
+            <h3 class="mb3">Subjects in selection <span class="fw1">{{subjectsForSelection.length}}</span></h3>
             <div v-for="subject in subjectsForSelection" :key="subject.name">
               <v-chip
                 @click="onToggleSubjectFilter(subject.name)"
@@ -189,7 +189,8 @@
             </v-btn>
           </v-col>
           <v-col>
-            <div class="mv3 relative dflex flex-wrap">
+            <h3 class="mb3">Videos in selection <span class="fw1">{{itemsSelectedSorted.length}}</span></h3>
+            <div class="relative dflex flex-wrap">
               <CollectionItem
                 v-for = "item in itemsSelectedSorted" 
                 :key             = "item['id']"
