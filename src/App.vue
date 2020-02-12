@@ -148,7 +148,7 @@
               <v-chip
                 @click="onToggleLocationFilter(location.name)"
                 :value="location.name"
-                :class="locationFilters.includes(location.name) ? 'cyan white--text' : ''"
+                :class="locationFilters.includes(location.name) ? 'teal white--text' : ''"
                 label small
                 class="font-mono"
               >
