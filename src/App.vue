@@ -28,8 +28,7 @@
                 @click:close="onToggleLocationFilter(locationFilter)" close close-icon="cancel"
                 label small class="teal white--text"
               >
-                <strong class="mr1">{{ locationFilter }}</strong>
-                <span>{{locationCountsForYearSelection[locationFilter]}}</span>
+                <strong>{{ locationFilter }}</strong>
               </v-chip>
             </v-chip-group>
           </span>
@@ -44,8 +43,7 @@
                 @click:close="onToggleSubjectFilter(subjectFilter)" close close-icon="cancel"
                 label small class="cyan white--text"
               >
-                <strong class="mr1">{{ subjectFilter }}</strong>
-                <span>{{subjectCountsForYearSelection[subjectFilter]}}</span>
+                <strong>{{ subjectFilter }}</strong>
               </v-chip>
             </v-chip-group>,
           </span>
@@ -76,14 +74,14 @@
               multiple class="font-mono filterGroupWidth"
             >
               <v-chip  
-                v-for="location in locationsForYearSelection" :key="location.name"
+                v-for="location in locationsForSelection" :key="location.name"
                 @click="onToggleLocationFilter(location.name)"
                 :value="location.name"
                 :class="locationFilters.includes(location.name) ? 'teal white--text' : ''"
                 label small
               >
                 <strong class="mr1">{{ location.name }}</strong>
-                <span>{{locationCountsForYearSelection[location.name]}}</span>
+                <span>{{locationCountsForSelection[location.name]}}</span>
                 <v-icon right small>{{locationFilters.includes(location.name) ? 'cancel' : 'filter_list'}} </v-icon>
               </v-chip>
             </v-chip-group>
@@ -95,14 +93,14 @@
               multiple class="font-mono filterGroupWidth"
             >
               <v-chip  
-                v-for="subject in subjectsForYearSelection" :key="subject.name"
+                v-for="subject in subjectsForSelection" :key="subject.name"
                 @click="onToggleSubjectFilter(subject.name)"
                 :value="subject.name"
                 :class="subjectFilters.includes(subject.name) ? 'cyan white--text' : ''"
                 label small
               >
                 <strong class="mr1">{{ subject.name }}</strong>
-                <span>{{subjectCountsForYearSelection[subject.name]}}</span>
+                <span>{{subjectCountsForSelection[subject.name]}}</span>
                 <v-icon right small>{{subjectFilters.includes(subject.name) ? 'cancel' : 'filter_list'}} </v-icon>
               </v-chip>
             </v-chip-group>
@@ -145,8 +143,8 @@
       <v-container fluid>
         <v-row>
           <v-col cols="auto" class="dn db-l">
-            <h3>Top locations in decade</h3>
-            <div v-for="location in locationsForYearSelection" :key="location.name">
+            <h3>Locations in selection</h3>
+            <div v-for="location in locationsForSelection" :key="location.name">
               <v-chip
                 @click="onToggleLocationFilter(location.name)"
                 :value="location.name"
@@ -155,14 +153,14 @@
                 class="font-mono"
               >
                 <strong class="mr1">{{ location.name }}</strong>
-                <span>{{locationCountsForYearSelection[location.name]}}</span>
+                <span>{{locationCountsForSelection[location.name]}}</span>
                 <v-icon right small>{{locationFilters.includes(location.name) ? 'cancel' : 'filter_list'}} </v-icon>
               </v-chip>
             </div>
           </v-col>
           <v-col cols="auto" class="dn db-l">
-            <h3>Top subjects in decade</h3>
-            <div v-for="subject in subjectsForYearSelection" :key="subject.name">
+            <h3>Subjects in selection</h3>
+            <div v-for="subject in subjectsForSelection" :key="subject.name">
               <v-chip
                 @click="onToggleSubjectFilter(subject.name)"
                 :value="subject.name"
@@ -171,7 +169,7 @@
                 class="font-mono"
               >
                 <strong class="mr1">{{ subject.name }}</strong>
-                <span>{{subjectCountsForYearSelection[subject.name]}}</span>
+                <span>{{subjectCountsForSelection[subject.name]}}</span>
                 <v-icon right small>{{subjectFilters.includes(subject.name) ? 'cancel' : 'filter_list'}} </v-icon>
               </v-chip>
             </div>
@@ -196,8 +194,8 @@
                 :displayThumb    = "displayFieldsSelected.includes('thumb')"
                 :locationFilters = "locationFilters"
                 :subjectFilters  = "subjectFilters"
-                :locationCountsForYearSelection = "locationCountsForYearSelection"
-                :subjectCountsForYearSelection  = "subjectCountsForYearSelection"
+                :locationCountsForSelection = "locationCountsForSelection"
+                :subjectCountsForSelection  = "subjectCountsForSelection"
                 v-on:toggle-location-filter = "onToggleLocationFilter"
                 v-on:toggle-subject-filter  = "onToggleSubjectFilter"
               />
@@ -335,35 +333,37 @@ export default {
     decadeMax: function () {
       return Math.floor(this.yearMax / 10) * 10
     },
-    locationCountsForYearSelection: function () {
-      let locations =  _.flatMap(this.itemsFilteredByYear, i => i['locations']) 
+    locationCountsForSelection: function () {
+      let locations =  _.flatMap(this.itemsSelectedSorted, i => i['locations'])
       return _.countBy(locations)
     },
-    locationsForYearSelection: function () {
+    locationsForSelection: function () {
       let locations = 
-        Object.keys(this.locationCountsForYearSelection)
+        Object.keys(this.locationCountsForSelection)
           .map( key => {
             return {
               'name': key,
-              'count': this.locationCountsForYearSelection[key]
+              'count': this.locationCountsForSelection[key]
             }
           })
-      return _.orderBy(locations, ['count', 'name'], ['desc',  'asc']).slice(0, this.filterGroupLimit)
+      return _.orderBy(locations, ['count', 'name'], ['desc', 'asc'])
+              .slice(0, this.filterGroupLimit)
     },
-    subjectCountsForYearSelection: function () {
-      let subjects =  _.flatMap(this.itemsFilteredByYear, i => i['subjects']) 
+    subjectCountsForSelection: function () {
+      let subjects =  _.flatMap(this.itemsSelectedSorted, i => i['subjects']) 
       return _.countBy(subjects)
     },
-    subjectsForYearSelection: function () {
+    subjectsForSelection: function () {
       let subjects = 
-        Object.keys(this.subjectCountsForYearSelection)
+        Object.keys(this.subjectCountsForSelection)
           .map( key => {
             return {
               'name': key,
-              'count': this.subjectCountsForYearSelection[key]
+              'count': this.subjectCountsForSelection[key]
             }
           })
-      return _.orderBy(subjects, ['count', 'name'], ['desc',  'asc']).slice(0, this.filterGroupLimit)
+      return _.orderBy(subjects, ['count', 'name'], ['desc', 'asc'])
+              .slice(0, this.filterGroupLimit)
     },
     decadeCounts: function () {
       // get decades present in data

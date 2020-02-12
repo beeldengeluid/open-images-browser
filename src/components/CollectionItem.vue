@@ -52,7 +52,7 @@
               :class="subjectFilters.includes(subject) ? 'teal white--text' : ''"
             >
               <strong class="mr1">{{ subject }}</strong>
-              <span>({{subjectCountsForYearSelection[subject]}})</span>
+              <span>({{subjectCountsForSelection[subject]}})</span>
               <v-icon right>{{subjectFilters.includes(subject) ? 'cancel' : 'filter_list'}} </v-icon>
             </v-chip>
           </v-chip-group>
@@ -75,7 +75,7 @@
               :class="locationFilters.includes(location) ? 'teal white--text' : ''"
             >
               <strong class="mr1">{{ location }}</strong>
-              <span>({{locationCountsForYearSelection[location]}})</span>
+              <span>({{locationCountsForSelection[location]}})</span>
               <v-icon right>{{locationFilters.includes(location) ? 'cancel' : 'filter_list'}} </v-icon>
             </v-chip>
           </v-chip-group>
@@ -133,8 +133,8 @@ export default {
     },
     locationFilters: Array,
     subjectFilters: Array,
-    locationCountsForYearSelection: Object,
-    subjectCountsForYearSelection: Object,
+    locationCountsForSelection: Object,
+    subjectCountsForSelection: Object,
   },
   computed: {
     year: function () {
