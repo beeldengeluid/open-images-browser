@@ -246,7 +246,7 @@ export default {
     apexcharts: VueApexCharts,
     BackToTop
   },
-  data: function () {
+  data () {
     return {
       items: dataItems,
       selectedYearRange: [1970, 1979],
@@ -314,17 +314,17 @@ export default {
     }
   },
   computed: {
-    itemWidth: function () {
+    itemWidth () {
       let horizontalMarkupMargin = 32
       return (this.clientWidth - horizontalMarkupMargin) / this.noThumbsPerRow - this.itemMargin
     },
-    itemHeight: function () {
+    itemHeight () {
       return this.itemWidth / this.itemAspectRatio
     },
-    itemsFilteredByYear: function () {
+    itemsFilteredByYear () {
       return this.items.filter(i => this.filterByYear(i))
     },
-    itemsSelectedSorted: function () {
+    itemsSelectedSorted () {
       // filter
       let selected = this.itemsFilteredByYear.filter(
         i => this.filterByLocation(i) && this.filterBySubject(i)
@@ -337,23 +337,23 @@ export default {
       }
       return selected
     },
-    yearMin: function () {
+    yearMin () {
       return Math.min(... this.items.map(i => i['date'].slice(0, 4)))
     },
-    yearMax: function () {
+    yearMax () {
       return Math.max(... this.items.map(i => i['date'].slice(0, 4)))
     },
-    decadeMin: function () {
+    decadeMin () {
       return Math.floor(this.yearMin / 10) * 10
     },
-    decadeMax: function () {
+    decadeMax () {
       return Math.floor(this.yearMax / 10) * 10
     },
-    locationCountsForSelection: function () {
+    locationCountsForSelection () {
       let locations =  _.flatMap(this.itemsSelectedSorted, i => i['locations'])
       return _.countBy(locations)
     },
-    locationsForSelection: function () {
+    locationsForSelection () {
       let locations = 
         Object.keys(this.locationCountsForSelection)
           .map( key => {
@@ -365,17 +365,17 @@ export default {
       return _.orderBy(locations, ['count', 'name'], ['desc', 'asc'])
               .filter(l => this.filterFilterLongtail(l, this.locationsThresholdReached, this.limitLocationFilterList))
     },
-    locationsThresholdReached: function () {
+    locationsThresholdReached () {
       return _.size(this.locationCountsForSelection) > this.filterListLimitThreshold
     },
-    subjectsThresholdReached: function () {
+    subjectsThresholdReached () {
       return _.size(this.subjectCountsForSelection) > this.filterListLimitThreshold
     },
-    subjectCountsForSelection: function () {
+    subjectCountsForSelection () {
       let subjects =  _.flatMap(this.itemsSelectedSorted, i => i['subjects']) 
       return _.countBy(subjects)
     },
-    subjectsForSelection: function () {
+    subjectsForSelection () {
       let subjects = 
         Object.keys(this.subjectCountsForSelection)
           .map( key => {
@@ -387,7 +387,7 @@ export default {
       return _.orderBy(subjects, ['count', 'name'], ['desc', 'asc'])
               .filter(s => this.filterFilterLongtail(s, this.subjectsThresholdReached, this.limitSubjectFilterList))
     },
-    decadeCounts: function () {
+    decadeCounts () {
       // get decades present in data
       let decadesPresent =  _.countBy(this.items, function (i) {
         return i['date'].slice(0,3)+'0s'
@@ -409,22 +409,22 @@ export default {
     },
   },
   methods: {
-    toOrdinal(int){
+    toOrdinal (int) {
       return converter.toOrdinal(int)
     },
-    toggleSortAscending(){
+    toggleSortAscending () {
       this.sortAscending = ! this.sortAscending
     },
-    dateToYear(date){
+    dateToYear (date) {
       return date.slice(0,4)
     },
-    getClientWidth(){
+    getClientWidth () {
       return document.body.clientWidth || document.documentElement.clientWidth
     },
-    onResize(){
+    onResize () {
       this.clientWidth = this.getClientWidth()
     },
-    onToggleLocationFilter: function (filterValue) {
+    onToggleLocationFilter (filterValue) {
       if (this.locationFilters.includes(filterValue)) {
         this.removeLocationFilter(filterValue)
       } else {
@@ -439,7 +439,7 @@ export default {
     removeLocationFilter (filterValue) {
       this.locationFilters = this.locationFilters.filter(lf => lf !== filterValue)
     },
-    onToggleSubjectFilter: function (filterValue) {
+    onToggleSubjectFilter (filterValue) {
       if (this.subjectFilters.includes(filterValue)) {
         this.removeSubjectFilter(filterValue)
       } else {
@@ -454,17 +454,17 @@ export default {
     removeSubjectFilter (filterValue) {
       this.subjectFilters = this.subjectFilters.filter(lf => lf !== filterValue)
     },
-    filterByYear: function (item) {
+    filterByYear (item) {
       return this.dateToYear(item['date']) >= this.selectedYearRange[0] &&
              this.dateToYear(item['date']) <= this.selectedYearRange[1]
     },
-    filterByLocation: function (item) {
+    filterByLocation (item) {
       return this.locationFilters.every(lf => item['locations'].includes(lf)) || !this.locationFilters.length
     },
-    filterBySubject: function (item) {
+    filterBySubject (item) {
       return this.subjectFilters.every(sf => item['subjects'].includes(sf)) || !this.subjectFilters.length
     },
-    updateChart: function () {      
+    updateChart () {      
       this.chartOptions = {...this.chartOptions, ...{
         xaxis: {
           categories: Object.keys(this.decadeCounts)
@@ -476,7 +476,7 @@ export default {
         data: Object.values(this.decadeCounts),
       }]
     },
-    onDecadeClick: function (dataPointIndex) {
+    onDecadeClick (dataPointIndex) {
       // set year range
       let decade = Object.keys(this.decadeCounts)[dataPointIndex]
       let decadeYearMin = parseInt(decade.slice(0,4))
@@ -491,7 +491,7 @@ export default {
         colors: colorList
       }}
     },
-    getColorList: function () {
+    getColorList () {
       return Array.from(Object.keys(this.decadeCounts))
               .fill(this.colors.gray)
               .fill(this.colors.indigo, this.selectedDecadeIndex, this.selectedDecadeIndex+1)
@@ -509,7 +509,7 @@ export default {
     toggleLimitSubjectFilterList () {
       this.limitSubjectFilterList = !this.limitSubjectFilterList
     },
-    filterFilterLongtail: function (filter, thresholdReached, limitFilterList) {
+    filterFilterLongtail (filter, thresholdReached, limitFilterList) {
       return (!thresholdReached) 
               ? true
               : limitFilterList
@@ -518,16 +518,16 @@ export default {
     },
   },
   watch: {
-    sortBy: function (newValue) {
+    sortBy (newValue) {
       this.showSnackbar(`${this.sortAscending ? '☝️' : '👇'} Sorting by <strong>${newValue}</strong>`)
     },
-    selectedDecadeIndex: function (newValue) {
+    selectedDecadeIndex (newValue) {
       this.showSnackbar(`✅ Selected <strong>${Object.keys(this.decadeCounts)[newValue]}</strong> decade`)
     },
-    sortAscending: function (newValue) {
+    sortAscending (newValue) {
       this.showSnackbar(`${newValue ? '☝️' : '👇'} Sorting in <strong>${newValue ? 'ascending' : 'descending'}</strong> order`)
     },
-    locationFilters: function (newValue, oldValue) {
+    locationFilters (newValue, oldValue) {
       let added = _.difference(newValue, oldValue)
       if (added.length) {
         this.showSnackbar(`📍 Added location filter <strong>${added[0]}</strong>`)
@@ -536,7 +536,7 @@ export default {
         this.showSnackbar(`❌ Removed location filter <strong>${removed}</strong>`)
       }
     },
-    subjectFilters: function (newValue, oldValue) {
+    subjectFilters (newValue, oldValue) {
       let added = _.difference(newValue, oldValue)
       if (added.length) {
         this.showSnackbar(`🏷 Added subject filter <strong>${added[0]}</strong>`)
@@ -545,7 +545,7 @@ export default {
         this.showSnackbar(`❌ Removed subject filter <strong>${removed}</strong>`)
       }
     },
-    displayFieldsSelected: function (newValue, oldValue) {
+    displayFieldsSelected (newValue, oldValue) {
       let added = _.difference(newValue, oldValue)
       if (added.length) {
         this.showSnackbar(`👀 Displaying <strong>${added}</strong>`)
@@ -554,14 +554,14 @@ export default {
         this.showSnackbar(`🙈 Not displaying <strong>${removed}</strong>`)
       }
     },
-    limitLocationFilterList: function (newValue) {
+    limitLocationFilterList (newValue) {
       if (newValue) {
         this.showSnackbar(`🙈 Hiding <strong>Locations</strong> with <strong>1 occurance</strong>`)  
       } else {
         this.showSnackbar(`✊ SHOWING <strong>ALL THE LOCATIONS!</strong>`)
       }
     },
-    limitSubjectFilterList: function (newValue) {
+    limitSubjectFilterList (newValue) {
       if (newValue) {
         this.showSnackbar(`🙈 Hiding <strong>Subjects</strong> with <strong>1 occurance</strong>`)  
       } else {
