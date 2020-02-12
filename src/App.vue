@@ -143,7 +143,7 @@
       <v-container fluid>
         <v-row>
           <v-col cols="auto" class="dn db-l">
-            <h3>Locations in selection</h3>
+            <h3>Locations in selection <span class="fw1">{{locationsForSelection.length}}</span></h3>
             <div v-for="location in locationsForSelection" :key="location.name">
               <v-chip
                 @click="onToggleLocationFilter(location.name)"
@@ -157,9 +157,16 @@
                 <v-icon right small>{{locationFilters.includes(location.name) ? 'cancel' : 'filter_list'}} </v-icon>
               </v-chip>
             </div>
+            <v-btn 
+              v-if="locationsThresholdReached" 
+              @click="toggleLimitLocationFilterList"
+              class="mt3" outlined 
+            >
+              {{limitLocationFilterList ? 'Show all' : 'Hide long tail'}}
+            </v-btn>
           </v-col>
           <v-col cols="auto" class="dn db-l">
-            <h3>Subjects in selection</h3>
+            <h3>Subjects in selection <span class="fw1">{{subjectsForSelection.length}}</span></h3>
             <div v-for="subject in subjectsForSelection" :key="subject.name">
               <v-chip
                 @click="onToggleSubjectFilter(subject.name)"
@@ -173,6 +180,13 @@
                 <v-icon right small>{{subjectFilters.includes(subject.name) ? 'cancel' : 'filter_list'}} </v-icon>
               </v-chip>
             </div>
+            <v-btn 
+              v-if="subjectsThresholdReached" 
+              @click="toggleLimitSubjectFilterList"
+              class="mt3" outlined 
+            >
+              {{limitSubjectFilterList ? 'Show all' : 'Hide long tail'}}
+            </v-btn>
           </v-col>
           <v-col>
             <div class="mv3 relative dflex flex-wrap">
@@ -244,7 +258,9 @@ export default {
       sortAscending: true,
       locationFilters: ['Nederland'],
       subjectFilters: [],
-      filterGroupLimit: 50,
+      filterListLimitThreshold: 50,
+      limitLocationFilterList: true,
+      limitSubjectFilterList: true,
       noThumbsPerRow: 10,
       itemAspectRatio: 352 / 288,
       itemMargin: 4,
@@ -347,7 +363,19 @@ export default {
             }
           })
       return _.orderBy(locations, ['count', 'name'], ['desc', 'asc'])
-              .slice(0, this.filterGroupLimit)
+              .filter(l => {
+                return (!this.locationsThresholdReached) 
+                        ? true
+                        : this.limitLocationFilterList 
+                        ? l.count > 1 
+                        : true
+              })
+    },
+    locationsThresholdReached: function () {
+      return _.size(this.locationCountsForSelection) > this.filterListLimitThreshold
+    },
+    subjectsThresholdReached: function () {
+      return _.size(this.subjectCountsForSelection) > this.filterListLimitThreshold
     },
     subjectCountsForSelection: function () {
       let subjects =  _.flatMap(this.itemsSelectedSorted, i => i['subjects']) 
@@ -363,7 +391,13 @@ export default {
             }
           })
       return _.orderBy(subjects, ['count', 'name'], ['desc', 'asc'])
-              .slice(0, this.filterGroupLimit)
+              .filter(s => {
+                return (!this.subjectsThresholdReached) 
+                        ? true
+                        : this.limitSubjectFilterList 
+                        ? s.count > 1 
+                        : true
+              })
     },
     decadeCounts: function () {
       // get decades present in data
@@ -481,6 +515,12 @@ export default {
         this.snackbar.state = true
       })
     },
+    toggleLimitLocationFilterList () {
+      this.limitLocationFilterList = !this.limitLocationFilterList
+    },
+    toggleLimitSubjectFilterList () {
+      this.limitSubjectFilterList = !this.limitSubjectFilterList
+    },
   },
   watch: {
     sortBy: function (newValue) {
@@ -517,6 +557,20 @@ export default {
       } else {
         let removed = _.difference(oldValue, newValue)
         this.showSnackbar(`🙈 Not displaying <strong>${removed}</strong>`)
+      }
+    },
+    limitLocationFilterList: function (newValue) {
+      if (newValue) {
+        this.showSnackbar(`🙈 Hiding <strong>Locations</strong> with <strong>1 occurance</strong>`)  
+      } else {
+        this.showSnackbar(`✊ SHOWING <strong>ALL THE LOCATIONS!</strong>`)
+      }
+    },
+    limitSubjectFilterList: function (newValue) {
+      if (newValue) {
+        this.showSnackbar(`🙈 Hiding <strong>Subjects</strong> with <strong>1 occurance</strong>`)  
+      } else {
+        this.showSnackbar(`✊ SHOWING <strong>ALL THE SUBJECTS!</strong>`)
       }
     },
   },
