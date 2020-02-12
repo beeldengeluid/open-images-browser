@@ -363,13 +363,7 @@ export default {
             }
           })
       return _.orderBy(locations, ['count', 'name'], ['desc', 'asc'])
-              .filter(l => {
-                return (!this.locationsThresholdReached) 
-                        ? true
-                        : this.limitLocationFilterList 
-                        ? l.count > 1 
-                        : true
-              })
+              .filter(l => this.filterFilterLongtail(l, this.locationsThresholdReached, this.limitLocationFilterList))
     },
     locationsThresholdReached: function () {
       return _.size(this.locationCountsForSelection) > this.filterListLimitThreshold
@@ -391,13 +385,7 @@ export default {
             }
           })
       return _.orderBy(subjects, ['count', 'name'], ['desc', 'asc'])
-              .filter(s => {
-                return (!this.subjectsThresholdReached) 
-                        ? true
-                        : this.limitSubjectFilterList 
-                        ? s.count > 1 
-                        : true
-              })
+              .filter(s => this.filterFilterLongtail(s, this.subjectsThresholdReached, this.limitSubjectFilterList))
     },
     decadeCounts: function () {
       // get decades present in data
@@ -520,6 +508,13 @@ export default {
     },
     toggleLimitSubjectFilterList () {
       this.limitSubjectFilterList = !this.limitSubjectFilterList
+    },
+    filterFilterLongtail: function (filter, thresholdReached, limitFilterList) {
+      return (!thresholdReached) 
+              ? true
+              : limitFilterList
+              ? filter.count > 1
+              : true
     },
   },
   watch: {
