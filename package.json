@@ -14,6 +14,7 @@
     "number-to-words": "^1.2.4",
     "vue": "^2.6.10",
     "vue-apexcharts": "^1.5.2",
+    "vue-backtotop": "^1.6.1",
     "vuetify": "^2.1.0"
   },
   "devDependencies": {
