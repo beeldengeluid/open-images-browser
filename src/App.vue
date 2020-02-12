@@ -389,9 +389,7 @@ export default {
     },
     decadeCounts () {
       // get decades present in data
-      let decadesPresent =  _.countBy(this.items, function (i) {
-        return i['date'].slice(0,3)+'0s'
-      })
+      let decadesPresent =  _.countBy(this.items, i => i['date'].slice(0,3)+'0s')
       
       // add intermediary decades
       let decadesAll = _.range(this.decadeMin, this.decadeMax, 10).map(d => d + 's')
