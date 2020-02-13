@@ -169,7 +169,7 @@
             </div>
           </v-col>
           <v-col cols="auto" class="dn db-l">
-            <h3 class="mb3">Subjects in selection <span class="fw1">{{noLocationsForSelection}}</span></h3>
+            <h3 class="mb3">Subjects in selection <span class="fw1">{{noSubjectsForSelection}}</span></h3>
             <div v-for="subject in subjectsForSelection" :key="subject.name">
               <v-chip
                 @click="onToggleSubjectFilter(subject.name)"
