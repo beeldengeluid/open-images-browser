@@ -363,8 +363,9 @@ export default {
               'count': this.locationCountsForSelection[key]
             }
           })
-      return _.orderBy(locations, ['count', 'name'], ['desc', 'asc'])
-              .filter(l => this.filterFilterLongtail(l, this.locationsThresholdReached, this.limitLocationFilterList))
+          .filter(l => this.filterFilterLongtail(l, this.locationsThresholdReached, this.limitLocationFilterList))
+
+      return _.orderBy(locations, ['count', 'name'], ['desc', 'asc'])    
     },
     locationsThresholdReached () {
       return _.size(this.locationCountsForSelection) > this.filterListLimitThreshold
@@ -385,8 +386,9 @@ export default {
               'count': this.subjectCountsForSelection[key]
             }
           })
+          .filter(s => this.filterFilterLongtail(s, this.subjectsThresholdReached, this.limitSubjectFilterList))
+
       return _.orderBy(subjects, ['count', 'name'], ['desc', 'asc'])
-              .filter(s => this.filterFilterLongtail(s, this.subjectsThresholdReached, this.limitSubjectFilterList))
     },
     decadeCounts () {
       // get decades present in data
