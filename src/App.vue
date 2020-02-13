@@ -143,7 +143,7 @@
       <v-container fluid>
         <v-row>
           <v-col cols="auto" class="dn db-l">
-            <h3 class="mb3">Locations in selection <span class="fw1">{{locationsForSelection.length}}</span></h3>
+            <h3 class="mb3">Locations in selection <span class="fw1">{{noLocationsForSelection}}</span></h3>
             <div v-for="location in locationsForSelection" :key="location.name">
               <v-chip
                 @click="onToggleLocationFilter(location.name)"
@@ -157,16 +157,19 @@
                 <v-icon right small>{{locationFilters.includes(location.name) ? 'cancel' : 'filter_list'}} </v-icon>
               </v-chip>
             </div>
-            <v-btn 
-              v-if="locationsThresholdReached" 
-              @click="toggleLimitLocationFilterList"
-              class="mt3" outlined 
-            >
-              {{limitLocationFilterList ? 'Show all' : 'Hide long tail'}}
-            </v-btn>
+            <div>
+              <div v-if="locationsThresholdReached && limitLocationFilterList" class="mt2 w4 f6">... long tail of single occurences hidden</div>
+              <v-btn 
+                v-if="locationsThresholdReached" 
+                @click="toggleLimitLocationFilterList"
+                class="mt2" outlined 
+              >
+                {{limitLocationFilterList ? 'Show all' : 'Hide long tail'}}
+              </v-btn>
+            </div>
           </v-col>
           <v-col cols="auto" class="dn db-l">
-            <h3 class="mb3">Subjects in selection <span class="fw1">{{subjectsForSelection.length}}</span></h3>
+            <h3 class="mb3">Subjects in selection <span class="fw1">{{noLocationsForSelection}}</span></h3>
             <div v-for="subject in subjectsForSelection" :key="subject.name">
               <v-chip
                 @click="onToggleSubjectFilter(subject.name)"
@@ -180,13 +183,16 @@
                 <v-icon right small>{{subjectFilters.includes(subject.name) ? 'cancel' : 'filter_list'}} </v-icon>
               </v-chip>
             </div>
-            <v-btn 
-              v-if="subjectsThresholdReached" 
-              @click="toggleLimitSubjectFilterList"
-              class="mt3" outlined 
-            >
-              {{limitSubjectFilterList ? 'Show all' : 'Hide long tail'}}
-            </v-btn>
+            <div>
+              <div v-if="subjectsThresholdReached" class="mt2 w4 f6">... long tail of single occurences hidden</div>
+              <v-btn 
+                v-if="subjectsThresholdReached" 
+                @click="toggleLimitSubjectFilterList"
+                class="mt2" outlined 
+              >
+                {{limitSubjectFilterList ? 'Show all' : 'Hide long tail'}}
+              </v-btn>
+            </div>
           </v-col>
           <v-col>
             <h3 class="mb3">Videos in selection <span class="fw1">{{itemsSelectedSorted.length}}</span></h3>
@@ -350,9 +356,14 @@ export default {
     decadeMax () {
       return Math.floor(this.yearMax / 10) * 10
     },
+    locationNamesForSelection () {
+      return _.flatMap(this.itemsSelectedSorted, i => i['locations'])
+    },
     locationCountsForSelection () {
-      let locations =  _.flatMap(this.itemsSelectedSorted, i => i['locations'])
-      return _.countBy(locations)
+      return _.countBy(this.locationNamesForSelection)
+    },
+    noLocationsForSelection () {
+      return _.size(this.locationNamesForSelection)
     },
     locationsForSelection () {
       let locations = 
@@ -368,14 +379,19 @@ export default {
       return _.orderBy(locations, ['count', 'name'], ['desc', 'asc'])    
     },
     locationsThresholdReached () {
-      return _.size(this.locationCountsForSelection) > this.filterListLimitThreshold
+      return this.noLocationsForSelection > this.filterListLimitThreshold
     },
     subjectsThresholdReached () {
-      return _.size(this.subjectCountsForSelection) > this.filterListLimitThreshold
+      return this.noSubjectsForSelection > this.filterListLimitThreshold
+    },
+    subjectNamesForSelection () {
+      return _.flatMap(this.itemsSelectedSorted, i => i['subjects']) 
     },
     subjectCountsForSelection () {
-      let subjects =  _.flatMap(this.itemsSelectedSorted, i => i['subjects']) 
-      return _.countBy(subjects)
+      return _.countBy(this.subjectNamesForSelection)
+    },
+    noSubjectsForSelection () {
+      return _.size(this.subjectNamesForSelection)
     },
     subjectsForSelection () {
       let subjects = 
