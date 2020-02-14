@@ -184,7 +184,7 @@
               </v-chip>
             </div>
             <div>
-              <div v-if="subjectsThresholdReached" class="mt2 w4 f6">... long tail of single occurences hidden</div>
+              <div v-if="subjectsThresholdReached && limitSubjectFilterList" class="mt2 w4 f6">... long tail of single occurences hidden</div>
               <v-btn 
                 v-if="subjectsThresholdReached" 
                 @click="toggleLimitSubjectFilterList"
