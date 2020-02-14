@@ -49,11 +49,11 @@
               :value="subject"
               @click="toggleSubjectFilter(subject)"
               label
-              :class="subjectFilters.includes(subject) ? 'teal white--text' : ''"
+              :class="activeSubjectFilters.includes(subject) ? 'teal white--text' : ''"
             >
               <strong class="mr1">{{ subject }}</strong>
               <span>({{subjectCountsForSelection[subject]}})</span>
-              <v-icon right>{{subjectFilters.includes(subject) ? 'cancel' : 'filter_list'}} </v-icon>
+              <v-icon right>{{activeSubjectFilters.includes(subject) ? 'cancel' : 'filter_list'}} </v-icon>
             </v-chip>
           </v-chip-group>
         </div>
@@ -72,11 +72,11 @@
               :value="location"
               @click="toggleLocationFilter(location)"
               label
-              :class="locationFilters.includes(location) ? 'teal white--text' : ''"
+              :class="activeLocationFilters.includes(location) ? 'teal white--text' : ''"
             >
               <strong class="mr1">{{ location }}</strong>
               <span>({{locationCountsForSelection[location]}})</span>
-              <v-icon right>{{locationFilters.includes(location) ? 'cancel' : 'filter_list'}} </v-icon>
+              <v-icon right>{{activeLocationFilters.includes(location) ? 'cancel' : 'filter_list'}} </v-icon>
             </v-chip>
           </v-chip-group>
         </div>
@@ -131,8 +131,8 @@ export default {
       type: Boolean,
       default: true
     },
-    locationFilters: Array,
-    subjectFilters: Array,
+    activeLocationFilters: Array,
+    activeSubjectFilters: Array,
     locationCountsForSelection: Object,
     subjectCountsForSelection: Object,
   },
