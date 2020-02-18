@@ -64,7 +64,7 @@
           <span>.</span>
         </p>
       </div>
-      <div class="mv3">
+      <div>
         <apexcharts  width="100%" :options="chartOptions"  :series="chartSeries" class="apex-bar-chart"></apexcharts>
         <div class="db dn-l">
           <div class="dflex items-center justify-start">
@@ -119,18 +119,21 @@
         </div>
         <div class="dflex mt4 flex-wrap items-center justify-between">
           <v-slider
-            v-model="noThumbsPerRow"
+            v-model="zoom.value"
             append-icon="zoom_out"
             prepend-icon="zoom_in"
-            @click:append="noThumbsPerRow++"
-            @click:prepend="noThumbsPerRow--"
-            min="1" max="50" step="1"
+            @click:append="zoom.value++"
+            @click:prepend="zoom.value--"
+            :min="zoom.min" :max="zoom.max" :step="zoom.step"
+            ticks="always"
+            tick-size="4"
+            :tick-labels="zoomLabels"
             label="Items per row"
-            color="orange" thumb-color="orange" thumb-label="always"
+            color="orange" 
             hide-details
-            class="mr4"
+            class="mr4 mb4 min-w-24rem"
           ></v-slider>
-          <div class="dflex items-center">
+          <div class="dflex items-center mb4">
             <span class="pr2 fw7">Display</span>
             <v-chip-group v-model="displayFieldsSelected" active-class="green" multiple class="fw5 font-mono">
               <v-chip v-for="displayField in displayFields" :key="displayField" :value="displayField">
@@ -234,7 +237,12 @@ export default {
       filterListLimitThreshold: 50,
       limitLocationFilterList: true,
       limitSubjectFilterList: true,
-      noThumbsPerRow: 10,
+      zoom: {
+        value: 4,
+        min: 0,
+        max: 6,
+        step: 1,
+      },
       itemAspectRatio: 352 / 288,
       itemMargin: 4,
       clientWidth: this.getClientWidth(),
@@ -293,6 +301,13 @@ export default {
     },
     itemHeight () {
       return this.itemWidth / this.itemAspectRatio
+    },
+    noThumbsPerRow () {
+      return Math.pow(2, this.zoom.value)
+    },
+    zoomLabels () {
+      return _.range(this.zoom.max + 1)
+              .map(value => Math.pow(2, value))
     },
     itemsFilteredByYear () {
       return this.items.filter(i => this.filterByYear(i))
@@ -624,5 +639,9 @@ https://github.com/vuetifyjs/vuetify/commit/4f151bbdf4388e76d92920ca19c6271c022e
 
 .filterGroupWidth {
   width: calc(100% - 180px);
+}
+
+.min-w-24rem {
+  min-width: 24rem;
 }
 </style>
