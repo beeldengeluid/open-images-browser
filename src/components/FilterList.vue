@@ -15,8 +15,8 @@
       </v-chip>
     </div>
     <div>
-      <div v-if="isTailHidden" class="mt2 w4 f6">
-        ... long tail of {{tail.length}} single occurences hidden
+      <div v-if="isTailHidden" class="mt2 w4-5 f6">
+        ... long tail of {{tail.length}} single occurrences hidden
       </div>
       <v-btn 
         v-if="hasLongTail" 
@@ -66,3 +66,8 @@ export default {
   },
 }
 </script>
+<style scoped>
+.w4-5 {
+  width: 10rem;
+}
+</style>
