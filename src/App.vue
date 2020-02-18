@@ -222,7 +222,7 @@ export default {
   data () {
     return {
       items: dataItems,
-      selectedYearRange: [1970, 1979],
+      selectedYearRange: [1980, 1989],
       selectedDecadeIndex: 7,
       sortFields: ['id','date', 'title'],
       sortBy: 'date',
