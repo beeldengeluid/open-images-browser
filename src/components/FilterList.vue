@@ -20,7 +20,7 @@
       </div>
       <v-btn 
         v-if="hasLongTail" 
-        @click="toggleTailHidden"
+        @click="toggleTail"
         class="mt2" outlined 
       >
         {{isTailHidden ? 'Show all' : 'Hide long tail'}}
@@ -60,8 +60,9 @@ export default {
     },
   },
   methods: {
-    toggleTailHidden () {
+    toggleTail () {
       this.userWantsToSeeTail = !this.userWantsToSeeTail
+      this.$emit('toggle-tail', this.userWantsToSeeTail)
     },
   },
 }

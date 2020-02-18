@@ -158,6 +158,7 @@
               :filters="locationsForSelection"
               :activeFilters="activeLocationFilters"
               v-on:toggle-filter = "onToggleLocationFilter"
+              v-on:toggle-tail = "onToggleTail"
             />
           </v-col>
           <v-col cols="auto" class="dn db-l">
@@ -166,6 +167,7 @@
               :filters="subjectsForSelection"
               :activeFilters="activeSubjectFilters"
               v-on:toggle-filter = "onToggleSubjectFilter"
+              v-on:toggle-tail = "onToggleTail"
             />
           </v-col>
           <v-col>
@@ -241,9 +243,6 @@ export default {
       sortAscending: true,
       activeLocationFilters: ['Nederland'],
       activeSubjectFilters: [],
-      filterListLimitThreshold: 50,
-      limitLocationFilterList: true,
-      limitSubjectFilterList: true,
       zoom: {
         value: 4,
         min: 0,
@@ -361,15 +360,8 @@ export default {
               'count': this.locationCountsForSelection[key]
             }
           })
-          .filter(l => this.filterFilterLongtail(l, this.locationsThresholdReached, this.limitLocationFilterList))
 
       return _.orderBy(locations, ['count', 'name'], ['desc', 'asc'])    
-    },
-    locationsThresholdReached () {
-      return this.noLocationsForSelection > this.filterListLimitThreshold
-    },
-    subjectsThresholdReached () {
-      return this.noSubjectsForSelection > this.filterListLimitThreshold
     },
     subjectCountsForSelection () {
       let subjects = _.flatMap(this.itemsSelectedSorted, i => i['subjects']) 
@@ -504,19 +496,13 @@ export default {
         this.snackbar.state = true
       })
     },
-    toggleLimitLocationFilterList () {
-      this.limitLocationFilterList = !this.limitLocationFilterList
-    },
-    toggleLimitSubjectFilterList () {
-      this.limitSubjectFilterList = !this.limitSubjectFilterList
-    },
-    filterFilterLongtail (filter, thresholdReached, limitFilterList) {
-      return (!thresholdReached) 
-              ? true
-              : limitFilterList
-              ? filter.count > 1
-              : true
-    },
+    onToggleTail (newValue) {
+      if (newValue) {
+        this.showSnackbar(`👀 Showing the <strong>full list of filters</strong>`)
+      } else {
+        this.showSnackbar(`🙈 Hiding <strong>filters with 1 occurance</strong>`)  
+      }
+    }
   },
   watch: {
     sortBy (newValue) {
@@ -553,20 +539,6 @@ export default {
       } else {
         let removed = _.difference(oldValue, newValue)
         this.showSnackbar(`🙈 Not displaying <strong>${removed}</strong>`)
-      }
-    },
-    limitLocationFilterList (newValue) {
-      if (newValue) {
-        this.showSnackbar(`🙈 Hiding <strong>Locations</strong> with <strong>1 occurance</strong>`)  
-      } else {
-        this.showSnackbar(`✊ SHOWING <strong>ALL THE LOCATIONS!</strong>`)
-      }
-    },
-    limitSubjectFilterList (newValue) {
-      if (newValue) {
-        this.showSnackbar(`🙈 Hiding <strong>Subjects</strong> with <strong>1 occurance</strong>`)  
-      } else {
-        this.showSnackbar(`✊ SHOWING <strong>ALL THE SUBJECTS!</strong>`)
       }
     },
   },
