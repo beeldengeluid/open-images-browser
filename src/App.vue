@@ -120,10 +120,6 @@
         <div class="dflex mt4 flex-wrap items-center justify-between">
           <v-slider
             v-model="zoom.value"
-            append-icon="zoom_out"
-            prepend-icon="zoom_in"
-            @click:append="zoom.value++"
-            @click:prepend="zoom.value--"
             :min="zoom.min" :max="zoom.max" :step="zoom.step"
             ticks="always"
             tick-size="4"
@@ -132,7 +128,18 @@
             color="orange" 
             hide-details
             class="mr4 mb4 min-w-24rem"
-          ></v-slider>
+          >
+            <template v-slot:prepend>
+              <v-btn icon @click="zoom.value--">
+                <v-icon>zoom_in</v-icon>
+              </v-btn>
+            </template>
+            <template v-slot:append>
+              <v-btn icon @click="zoom.value++">
+                <v-icon>zoom_out</v-icon>
+              </v-btn>
+            </template>
+          </v-slider>
           <div class="dflex items-center mb4">
             <span class="pr2 fw7">Display</span>
             <v-chip-group v-model="displayFieldsSelected" active-class="green" multiple class="fw5 font-mono">
