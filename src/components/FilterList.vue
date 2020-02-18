@@ -48,11 +48,14 @@ export default {
   },
   computed: {
     thresholdReached () {
-      return this.filters.length > this.threshold
+      return this.filters.length > this.threshold && this.filtersTail.length
     },
     filtersHead () {
       return this.filters
         .filter(filter => this.filterFilterLongtail(filter, this.thresholdReached, this.isTailHidden))
+    },
+    filtersTail () {
+      return this.filters.filter(filter => filter.count == 1)
     },
     filtersShown () {
       return this.isTailHidden ? this.filtersHead : this.filters

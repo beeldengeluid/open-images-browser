@@ -144,29 +144,11 @@
         <v-row>
           <v-col cols="auto" class="dn db-l">
             <h3 class="mb3">Locations in selection <span class="fw1">{{noLocationsForSelection}}</span></h3>
-            <div v-for="location in locationsForSelection" :key="location.name">
-              <v-chip
-                @click="onToggleLocationFilter(location.name)"
-                :value="location.name"
-                :class="activeLocationFilters.includes(location.name) ? 'teal white--text' : ''"
-                label small
-                class="font-mono"
-              >
-                <strong class="mr1">{{ location.name }}</strong>
-                <span>{{locationCountsForSelection[location.name]}}</span>
-                <v-icon right small>{{activeLocationFilters.includes(location.name) ? 'cancel' : 'filter_list'}} </v-icon>
-              </v-chip>
-            </div>
-            <div>
-              <div v-if="locationsThresholdReached && limitLocationFilterList" class="mt2 w4 f6">... long tail of single occurences hidden</div>
-              <v-btn 
-                v-if="locationsThresholdReached" 
-                @click="toggleLimitLocationFilterList"
-                class="mt2" outlined 
-              >
-                {{limitLocationFilterList ? 'Show all' : 'Hide long tail'}}
-              </v-btn>
-            </div>
+            <FilterList 
+              :filters="locationsForSelection"
+              :activeFilters="activeLocationFilters"
+              v-on:toggle-filter = "onToggleLocationFilter"
+            />
           </v-col>
           <v-col cols="auto" class="dn db-l">
             <h3 class="mb3">Subjects in selection <span class="fw1">{{noSubjectsForSelection}}</span></h3>
@@ -340,14 +322,12 @@ export default {
     decadeMax () {
       return Math.floor(this.yearMax / 10) * 10
     },
-    locationNamesForSelection () {
-      return _.flatMap(this.itemsSelectedSorted, i => i['locations'])
-    },
     locationCountsForSelection () {
-      return _.countBy(this.locationNamesForSelection)
+      let locations = _.flatMap(this.itemsSelectedSorted, i => i['locations'])
+      return _.countBy(locations)
     },
     noLocationsForSelection () {
-      return _.size(this.locationNamesForSelection)
+      return _.size(this.locationCountsForSelection)
     },
     locationsForSelection () {
       let locations = 
@@ -368,14 +348,12 @@ export default {
     subjectsThresholdReached () {
       return this.noSubjectsForSelection > this.filterListLimitThreshold
     },
-    subjectNamesForSelection () {
-      return _.flatMap(this.itemsSelectedSorted, i => i['subjects']) 
-    },
     subjectCountsForSelection () {
-      return _.countBy(this.subjectNamesForSelection)
+      let subjects = _.flatMap(this.itemsSelectedSorted, i => i['subjects']) 
+      return _.countBy(subjects)
     },
     noSubjectsForSelection () {
-      return _.size(this.subjectNamesForSelection)
+      return _.size(this.subjectCountsForSelection)
     },
     subjectsForSelection () {
       let subjects = 
