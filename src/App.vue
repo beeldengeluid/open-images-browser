@@ -16,14 +16,14 @@
         </p>
         <p>
           <span>The current selection, ranging from </span><span class="ph1 blue white--text">{{selectedYearRange[0]}}</span> to <span class="ph1 blue white--text">{{selectedYearRange[1]}}</span>
-          <span v-if="locationFilters.length || subjectFilters.length">, filtered for </span>
-          <span v-if="locationFilters.length">
+          <span v-if="activeLocationFilters.length || activeSubjectFilters.length">, filtered for </span>
+          <span v-if="activeLocationFilters.length">
             <v-chip-group
               prev-icon="keyboard_arrow_left" next-icon="keyboard_arrow_right"  
               class="font-mono dib-i v-mid"
             >
               <v-chip  
-                v-for="locationFilter in locationFilters" :key="locationFilter"
+                v-for="locationFilter in activeLocationFilters" :key="locationFilter"
                 :value="locationFilter"
                 @click:close="onToggleLocationFilter(locationFilter)" close close-icon="cancel"
                 label small class="teal white--text"
@@ -32,13 +32,13 @@
               </v-chip>
             </v-chip-group>
           </span>
-          <span v-if="subjectFilters.length">
+          <span v-if="activeSubjectFilters.length">
             <v-chip-group
               prev-icon="keyboard_arrow_left" next-icon="keyboard_arrow_right"  
               class="font-mono dib-i v-mid"
             >
               <v-chip  
-                v-for="subjectFilter in subjectFilters" :key="subjectFilter"
+                v-for="subjectFilter in activeSubjectFilters" :key="subjectFilter"
                 :value="subjectFilter"
                 @click:close="onToggleSubjectFilter(subjectFilter)" close close-icon="cancel"
                 label small class="cyan white--text"
@@ -77,12 +77,12 @@
                 v-for="location in locationsForSelection" :key="location.name"
                 @click="onToggleLocationFilter(location.name)"
                 :value="location.name"
-                :class="locationFilters.includes(location.name) ? 'teal white--text' : ''"
+                :class="activeLocationFilters.includes(location.name) ? 'teal white--text' : ''"
                 label small
               >
                 <strong class="mr1">{{ location.name }}</strong>
                 <span>{{locationCountsForSelection[location.name]}}</span>
-                <v-icon right small>{{locationFilters.includes(location.name) ? 'cancel' : 'filter_list'}} </v-icon>
+                <v-icon right small>{{activeLocationFilters.includes(location.name) ? 'cancel' : 'filter_list'}} </v-icon>
               </v-chip>
             </v-chip-group>
           </div>
@@ -96,12 +96,12 @@
                 v-for="subject in subjectsForSelection" :key="subject.name"
                 @click="onToggleSubjectFilter(subject.name)"
                 :value="subject.name"
-                :class="subjectFilters.includes(subject.name) ? 'cyan white--text' : ''"
+                :class="activeSubjectFilters.includes(subject.name) ? 'cyan white--text' : ''"
                 label small
               >
                 <strong class="mr1">{{ subject.name }}</strong>
                 <span>{{subjectCountsForSelection[subject.name]}}</span>
-                <v-icon right small>{{subjectFilters.includes(subject.name) ? 'cancel' : 'filter_list'}} </v-icon>
+                <v-icon right small>{{activeSubjectFilters.includes(subject.name) ? 'cancel' : 'filter_list'}} </v-icon>
               </v-chip>
             </v-chip-group>
           </div>
@@ -144,55 +144,19 @@
         <v-row>
           <v-col cols="auto" class="dn db-l">
             <h3 class="mb3">Locations in selection <span class="fw1">{{noLocationsForSelection}}</span></h3>
-            <div v-for="location in locationsForSelection" :key="location.name">
-              <v-chip
-                @click="onToggleLocationFilter(location.name)"
-                :value="location.name"
-                :class="locationFilters.includes(location.name) ? 'teal white--text' : ''"
-                label small
-                class="font-mono"
-              >
-                <strong class="mr1">{{ location.name }}</strong>
-                <span>{{locationCountsForSelection[location.name]}}</span>
-                <v-icon right small>{{locationFilters.includes(location.name) ? 'cancel' : 'filter_list'}} </v-icon>
-              </v-chip>
-            </div>
-            <div>
-              <div v-if="locationsThresholdReached && limitLocationFilterList" class="mt2 w4 f6">... long tail of single occurences hidden</div>
-              <v-btn 
-                v-if="locationsThresholdReached" 
-                @click="toggleLimitLocationFilterList"
-                class="mt2" outlined 
-              >
-                {{limitLocationFilterList ? 'Show all' : 'Hide long tail'}}
-              </v-btn>
-            </div>
+            <FilterList 
+              :filters="locationsForSelection"
+              :activeFilters="activeLocationFilters"
+              v-on:toggle-filter = "onToggleLocationFilter"
+            />
           </v-col>
           <v-col cols="auto" class="dn db-l">
             <h3 class="mb3">Subjects in selection <span class="fw1">{{noSubjectsForSelection}}</span></h3>
-            <div v-for="subject in subjectsForSelection" :key="subject.name">
-              <v-chip
-                @click="onToggleSubjectFilter(subject.name)"
-                :value="subject.name"
-                :class="subjectFilters.includes(subject.name) ? 'cyan white--text' : ''"
-                label small
-                class="font-mono"
-              >
-                <strong class="mr1">{{ subject.name }}</strong>
-                <span>{{subjectCountsForSelection[subject.name]}}</span>
-                <v-icon right small>{{subjectFilters.includes(subject.name) ? 'cancel' : 'filter_list'}} </v-icon>
-              </v-chip>
-            </div>
-            <div>
-              <div v-if="subjectsThresholdReached && limitSubjectFilterList" class="mt2 w4 f6">... long tail of single occurences hidden</div>
-              <v-btn 
-                v-if="subjectsThresholdReached" 
-                @click="toggleLimitSubjectFilterList"
-                class="mt2" outlined 
-              >
-                {{limitSubjectFilterList ? 'Show all' : 'Hide long tail'}}
-              </v-btn>
-            </div>
+            <FilterList 
+              :filters="subjectsForSelection"
+              :activeFilters="activeSubjectFilters"
+              v-on:toggle-filter = "onToggleSubjectFilter"
+            />
           </v-col>
           <v-col>
             <h3 class="mb3">Videos in selection <span class="fw1">{{itemsSelectedSorted.length}}</span></h3>
@@ -213,8 +177,8 @@
                 :displayTitle    = "displayFieldsSelected.includes('title')"
                 :displayYear     = "displayFieldsSelected.includes('year')"
                 :displayThumb    = "displayFieldsSelected.includes('thumb')"
-                :locationFilters = "locationFilters"
-                :subjectFilters  = "subjectFilters"
+                :activeLocationFilters = "activeLocationFilters"
+                :activeSubjectFilters  = "activeSubjectFilters"
                 :locationCountsForSelection = "locationCountsForSelection"
                 :subjectCountsForSelection  = "subjectCountsForSelection"
                 v-on:toggle-location-filter = "onToggleLocationFilter"
@@ -243,6 +207,7 @@ import _ from 'lodash';
 import converter from 'number-to-words'
 import dataItems from "./assets/data/openbeelden-items-clean.json";
 import CollectionItem from "./components/CollectionItem";
+import FilterList from "./components/FilterList";
 import VueApexCharts from 'vue-apexcharts'
 import BackToTop from 'vue-backtotop'
 
@@ -250,21 +215,22 @@ export default {
   name: 'OpenBeeldenBrowser',
   components: {
     CollectionItem,
+    FilterList,
     apexcharts: VueApexCharts,
     BackToTop
   },
   data () {
     return {
       items: dataItems,
-      selectedYearRange: [1970, 1979],
-      selectedDecadeIndex: 6,
+      selectedYearRange: [1980, 1989],
+      selectedDecadeIndex: 7,
       sortFields: ['id','date', 'title'],
       sortBy: 'date',
       displayFields: ['title', 'year', 'thumb'],
       displayFieldsSelected: ['thumb', 'year'],
       sortAscending: true,
-      locationFilters: ['Nederland'],
-      subjectFilters: [],
+      activeLocationFilters: ['Nederland'],
+      activeSubjectFilters: [],
       filterListLimitThreshold: 50,
       limitLocationFilterList: true,
       limitSubjectFilterList: true,
@@ -356,14 +322,12 @@ export default {
     decadeMax () {
       return Math.floor(this.yearMax / 10) * 10
     },
-    locationNamesForSelection () {
-      return _.flatMap(this.itemsSelectedSorted, i => i['locations'])
-    },
     locationCountsForSelection () {
-      return _.countBy(this.locationNamesForSelection)
+      let locations = _.flatMap(this.itemsSelectedSorted, i => i['locations'])
+      return _.countBy(locations)
     },
     noLocationsForSelection () {
-      return _.size(this.locationNamesForSelection)
+      return _.size(this.locationCountsForSelection)
     },
     locationsForSelection () {
       let locations = 
@@ -384,14 +348,12 @@ export default {
     subjectsThresholdReached () {
       return this.noSubjectsForSelection > this.filterListLimitThreshold
     },
-    subjectNamesForSelection () {
-      return _.flatMap(this.itemsSelectedSorted, i => i['subjects']) 
-    },
     subjectCountsForSelection () {
-      return _.countBy(this.subjectNamesForSelection)
+      let subjects = _.flatMap(this.itemsSelectedSorted, i => i['subjects']) 
+      return _.countBy(subjects)
     },
     noSubjectsForSelection () {
-      return _.size(this.subjectNamesForSelection)
+      return _.size(this.subjectCountsForSelection)
     },
     subjectsForSelection () {
       let subjects = 
@@ -402,7 +364,6 @@ export default {
               'count': this.subjectCountsForSelection[key]
             }
           })
-          .filter(s => this.filterFilterLongtail(s, this.subjectsThresholdReached, this.limitSubjectFilterList))
 
       return _.orderBy(subjects, ['count', 'name'], ['desc', 'asc'])
     },
@@ -442,7 +403,7 @@ export default {
       this.clientWidth = this.getClientWidth()
     },
     onToggleLocationFilter (filterValue) {
-      if (this.locationFilters.includes(filterValue)) {
+      if (this.activeLocationFilters.includes(filterValue)) {
         this.removeLocationFilter(filterValue)
       } else {
         this.addLocationFilter(filterValue)
@@ -451,13 +412,13 @@ export default {
     addLocationFilter (filterValue) {
       /* for unclear reason .push() doesn't register correctly in the watch() 
          function, so using .concat() instead */
-      this.locationFilters = this.locationFilters.concat([filterValue])
+      this.activeLocationFilters = this.activeLocationFilters.concat([filterValue])
     },
     removeLocationFilter (filterValue) {
-      this.locationFilters = this.locationFilters.filter(lf => lf !== filterValue)
+      this.activeLocationFilters = this.activeLocationFilters.filter(lf => lf !== filterValue)
     },
     onToggleSubjectFilter (filterValue) {
-      if (this.subjectFilters.includes(filterValue)) {
+      if (this.activeSubjectFilters.includes(filterValue)) {
         this.removeSubjectFilter(filterValue)
       } else {
         this.addSubjectFilter(filterValue)
@@ -466,20 +427,20 @@ export default {
     addSubjectFilter (filterValue) {
       /* for unclear reason .push() doesn't register correctly in the watch() 
          function, so using .concat() instead */
-      this.subjectFilters = this.subjectFilters.concat([filterValue])
+      this.activeSubjectFilters = this.activeSubjectFilters.concat([filterValue])
     },
     removeSubjectFilter (filterValue) {
-      this.subjectFilters = this.subjectFilters.filter(lf => lf !== filterValue)
+      this.activeSubjectFilters = this.activeSubjectFilters.filter(lf => lf !== filterValue)
     },
     filterByYear (item) {
       return this.dateToYear(item['date']) >= this.selectedYearRange[0] &&
              this.dateToYear(item['date']) <= this.selectedYearRange[1]
     },
     filterByLocation (item) {
-      return this.locationFilters.every(lf => item['locations'].includes(lf)) || !this.locationFilters.length
+      return this.activeLocationFilters.every(lf => item['locations'].includes(lf)) || !this.activeLocationFilters.length
     },
     filterBySubject (item) {
-      return this.subjectFilters.every(sf => item['subjects'].includes(sf)) || !this.subjectFilters.length
+      return this.activeSubjectFilters.every(sf => item['subjects'].includes(sf)) || !this.activeSubjectFilters.length
     },
     updateChart () {      
       this.chartOptions = {...this.chartOptions, ...{
@@ -544,7 +505,7 @@ export default {
     sortAscending (newValue) {
       this.showSnackbar(`${newValue ? '☝️' : '👇'} Sorting in <strong>${newValue ? 'ascending' : 'descending'}</strong> order`)
     },
-    locationFilters (newValue, oldValue) {
+    activeLocationFilters (newValue, oldValue) {
       let added = _.difference(newValue, oldValue)
       if (added.length) {
         this.showSnackbar(`📍 Added location filter <strong>${added[0]}</strong>`)
@@ -553,7 +514,7 @@ export default {
         this.showSnackbar(`❌ Removed location filter <strong>${removed}</strong>`)
       }
     },
-    subjectFilters (newValue, oldValue) {
+    activeSubjectFilters (newValue, oldValue) {
       let added = _.difference(newValue, oldValue)
       if (added.length) {
         this.showSnackbar(`🏷 Added subject filter <strong>${added[0]}</strong>`)
