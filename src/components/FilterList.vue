@@ -35,7 +35,7 @@ export default {
   data: function () {
     return {
       threshold: 30,
-      userWantsToSeeTail: false,
+      isTailDesired: false,
     }
   },
   props: {
@@ -53,7 +53,7 @@ export default {
       return this.tail.length > this.threshold
     },
     isTailHidden () {
-      return this.hasLongTail && !this.userWantsToSeeTail
+      return this.hasLongTail && !this.isTailDesired
     },
     filtersToDisplay () {
       return this.isTailHidden ? this.head : this.filters
@@ -61,8 +61,8 @@ export default {
   },
   methods: {
     toggleTail () {
-      this.userWantsToSeeTail = !this.userWantsToSeeTail
-      this.$emit('toggle-tail', this.userWantsToSeeTail)
+      this.isTailDesired = !this.isTailDesired
+      this.$emit('toggle-tail', this.isTailDesired)
     },
   },
 }
