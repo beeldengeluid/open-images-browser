@@ -127,7 +127,7 @@
             :label="zoom.label"
             color="orange" 
             hide-details
-            class="mr4 mb4 min-w-24rem"
+            class="zoom-slider mr4 mb4 min-w-24rem"
           >
             <template v-slot:prepend>
               <v-btn icon @click="zoom.value--">
@@ -651,5 +651,9 @@ https://github.com/vuetifyjs/vuetify/commit/4f151bbdf4388e76d92920ca19c6271c022e
 
 .min-w-24rem {
   min-width: 24rem;
+}
+
+.zoom-slider .v-input__prepend-outer, .zoom-slider .v-input__append-outer {
+  margin-top: 0;
 }
 </style>
