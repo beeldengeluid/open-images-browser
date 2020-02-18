@@ -242,7 +242,6 @@ export default {
         activeSubjectFilters: [],
         displayFieldsSelected: ['thumb', 'year'],
       },
-      selectedYearRange: [1980, 1989],
       sortFields: ['id','date', 'title'],
       displayFields: ['title', 'year', 'thumb'],
       zoom: {
@@ -333,6 +332,12 @@ export default {
         selected.sort((a, b) => (a[this.state.sortBy] < b[this.state.sortBy]) ? 1 : -1)
       }
       return selected
+    },
+    selectedYearRange () {
+      let decade = Object.keys(this.decadeCounts)[this.state.selectedDecadeIndex]
+      let decadeYearMin = parseInt(decade.slice(0,4))
+      let decadeYearMax = decadeYearMin + 9
+      return [decadeYearMin, decadeYearMax]
     },
     yearMin () {
       return Math.min(... this.items.map(i => i['date'].slice(0, 4)))
@@ -469,11 +474,6 @@ export default {
       }]
     },
     onDecadeClick (dataPointIndex) {
-      // set year range
-      let decade = Object.keys(this.decadeCounts)[dataPointIndex]
-      let decadeYearMin = parseInt(decade.slice(0,4))
-      let decadeYearMax = decadeYearMin + 9
-      this.selectedYearRange = [decadeYearMin, decadeYearMax]
       // set decade
       this.state.selectedDecadeIndex = dataPointIndex
 
@@ -486,7 +486,7 @@ export default {
     getColorList () {
       return Array.from(Object.keys(this.decadeCounts))
               .fill(this.colors.gray)
-              .fill(this.colors.indigo, this.state.selectedDecadeIndex, this.state.selectedDecadeIndex+1)
+              .fill(this.colors.indigo, this.state.selectedDecadeIndex, this.state.selectedDecadeIndex + 1)
     },
     showSnackbar (markup) {
       this.snackbar.state = false
@@ -501,7 +501,10 @@ export default {
       } else {
         this.showSnackbar(`🙈 Hiding <strong>filters with 1 occurance</strong>`)  
       }
-    }
+    },
+    qsCustomizer (objValue, srcValue) {
+      return typeof objValue === 'number' ? parseInt(srcValue, 10) : srcValue
+    },
   },
   watch: {
     'state.sortBy': function (newValue) {
@@ -548,6 +551,8 @@ export default {
     },
   },
   created() {
+    // Object.assign(this.state, this.$route.query )
+    _.assignWith(this.state, this.$route.query, this.qsCustomizer)
     this.updateChart()
     window.addEventListener("resize", _.debounce(this.onResize), 400)
   },

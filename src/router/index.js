@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
+import qs from 'qs';
 
 Vue.use(VueRouter)
 
@@ -21,7 +22,16 @@ const routes = [
 ]
 
 const router = new VueRouter({
-  routes
+  routes,
+  // set custom query resolver
+  parseQuery(query) {
+    return qs.parse(query);
+  },
+  stringifyQuery(query) {
+    var result = qs.stringify(query);
+
+    return result ? ('?' + result) : '';
+  }
 })
 
 export default router
