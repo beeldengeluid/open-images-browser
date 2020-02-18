@@ -17,14 +17,14 @@
         </p>
         <p>
           <span>The current selection, ranging from </span><span class="ph1 blue white--text">{{selectedYearRange[0]}}</span> to <span class="ph1 blue white--text">{{selectedYearRange[1]}}</span>
-          <span v-if="activeLocationFilters.length || activeSubjectFilters.length">, filtered for </span>
-          <span v-if="activeLocationFilters.length">
+          <span v-if="state.activeLocationFilters.length || state.activeSubjectFilters.length">, filtered for </span>
+          <span v-if="state.activeLocationFilters.length">
             <v-chip-group
               prev-icon="keyboard_arrow_left" next-icon="keyboard_arrow_right"  
               class="font-mono dib-i v-mid"
             >
               <v-chip  
-                v-for="locationFilter in activeLocationFilters" :key="locationFilter"
+                v-for="locationFilter in state.activeLocationFilters" :key="locationFilter"
                 :value="locationFilter"
                 @click:close="onToggleLocationFilter(locationFilter)" close close-icon="cancel"
                 label small class="teal white--text"
@@ -33,13 +33,13 @@
               </v-chip>
             </v-chip-group>
           </span>
-          <span v-if="activeSubjectFilters.length">
+          <span v-if="state.activeSubjectFilters.length">
             <v-chip-group
               prev-icon="keyboard_arrow_left" next-icon="keyboard_arrow_right"  
               class="font-mono dib-i v-mid"
             >
               <v-chip  
-                v-for="subjectFilter in activeSubjectFilters" :key="subjectFilter"
+                v-for="subjectFilter in state.activeSubjectFilters" :key="subjectFilter"
                 :value="subjectFilter"
                 @click:close="onToggleSubjectFilter(subjectFilter)" close close-icon="cancel"
                 label small class="cyan white--text"
@@ -50,17 +50,17 @@
           </span>
           <span> contains </span><span class="ph1 indigo white--text">{{itemsSelectedSorted.length}}</span><span> out of {{this.items.length}} videos.</span>
           <br>
-          <span>Videos are sorted by </span><span class="ph1 deep-purple font-mono">{{sortBy}}</span><span> in </span>
-          <span class="ph1 deep-purple">{{sortAscending ? 'ascending' : 'descending'}} 
-            <v-icon @click="toggleSortAscending" small>{{sortAscending ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</v-icon> 
+          <span>Videos are sorted by </span><span class="ph1 deep-purple font-mono">{{state.sortBy}}</span><span> in </span>
+          <span class="ph1 deep-purple">{{state.sortAscending ? 'ascending' : 'descending'}} 
+            <v-icon @click="toggleSortAscending" small>{{state.sortAscending ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</v-icon> 
           </span> order.
           <br>
           <span>Videos are displayed </span><span class="ph1 orange white--text">{{noThumbsPerRow}}</span><span> per row</span>
-          <span v-if="displayFieldsSelected.length">, along with their </span>
-          <span v-for="(field, index) in displayFieldsSelected" :key="field">
-            <span v-if="displayFieldsSelected.length > 1 && index == displayFieldsSelected.length - 1"> &amp; </span>
+          <span v-if="state.displayFieldsSelected.length">, along with their </span>
+          <span v-for="(field, index) in state.displayFieldsSelected" :key="field">
+            <span v-if="state.displayFieldsSelected.length > 1 && index == state.displayFieldsSelected.length - 1"> &amp; </span>
             <span class="ph1 green white--text">{{field}}</span>
-            <span v-if="displayFieldsSelected.length > 1 && index < displayFieldsSelected.length - 2">, </span>
+            <span v-if="state.displayFieldsSelected.length > 1 && index < state.displayFieldsSelected.length - 2">, </span>
           </span>
           <span>.</span>
         </p>
@@ -78,12 +78,12 @@
                 v-for="location in locationsForSelection" :key="location.name"
                 @click="onToggleLocationFilter(location.name)"
                 :value="location.name"
-                :class="activeLocationFilters.includes(location.name) ? 'teal white--text' : ''"
+                :class="state.activeLocationFilters.includes(location.name) ? 'teal white--text' : ''"
                 label small
               >
                 <strong class="mr1">{{ location.name }}</strong>
                 <span>{{locationCountsForSelection[location.name]}}</span>
-                <v-icon right small>{{activeLocationFilters.includes(location.name) ? 'cancel' : 'filter_list'}} </v-icon>
+                <v-icon right small>{{state.activeLocationFilters.includes(location.name) ? 'cancel' : 'filter_list'}} </v-icon>
               </v-chip>
             </v-chip-group>
           </div>
@@ -97,25 +97,25 @@
                 v-for="subject in subjectsForSelection" :key="subject.name"
                 @click="onToggleSubjectFilter(subject.name)"
                 :value="subject.name"
-                :class="activeSubjectFilters.includes(subject.name) ? 'cyan white--text' : ''"
+                :class="state.activeSubjectFilters.includes(subject.name) ? 'cyan white--text' : ''"
                 label small
               >
                 <strong class="mr1">{{ subject.name }}</strong>
                 <span>{{subjectCountsForSelection[subject.name]}}</span>
-                <v-icon right small>{{activeSubjectFilters.includes(subject.name) ? 'cancel' : 'filter_list'}} </v-icon>
+                <v-icon right small>{{state.activeSubjectFilters.includes(subject.name) ? 'cancel' : 'filter_list'}} </v-icon>
               </v-chip>
             </v-chip-group>
           </div>
         </div>
         <div class="dib dflex items-center">
           <span class="mr2 fw7">Sort by</span>
-          <v-chip-group v-model="sortBy" active-class="deep-purple" mandatory class="fw5 font-mono">
+          <v-chip-group v-model="state.sortBy" active-class="deep-purple" mandatory class="fw5 font-mono">
             <v-chip v-for="sortField in sortFields" :key="sortField" :value="sortField">
               {{ sortField }}
             </v-chip>
           </v-chip-group>
           <v-btn fab x-small color="deep-purple mr2">
-            <v-icon @click="toggleSortAscending">{{sortAscending ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</v-icon>
+            <v-icon @click="toggleSortAscending">{{state.sortAscending ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</v-icon>
           </v-btn>
         </div>
         <div class="dflex mt4 flex-wrap items-center justify-between">
@@ -143,7 +143,7 @@
           </v-slider>
           <div class="dflex items-center mb4">
             <span class="pr2 fw7">Display</span>
-            <v-chip-group v-model="displayFieldsSelected" active-class="green" multiple class="fw5 font-mono">
+            <v-chip-group v-model="state.displayFieldsSelected" active-class="green" multiple class="fw5 font-mono">
               <v-chip v-for="displayField in displayFields" :key="displayField" :value="displayField">
                 {{displayField}}
               </v-chip>
@@ -157,7 +157,7 @@
             <h3 class="mb3">Locations in selection <span class="fw1">{{noLocationsForSelection}}</span></h3>
             <FilterList 
               :filters="locationsForSelection"
-              :activeFilters="activeLocationFilters"
+              :activeFilters="state.activeLocationFilters"
               v-on:toggle-filter = "onToggleLocationFilter"
               v-on:toggle-tail = "onToggleTail"
             />
@@ -166,7 +166,7 @@
             <h3 class="mb3">Subjects in selection <span class="fw1">{{noSubjectsForSelection}}</span></h3>
             <FilterList 
               :filters="subjectsForSelection"
-              :activeFilters="activeSubjectFilters"
+              :activeFilters="state.activeSubjectFilters"
               v-on:toggle-filter = "onToggleSubjectFilter"
               v-on:toggle-tail = "onToggleTail"
             />
@@ -187,11 +187,11 @@
                 :subjects        = "item['subjects']"
                 :creators        = "item['creators']"
                 :locations       = "item['locations']"
-                :displayTitle    = "displayFieldsSelected.includes('title')"
-                :displayYear     = "displayFieldsSelected.includes('year')"
-                :displayThumb    = "displayFieldsSelected.includes('thumb')"
-                :activeLocationFilters = "activeLocationFilters"
-                :activeSubjectFilters  = "activeSubjectFilters"
+                :displayTitle    = "state.displayFieldsSelected.includes('title')"
+                :displayYear     = "state.displayFieldsSelected.includes('year')"
+                :displayThumb    = "state.displayFieldsSelected.includes('thumb')"
+                :activeLocationFilters = "state.activeLocationFilters"
+                :activeSubjectFilters  = "state.activeSubjectFilters"
                 :locationCountsForSelection = "locationCountsForSelection"
                 :subjectCountsForSelection  = "subjectCountsForSelection"
                 v-on:toggle-location-filter = "onToggleLocationFilter"
@@ -235,15 +235,17 @@ export default {
   data () {
     return {
       items: dataItems,
+      state: {
+        sortBy: 'date',
+        selectedDecadeIndex: 7,
+        sortAscending: true,
+        activeLocationFilters: ['Nederland'],
+        activeSubjectFilters: [],
+        displayFieldsSelected: ['thumb', 'year'],
+      },
       selectedYearRange: [1980, 1989],
-      selectedDecadeIndex: 7,
       sortFields: ['id','date', 'title'],
-      sortBy: 'date',
       displayFields: ['title', 'year', 'thumb'],
-      displayFieldsSelected: ['thumb', 'year'],
-      sortAscending: true,
-      activeLocationFilters: ['Nederland'],
-      activeSubjectFilters: [],
       zoom: {
         value: 4,
         min: 0,
@@ -326,10 +328,10 @@ export default {
         i => this.filterByLocation(i) && this.filterBySubject(i)
       )
       // sort
-      if (this.sortAscending) {
-        selected.sort((a, b) => (a[this.sortBy] > b[this.sortBy]) ? 1 : -1)
+      if (this.state.sortAscending) {
+        selected.sort((a, b) => (a[this.state.sortBy] > b[this.state.sortBy]) ? 1 : -1)
       } else {
-        selected.sort((a, b) => (a[this.sortBy] < b[this.sortBy]) ? 1 : -1)
+        selected.sort((a, b) => (a[this.state.sortBy] < b[this.state.sortBy]) ? 1 : -1)
       }
       return selected
     },
@@ -407,7 +409,7 @@ export default {
       return converter.toOrdinal(int)
     },
     toggleSortAscending () {
-      this.sortAscending = ! this.sortAscending
+      this.state.sortAscending = ! this.state.sortAscending
     },
     dateToYear (date) {
       return date.slice(0,4)
@@ -419,7 +421,7 @@ export default {
       this.clientWidth = this.getClientWidth()
     },
     onToggleLocationFilter (filterValue) {
-      if (this.activeLocationFilters.includes(filterValue)) {
+      if (this.state.activeLocationFilters.includes(filterValue)) {
         this.removeLocationFilter(filterValue)
       } else {
         this.addLocationFilter(filterValue)
@@ -428,13 +430,13 @@ export default {
     addLocationFilter (filterValue) {
       /* for unclear reason .push() doesn't register correctly in the watch() 
          function, so using .concat() instead */
-      this.activeLocationFilters = this.activeLocationFilters.concat([filterValue])
+      this.state.activeLocationFilters = this.state.activeLocationFilters.concat([filterValue])
     },
     removeLocationFilter (filterValue) {
-      this.activeLocationFilters = this.activeLocationFilters.filter(lf => lf !== filterValue)
+      this.state.activeLocationFilters = this.state.activeLocationFilters.filter(lf => lf !== filterValue)
     },
     onToggleSubjectFilter (filterValue) {
-      if (this.activeSubjectFilters.includes(filterValue)) {
+      if (this.state.activeSubjectFilters.includes(filterValue)) {
         this.removeSubjectFilter(filterValue)
       } else {
         this.addSubjectFilter(filterValue)
@@ -443,20 +445,20 @@ export default {
     addSubjectFilter (filterValue) {
       /* for unclear reason .push() doesn't register correctly in the watch() 
          function, so using .concat() instead */
-      this.activeSubjectFilters = this.activeSubjectFilters.concat([filterValue])
+      this.state.activeSubjectFilters = this.state.activeSubjectFilters.concat([filterValue])
     },
     removeSubjectFilter (filterValue) {
-      this.activeSubjectFilters = this.activeSubjectFilters.filter(lf => lf !== filterValue)
+      this.state.activeSubjectFilters = this.state.activeSubjectFilters.filter(lf => lf !== filterValue)
     },
     filterByYear (item) {
       return this.dateToYear(item['date']) >= this.selectedYearRange[0] &&
              this.dateToYear(item['date']) <= this.selectedYearRange[1]
     },
     filterByLocation (item) {
-      return this.activeLocationFilters.every(lf => item['locations'].includes(lf)) || !this.activeLocationFilters.length
+      return this.state.activeLocationFilters.every(lf => item['locations'].includes(lf)) || !this.state.activeLocationFilters.length
     },
     filterBySubject (item) {
-      return this.activeSubjectFilters.every(sf => item['subjects'].includes(sf)) || !this.activeSubjectFilters.length
+      return this.state.activeSubjectFilters.every(sf => item['subjects'].includes(sf)) || !this.state.activeSubjectFilters.length
     },
     updateChart () {      
       this.chartOptions = {...this.chartOptions, ...{
@@ -477,7 +479,7 @@ export default {
       let decadeYearMax = decadeYearMin + 9
       this.selectedYearRange = [decadeYearMin, decadeYearMax]
       // set decade
-      this.selectedDecadeIndex = dataPointIndex
+      this.state.selectedDecadeIndex = dataPointIndex
 
       // color bars to show state 
       let colorList = this.getColorList()
@@ -488,7 +490,7 @@ export default {
     getColorList () {
       return Array.from(Object.keys(this.decadeCounts))
               .fill(this.colors.gray)
-              .fill(this.colors.indigo, this.selectedDecadeIndex, this.selectedDecadeIndex+1)
+              .fill(this.colors.indigo, this.state.selectedDecadeIndex, this.state.selectedDecadeIndex+1)
     },
     showSnackbar (markup) {
       this.snackbar.state = false
@@ -506,19 +508,19 @@ export default {
     }
   },
   watch: {
-    sortBy (newValue) {
-      this.showSnackbar(`${this.sortAscending ? '☝️' : '👇'} Sorting by <strong>${newValue}</strong>`)
+    'state.sortBy': function (newValue) {
+      this.showSnackbar(`${this.state.sortAscending ? '☝️' : '👇'} Sorting by <strong>${newValue}</strong>`)
       this.$router.push({ query: Object.assign({}, this.$route.query, { sortBy: newValue })})
     },
-    selectedDecadeIndex (newValue) {
+    'state.selectedDecadeIndex': function (newValue) {
       this.showSnackbar(`✅ Selected <strong>${Object.keys(this.decadeCounts)[newValue]}</strong> decade`)
       this.$router.push({ query: Object.assign({}, this.$route.query, { selectedDecadeIndex: newValue })})
     },
-    sortAscending (newValue) {
+    'state.sortAscending': function (newValue) {
       this.showSnackbar(`${newValue ? '☝️' : '👇'} Sorting in <strong>${newValue ? 'ascending' : 'descending'}</strong> order`)
       this.$router.push({ query: Object.assign({}, this.$route.query, { sortAscending: newValue })})
     },
-    activeLocationFilters (newValue, oldValue) {
+    'state.activeLocationFilters': function (newValue, oldValue) {
       let added = _.difference(newValue, oldValue)
       if (added.length) {
         this.showSnackbar(`📍 Added location filter <strong>${added[0]}</strong>`)
@@ -528,7 +530,7 @@ export default {
       }
       this.$router.push({ query: Object.assign({}, this.$route.query, { activeLocationFilters: newValue })})
     },
-    activeSubjectFilters (newValue, oldValue) {
+    'state.activeSubjectFilters': function (newValue, oldValue) {
       let added = _.difference(newValue, oldValue)
       if (added.length) {
         this.showSnackbar(`🏷 Added subject filter <strong>${added[0]}</strong>`)
@@ -538,7 +540,7 @@ export default {
       }
       this.$router.push({ query: Object.assign({}, this.$route.query, { activeSubjectFilters: newValue })})
     },
-    displayFieldsSelected (newValue, oldValue) {
+    'state.displayFieldsSelected': function (newValue, oldValue) {
       let added = _.difference(newValue, oldValue)
       if (added.length) {
         this.showSnackbar(`👀 Displaying <strong>${added}</strong>`)
