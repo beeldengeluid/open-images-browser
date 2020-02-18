@@ -508,12 +508,15 @@ export default {
   watch: {
     sortBy (newValue) {
       this.showSnackbar(`${this.sortAscending ? '☝️' : '👇'} Sorting by <strong>${newValue}</strong>`)
+      this.$router.push({ query: Object.assign({}, this.$route.query, { sortBy: newValue })})
     },
     selectedDecadeIndex (newValue) {
       this.showSnackbar(`✅ Selected <strong>${Object.keys(this.decadeCounts)[newValue]}</strong> decade`)
+      this.$router.push({ query: Object.assign({}, this.$route.query, { selectedDecadeIndex: newValue })})
     },
     sortAscending (newValue) {
       this.showSnackbar(`${newValue ? '☝️' : '👇'} Sorting in <strong>${newValue ? 'ascending' : 'descending'}</strong> order`)
+      this.$router.push({ query: Object.assign({}, this.$route.query, { sortAscending: newValue })})
     },
     activeLocationFilters (newValue, oldValue) {
       let added = _.difference(newValue, oldValue)
@@ -523,6 +526,7 @@ export default {
         let removed = _.difference(oldValue, newValue)
         this.showSnackbar(`❌ Removed location filter <strong>${removed}</strong>`)
       }
+      this.$router.push({ query: Object.assign({}, this.$route.query, { activeLocationFilters: newValue })})
     },
     activeSubjectFilters (newValue, oldValue) {
       let added = _.difference(newValue, oldValue)
@@ -532,6 +536,7 @@ export default {
         let removed = _.difference(oldValue, newValue)
         this.showSnackbar(`❌ Removed subject filter <strong>${removed}</strong>`)
       }
+      this.$router.push({ query: Object.assign({}, this.$route.query, { activeSubjectFilters: newValue })})
     },
     displayFieldsSelected (newValue, oldValue) {
       let added = _.difference(newValue, oldValue)
@@ -541,6 +546,7 @@ export default {
         let removed = _.difference(oldValue, newValue)
         this.showSnackbar(`🙈 Not displaying <strong>${removed}</strong>`)
       }
+      this.$router.push({ query: Object.assign({}, this.$route.query, { displayFieldsSelected: newValue })})
     },
   },
   created() {
