@@ -2,7 +2,7 @@
   <div
     class="filter-list"
   >
-    <div v-for="filter in filtersShown" :key="filter.name">
+    <div v-for="filter in filtersToDisplay" :key="filter.name">
       <v-chip
         @click="$emit('toggle-filter', filter.name)"
         :value="filter.name"
@@ -15,11 +15,11 @@
       </v-chip>
     </div>
     <div>
-      <div v-if="thresholdReached && isTailHidden" class="mt2 w4 f6">
-        ... long tail of single occurences hidden
+      <div v-if="isTailHidden" class="mt2 w4 f6">
+        ... long tail of {{tail.length}} single occurences hidden
       </div>
       <v-btn 
-        v-if="thresholdReached" 
+        v-if="hasLongTail" 
         @click="toggleTailHidden"
         class="mt2" outlined 
       >
@@ -34,48 +34,35 @@ export default {
   name: 'FilterList',
   data: function () {
     return {
-      threshold: 50,
-      isTailHidden: true
+      threshold: 30,
+      userWantsToSeeTail: false,
     }
   },
   props: {
-    filters: {
-      type: Array,
-    },
-    activeFilters: {
-      type: Array,
-    },
+    filters: { type: Array },
+    activeFilters: { type: Array },
   },
   computed: {
-    thresholdReached () {
-      return this.filters.length > this.threshold && this.filtersTail.length
+    head () {
+      return this.filters.filter(filter => filter.count > 1)
     },
-    filtersHead () {
-      return this.filters
-        .filter(filter => this.filterFilterLongtail(filter, this.thresholdReached, this.isTailHidden))
-    },
-    filtersTail () {
+    tail () {
       return this.filters.filter(filter => filter.count == 1)
     },
-    filtersShown () {
-      return this.isTailHidden ? this.filtersHead : this.filters
+    hasLongTail () {
+      return this.tail.length > this.threshold
+    },
+    isTailHidden () {
+      return this.hasLongTail && !this.userWantsToSeeTail
+    },
+    filtersToDisplay () {
+      return this.isTailHidden ? this.head : this.filters
     },
   },
   methods: {
     toggleTailHidden () {
-      this.isTailHidden = !this.isTailHidden
-    },
-    filterFilterLongtail (filter, thresholdReached, limitFilterList) {
-      return (!thresholdReached) 
-              ? true
-              : limitFilterList
-              ? filter.count > 1
-              : true
+      this.userWantsToSeeTail = !this.userWantsToSeeTail
     },
   },
 }
 </script>
-
-<style scoped>
-
-</style>
