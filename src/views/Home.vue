@@ -217,7 +217,6 @@
 <script>
 import '../../node_modules/tachyons/css/tachyons.min.css';
 import _ from 'lodash';
-import converter from 'number-to-words'
 import dataItems from "@/assets/data/openbeelden-items-clean.json";
 import CollectionItem from "@/components/CollectionItem";
 import FilterList from "@/components/FilterList";
@@ -405,9 +404,6 @@ export default {
     },
   },
   methods: {
-    toOrdinal (int) {
-      return converter.toOrdinal(int)
-    },
     toggleSortAscending () {
       this.state.sortAscending = ! this.state.sortAscending
     },

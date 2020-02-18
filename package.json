@@ -11,7 +11,6 @@
     "apexcharts": "^3.15.2",
     "core-js": "^3.4.3",
     "lodash": "^4.17.15",
-    "number-to-words": "^1.2.4",
     "vue": "^2.6.10",
     "vue-apexcharts": "^1.5.2",
     "vue-backtotop": "^1.6.1",
