@@ -124,7 +124,7 @@
             ticks="always"
             tick-size="4"
             :tick-labels="zoomLabels"
-            label="Items per row"
+            :label="zoom.label"
             color="orange" 
             hide-details
             class="mr4 mb4 min-w-24rem"
@@ -249,6 +249,7 @@ export default {
         min: 0,
         max: 6,
         step: 1,
+        label: 'Zoom Out level',
       },
       itemAspectRatio: 352 / 288,
       itemMargin: 4,
