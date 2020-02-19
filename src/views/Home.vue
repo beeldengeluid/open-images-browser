@@ -48,7 +48,7 @@
               </v-chip>
             </v-chip-group>,
           </span>
-          <span> contains </span><span class="ph1 indigo white--text">{{itemsSelectedSorted.length}}</span><span> out of {{this.items.length}} videos.</span>
+          <span> contains </span><span class="ph1 indigo white--text">{{itemsFilteredSorted.length}}</span><span> out of {{this.items.length}} videos.</span>
           <br>
           <span>Videos are sorted by </span><span class="ph1 deep-purple font-mono">{{state.sortBy}}</span><span> in </span>
           <span class="ph1 deep-purple">{{state.sortAscending ? 'ascending' : 'descending'}} 
@@ -172,10 +172,10 @@
             />
           </v-col>
           <v-col>
-            <h3 class="mb3">Videos in selection <span class="fw1">{{itemsSelectedSorted.length}}</span></h3>
+            <h3 class="mb3">Videos in selection <span class="fw1">{{itemsFilteredSorted.length}}</span></h3>
             <div class="relative dflex flex-wrap">
               <CollectionItem
-                v-for = "item in itemsSelectedSorted" 
+                v-for = "item in itemsFilteredSorted" 
                 :key             = "item['id']"
                 :width           = "itemWidth + 'px'"
                 :height          = "itemHeight + 'px'"
@@ -317,21 +317,17 @@ export default {
       return _.range(this.zoom.max + 1)
               .map(value => Math.pow(2, value))
     },
-    itemsFilteredByYear () {
-      return this.items.filter(i => this.filterByYear(i))
+    itemsFiltered () {
+      return this.items
+        .filter(
+          i => this.filterByYear(i) &&
+               this.filterByLocation(i) && 
+               this.filterBySubject(i)
+        )
     },
-    itemsSelectedSorted () {
-      // filter
-      let selected = this.itemsFilteredByYear.filter(
-        i => this.filterByLocation(i) && this.filterBySubject(i)
-      )
-      // sort
-      if (this.state.sortAscending) {
-        selected.sort((a, b) => (a[this.state.sortBy] > b[this.state.sortBy]) ? 1 : -1)
-      } else {
-        selected.sort((a, b) => (a[this.state.sortBy] < b[this.state.sortBy]) ? 1 : -1)
-      }
-      return selected
+    itemsFilteredSorted () {
+      let order = this.state.sortAscending ? 'asc' : 'desc'
+      return _.orderBy(this.itemsFiltered, [this.state.sortBy], [order])
     },
     selectedYearRange () {
       let decade = Object.keys(this.decadeCounts)[this.state.selectedDecadeIndex]
@@ -352,7 +348,7 @@ export default {
       return Math.floor(this.yearMax / 10) * 10
     },
     locationCountsForSelection () {
-      let locations = _.flatMap(this.itemsSelectedSorted, i => i['locations'])
+      let locations = _.flatMap(this.itemsFilteredSorted, i => i['locations'])
       return _.countBy(locations)
     },
     noLocationsForSelection () {
@@ -371,7 +367,7 @@ export default {
       return _.orderBy(locations, ['count', 'name'], ['desc', 'asc'])    
     },
     subjectCountsForSelection () {
-      let subjects = _.flatMap(this.itemsSelectedSorted, i => i['subjects']) 
+      let subjects = _.flatMap(this.itemsFilteredSorted, i => i['subjects']) 
       return _.countBy(subjects)
     },
     noSubjectsForSelection () {
