@@ -52,7 +52,7 @@
               :class="activeSubjectFilters.includes(subject) ? 'teal white--text' : ''"
             >
               <strong class="mr1">{{ subject }}</strong>
-              <span>({{subjectCountsForSelection[subject]}})</span>
+              <span>{{subjectCountsForSelection[subject]}}</span>
               <v-icon right>{{activeSubjectFilters.includes(subject) ? 'cancel' : 'filter_list'}} </v-icon>
             </v-chip>
           </v-chip-group>
@@ -75,7 +75,7 @@
               :class="activeLocationFilters.includes(location) ? 'teal white--text' : ''"
             >
               <strong class="mr1">{{ location }}</strong>
-              <span>({{locationCountsForSelection[location]}})</span>
+              <span>{{locationCountsForSelection[location]}}</span>
               <v-icon right>{{activeLocationFilters.includes(location) ? 'cancel' : 'filter_list'}} </v-icon>
             </v-chip>
           </v-chip-group>
