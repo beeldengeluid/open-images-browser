@@ -1,37 +1,43 @@
 <template>
 <div class="mv3">
   <p>
-    <span>The current selection, ranging from </span><span class="ph1 blue white--text">{{computed.selectedYearRange[0]}}</span> to <span class="ph1 blue white--text">{{computed.selectedYearRange[1]}}</span>
-    <span v-if="state.activeLocationFilters.length || state.activeSubjectFilters.length">, filtered for</span>
-    <span v-if="state.activeLocationFilters.length">
-      <v-chip  
-        v-for="locationFilter in state.activeLocationFilters" :key="locationFilter"
-        :value="locationFilter"
-        label small class="ml1 white--text font-mono teal"
-        @click="toggleLocationFilter(locationFilter)"
-      >
-        <strong class="mr1">{{ locationFilter }}</strong>
-        <v-icon small right>cancel</v-icon>
-      </v-chip>
-    </span>
-    <span v-if="state.activeSubjectFilters.length">
+    The current selection, ranging
+    from <span class="ph1 blue white--text font-mono">{{computed.selectedYearRange[0]}}</span>
+    to <span class="ph1 blue white--text font-mono">{{computed.selectedYearRange[1]}}</span>,
+    <span v-if="state.activeLocationFilters.length || state.activeSubjectFilters.length">
+      <br>
+      <span>filtered for</span>
+      <span v-if="state.activeLocationFilters.length">
         <v-chip  
-          v-for="subjectFilter in state.activeSubjectFilters" :key="subjectFilter"
-          :value="subjectFilter"
-          label small class="ml1 white--text font-mono cyan"
-          @click="toggleSubjectFilter(subjectFilter)"
+          v-for="locationFilter in state.activeLocationFilters" :key="locationFilter"
+          :value="locationFilter"
+          label small class="ml1 teal white--text font-mono"
+          @click="toggleLocationFilter(locationFilter)"
         >
-          <strong class="mr1">{{ subjectFilter }}</strong>
+          <v-icon small left>room</v-icon>
+          <strong>{{ locationFilter }}</strong>
           <v-icon small right>cancel</v-icon>
         </v-chip>
+      </span>
+      <span v-if="state.activeSubjectFilters.length">
+          <v-chip  
+            v-for="subjectFilter in state.activeSubjectFilters" :key="subjectFilter"
+            :value="subjectFilter"
+            label small class="ml1 cyan white--text font-mono"
+            @click="toggleSubjectFilter(subjectFilter)"
+          >
+            <v-icon small left>local_offer</v-icon>
+            <strong>{{ subjectFilter }}</strong>
+            <v-icon small right>cancel</v-icon>
+          </v-chip>
+      </span>
+      <span>,</span>
     </span>
-    <span v-if="state.activeLocationFilters.length || state.activeSubjectFilters.length">,</span>
-    <span> contains </span><span class="ph1 indigo white--text">{{computed.activeLength}}</span><span> out of {{computed.totalLength}} videos.</span>
     <br>
-    <span>Videos are sorted by </span><span class="ph1 deep-purple font-mono">{{state.sortBy}}</span><span> in </span>
-    <span class="ph1 deep-purple">
-      {{state.sortAscending ? 'ascending' : 'descending'}} 
-    </span> order.
+    contains <span class="ph1 white black--text f3 fw5 font-mono">{{computed.activeLength}}</span> out of <span class="ph1 white black--text font-mono">{{computed.totalLength}}</span> videos,
+    <br>
+    sorted by <span class="ph1 deep-purple font-mono">{{state.sortBy}}</span>
+    in <span class="ph1 deep-purple font-mono">{{state.sortAscending ? 'ascending' : 'descending'}}</span> order.
   </p>
 </div>
 </template>
