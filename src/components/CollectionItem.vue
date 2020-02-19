@@ -49,7 +49,7 @@
               :value="subject"
               @click="toggleSubjectFilter(subject)"
               label
-              :class="activeSubjectFilters.includes(subject) ? 'teal white--text' : ''"
+              :class="activeSubjectFilters.includes(subject) ? 'cyan white--text' : ''"
             >
               <strong class="mr1">{{ subject }}</strong>
               <span>{{subjectCountsForSelection[subject]}}</span>

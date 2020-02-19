@@ -6,7 +6,7 @@
       <v-chip
         @click="$emit('toggle-filter', filter.name)"
         :value="filter.name"
-        :class="activeFilters.includes(filter.name) ? 'cyan white--text' : ''"
+        :class="activeFilters.includes(filter.name) ? activeClass +' white--text' : ''"
         label small
         class="font-mono"
       >
@@ -41,6 +41,7 @@ export default {
   props: {
     filters: { type: Array },
     activeFilters: { type: Array },
+    activeClass: { type: String, default: '' },
   },
   computed: {
     head () {

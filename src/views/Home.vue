@@ -117,6 +117,7 @@
               :activeFilters="state.activeLocationFilters"
               v-on:toggle-filter = "onToggleLocationFilter"
               v-on:toggle-tail = "onToggleTail"
+              activeClass="teal"
             />
           </v-col>
           <v-col cols="auto" class="dn db-l">
@@ -126,6 +127,7 @@
               :activeFilters="state.activeSubjectFilters"
               v-on:toggle-filter = "onToggleSubjectFilter"
               v-on:toggle-tail = "onToggleTail"
+              activeClass="cyan"
             />
           </v-col>
           <v-col>
