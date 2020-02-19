@@ -217,7 +217,7 @@ export default {
       clientWidth: this.getClientWidth(),
       colors: {
         gray: '#666',
-        indigo: '#3f51b5',
+        blue: '#2196F3',
       },
       chartOptions: {
         chart: {
@@ -443,7 +443,7 @@ export default {
     getColorList () {
       return Array.from(Object.keys(this.decadeCounts))
               .fill(this.colors.gray)
-              .fill(this.colors.indigo, this.state.selectedDecadeIndex, this.state.selectedDecadeIndex + 1)
+              .fill(this.colors.blue, this.state.selectedDecadeIndex, this.state.selectedDecadeIndex + 1)
     },
     showSnackbar (markup) {
       this.snackbar.state = false
