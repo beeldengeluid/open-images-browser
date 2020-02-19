@@ -638,4 +638,7 @@ https://github.com/vuetifyjs/vuetify/commit/4f151bbdf4388e76d92920ca19c6271c022e
 .zoom-slider .v-input__prepend-outer, .zoom-slider .v-input__append-outer {
   margin-top: 0;
 }
+.zoom-slider .v-slider__tick {
+  background-color: hsla(0,0%,100%,.5);
+}
 </style>
