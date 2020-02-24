@@ -490,7 +490,7 @@ export default {
         this.showSnackbar(`📍 Added location filter <strong>${added[0]}</strong>`)
       } else {
         let removed = _.difference(oldValue, newValue)
-        this.showSnackbar(`❌ Removed location filter <strong>${removed}</strong>`)
+        this.showSnackbar(`❌ Removed location filter <strong>${removed[0]}</strong>`)
       }
       this.$router.push({ query: Object.assign({}, this.$route.query, { activeLocationFilters: newValue })})
     },
@@ -500,17 +500,17 @@ export default {
         this.showSnackbar(`🏷 Added subject filter <strong>${added[0]}</strong>`)
       } else {
         let removed = _.difference(oldValue, newValue)
-        this.showSnackbar(`❌ Removed subject filter <strong>${removed}</strong>`)
+        this.showSnackbar(`❌ Removed subject filter <strong>${removed[0]}</strong>`)
       }
       this.$router.push({ query: Object.assign({}, this.$route.query, { activeSubjectFilters: newValue })})
     },
     'state.displayFieldsSelected': function (newValue, oldValue) {
       let added = _.difference(newValue, oldValue)
       if (added.length) {
-        this.showSnackbar(`👀 Displaying <strong>${added}</strong>`)
+        this.showSnackbar(`👀 Displaying <strong>${added[0]}</strong>`)
       } else {
         let removed = _.difference(oldValue, newValue)
-        this.showSnackbar(`🙈 Not displaying <strong>${removed}</strong>`)
+        this.showSnackbar(`🙈 Not displaying <strong>${removed[0]}</strong>`)
       }
       this.$router.push({ query: Object.assign({}, this.$route.query, { displayFieldsSelected: newValue })})
     },
