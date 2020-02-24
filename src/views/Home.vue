@@ -264,6 +264,9 @@ export default {
     }
   },
   computed: {
+    itemsPerDecade () {
+      return _.groupBy(this.items, i => this.dateToDecade(i['date']))
+    },
     itemWidth () {
       let horizontalMarkupMargin = 32
       return (this.clientWidth - horizontalMarkupMargin) / this.noThumbsPerRow - this.itemMargin
@@ -279,11 +282,11 @@ export default {
               .map(value => Math.pow(2, value))
     },
     itemsFiltered () {
-      return this.items
+      return this.itemsPerDecade[this.selectedDecade]
         .filter(
-          i => this.filterByYear(i) &&
-               this.filterByLocation(i) && 
-               this.filterBySubject(i)
+          i => 
+            this.filterByLocation(i) && 
+            this.filterBySubject(i)
         )
     },
     itemsFilteredSorted () {
@@ -291,10 +294,12 @@ export default {
       return _.orderBy(this.itemsFiltered, [this.state.sortBy], [order])
     },
     selectedYearRange () {
-      let decade = Object.keys(this.decadeCounts)[this.state.selectedDecadeIndex]
-      let decadeYearMin = parseInt(decade.slice(0,4))
+      let decadeYearMin = parseInt(this.selectedDecade.slice(0,4))
       let decadeYearMax = decadeYearMin + 9
       return [decadeYearMin, decadeYearMax]
+    },
+    selectedDecade () {
+      return  Object.keys(this.decadeCounts)[this.state.selectedDecadeIndex]
     },
     yearMin () {
       return Math.min(... this.items.map(i => i['date'].slice(0, 4)))
@@ -348,7 +353,7 @@ export default {
     },
     decadeCounts () {
       // get decades present in data
-      let decadesPresent =  _.countBy(this.items, i => i['date'].slice(0,3)+'0s')
+      let decadesPresent =  _.countBy(this.items, i => this.dateToDecade(i['date']))
       
       // add intermediary decades
       let decadesAll = _.range(this.decadeMin, this.decadeMax, 10).map(d => d + 's')
@@ -371,6 +376,9 @@ export default {
     },
     dateToYear (date) {
       return date.slice(0,4)
+    },
+    dateToDecade (date) {
+      return date.slice(0,3)+'0s'
     },
     getClientWidth () {
       return document.body.clientWidth || document.documentElement.clientWidth
