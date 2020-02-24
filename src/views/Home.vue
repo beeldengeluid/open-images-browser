@@ -222,8 +222,8 @@ export default {
       chartOptions: {
         chart: {
           id: 'decade-bar-chart',
-          toolbar: { tools: { download: false } },
-          type: 'bar',
+          toolbar: { show: false },
+          type: 'line',
           events: {
             dataPointSelection: (event, chartContext, config) => {
               if (config.dataPointIndex >= 0) {
@@ -240,10 +240,23 @@ export default {
             distributed: true,
           }
         },
-        yaxis: { show: false },
+        yaxis: [
+          {
+            // show: false,
+            title: { text: 'Total Items' }
+          }, 
+          {
+            // show: false,
+            opposite: true,
+            title: { text: 'Filtered Items' }
+          }
+        ],
         grid: { show: false },
-        legend: { show: false },
-        dataLabels: { enabled: false },
+        legend: { show: true },
+        dataLabels: {
+          enabled: true,
+          enabledOnSeries: [1]
+        },
         responsive: [
           {
             breakpoint: 9999,
@@ -283,6 +296,14 @@ export default {
     },
     itemsFiltered () {
       return this.itemsPerDecade[this.selectedDecade]
+        .filter(
+          i => 
+            this.filterByLocation(i) && 
+            this.filterBySubject(i)
+        )
+    },
+    itemsFilteredAllDecades () {
+      return this.items
         .filter(
           i => 
             this.filterByLocation(i) && 
@@ -352,22 +373,10 @@ export default {
       return _.orderBy(subjects, ['count', 'name'], ['desc', 'asc'])
     },
     decadeCounts () {
-      // get decades present in data
-      let decadesPresent =  _.countBy(this.items, i => this.dateToDecade(i['date']))
-      
-      // add intermediary decades
-      let decadesAll = _.range(this.decadeMin, this.decadeMax, 10).map(d => d + 's')
-      decadesAll.map(d => {
-        if (!Object.keys(decadesPresent).includes(d)) {
-          decadesPresent[d] = 0
-        }
-      })
-
-      const decadesSorted = {};
-      Object.keys(decadesPresent).sort().forEach(function(key) {
-        decadesSorted[key] = decadesPresent[key];
-      });
-      return decadesSorted
+      return this.getDecadeCounts(this.items, this.decadeMin, this.decadeMax)
+    },
+    decadeCountsForSelection () {
+      return this.getDecadeCounts(this.itemsFilteredAllDecades, this.decadeMin, this.decadeMax)
     },
   },
   methods: {
@@ -433,25 +442,52 @@ export default {
         },
         colors: this.getColorList(),
       }}
-      this.chartSeries = [{
-        name: 'Item count',
-        data: Object.values(this.decadeCounts),
-      }]
+      this.chartSeries = [
+        {
+          name: 'Total Items',
+          type: 'bar',
+          data: Object.values(this.decadeCounts),
+        },
+        {
+          name: 'Filtered Items',
+          type: 'line',
+          data: Object.values(this.decadeCountsForSelection),
+        },
+      ]
     },
     onDecadeClick (dataPointIndex) {
       // set decade
       this.state.selectedDecadeIndex = dataPointIndex
 
       // color bars to show state 
-      let colorList = this.getColorList()
       this.chartOptions = {...this.chartOptions, ...{
-        colors: colorList
+        colors: this.getColorList()
       }}
     },
     getColorList () {
       return Array.from(Object.keys(this.decadeCounts))
               .fill(this.colors.gray)
               .fill(this.colors.blue, this.state.selectedDecadeIndex, this.state.selectedDecadeIndex + 1)
+    },
+    getDecadeCounts (items, decadeMin, decadeMax) {
+      // get decades present in data
+      let decadesPresent =  _.countBy(items, i => this.dateToDecade(i['date']))
+      
+      // add intermediary decades
+      _.range(decadeMin, decadeMax + 10, 10)
+        .map(d => {
+          let decade = d + 's'
+          if (!Object.keys(decadesPresent).includes(decade)) {
+            decadesPresent[decade] = 0
+          }
+        })
+
+      // sort keys
+      const decadesSorted = {};
+      Object.keys(decadesPresent).sort().forEach(function(key) {
+        decadesSorted[key] = decadesPresent[key];
+      });
+      return decadesSorted
     },
     showSnackbar (markup) {
       this.snackbar.state = false
@@ -492,6 +528,7 @@ export default {
         let removed = _.difference(oldValue, newValue)
         this.showSnackbar(`❌ Removed location filter <strong>${removed[0]}</strong>`)
       }
+      this.updateChart()
       this.$router.push({ query: Object.assign({}, this.$route.query, { activeLocationFilters: newValue })})
     },
     'state.activeSubjectFilters': function (newValue, oldValue) {
@@ -502,6 +539,7 @@ export default {
         let removed = _.difference(oldValue, newValue)
         this.showSnackbar(`❌ Removed subject filter <strong>${removed[0]}</strong>`)
       }
+      this.updateChart()
       this.$router.push({ query: Object.assign({}, this.$route.query, { activeSubjectFilters: newValue })})
     },
     'state.displayFieldsSelected': function (newValue, oldValue) {
