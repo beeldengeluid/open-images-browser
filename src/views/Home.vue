@@ -137,7 +137,10 @@
             />
           </v-col>
           <v-col>
-            <h3 class="mb3">Videos in selection <span class="fw1">{{itemsFilteredSorted.length}}</span></h3>
+            <h3 class="mb3">
+              Videos in selection <span class="fw1">{{itemsFilteredSorted.length}}</span>
+              <span class="fw1 grey--text"> (of {{Object.values(decadeCounts)[state.selectedDecadeIndex]}} in decade)</span>
+            </h3>
             <div class="relative dflex flex-wrap">
               <CollectionItem
                 v-for = "item in itemsFilteredSorted" 
