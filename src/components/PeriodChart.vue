@@ -13,16 +13,13 @@ export default {
   },
   data: function () {
     return {
-      colors: {
-        primary: '#311B92',
-        secondary: '#009688',
-      },
     }
   },
   props: {
     selectedDecadeIndex: { type: Number },
     barSeries: { type: Object },
     lineSeries: { type: Object },
+    colors: { type: Object },
   },
   mounted () {
     this.$refs.apexPeriodChart.toggleDataPointSelection(0,this.selectedDecadeIndex)
@@ -48,6 +45,7 @@ export default {
           id: 'decade-bar-chart',
           toolbar: { show: false },
           type: 'line',
+          background: this.colors.background,
           events: {
             dataPointSelection: (event, chartContext, config) => {
               if (config.dataPointIndex >= 0) {
@@ -56,16 +54,10 @@ export default {
             }
           }
         },
-        colors: [this.colors.primary, this.colors.secondary],
-        stroke: {
-          width: [0,5]
-        },
+        colors: [this.colors.bar, this.colors.line],
+        stroke: { width: [0,5] },
         theme: { mode: 'dark' },
-        plotOptions: {
-          bar: {
-            columnWidth: '98%',
-          }
-        },
+        plotOptions: { bar: { columnWidth: '80%' } },
         xaxis: {
           categories: Object.keys(this.barSeries),
         },
@@ -81,7 +73,21 @@ export default {
         tooltip: { enabled: false },
         dataLabels: {
           enabled: true,
-          enabledOnSeries: [1]
+          enabledOnSeries: [1],
+        },
+        states: {
+          hover: {
+            filter: {
+              type: 'lighten',
+              value: 0.25,
+            }
+          },
+          active: {
+            filter: {
+              type: 'lighten',
+              value: 0.15,
+            }
+          },
         },
         responsive: [
           {
@@ -98,13 +104,3 @@ export default {
   },
 }
 </script>
-
-<style>
-.apexcharts-canvas.apexcharts-theme-dark {
-    background: none !important;
-}
-.apexcharts-series path[selected=true] {
-  fill: var(--selected-decade-color);
-  filter: none;
-}
-</style>

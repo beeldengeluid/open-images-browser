@@ -28,6 +28,7 @@
           :lineSeries="decadeCountsForSelection" 
           v-on:decade-click="onDecadeClick"
           :selectedDecadeIndex="state.selectedDecadeIndex" 
+          :colors="{ bar: this.colors.primary, line: this.colors.secondary, background: this.colors.background }" 
         />
         <div class="db dn-l">
           <div class="dflex items-center justify-start">
@@ -221,8 +222,9 @@ export default {
       itemMargin: 4,
       clientWidth: this.getClientWidth(),
       colors: {
-        gray: '#666',
-        blue: '#2196F3',
+        primary: '#311B92', 
+        secondary: '#009688', 
+        background: '#121212'
       },
       chartSeries: [],
       snackbar:{
