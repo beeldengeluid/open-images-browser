@@ -23,7 +23,13 @@
         v-on:toggle-subject-filter = "onToggleSubjectFilter"
       />
       <div>
-        <apexcharts  width="100%" :options="chartOptions"  :series="chartSeries" class="apex-bar-chart"></apexcharts>
+        <PeriodChart 
+          :barSeries="decadeCounts" 
+          :lineSeries="decadeCountsForSelection" 
+          v-on:decade-click="onDecadeClick"
+          :selectedDecadeIndex="state.selectedDecadeIndex" 
+          :colors="{ bar: this.colors.primary, line: this.colors.secondary, background: this.colors.background }" 
+        />
         <div class="db dn-l">
           <div class="dflex items-center justify-start">
             <div class="fw7 w5">Top locations in decade</div>
@@ -66,12 +72,12 @@
         </div>
         <div class="dib dflex items-center">
           <span class="mr2 fw7">Sort by</span>
-          <v-chip-group v-model="state.sortBy" active-class="deep-purple" mandatory class="fw5 font-mono">
+          <v-chip-group v-model="state.sortBy" active-class="indigo" mandatory class="fw5 font-mono">
             <v-chip v-for="sortField in sortFields" :key="sortField" :value="sortField">
               {{ sortField }}
             </v-chip>
           </v-chip-group>
-          <v-btn fab x-small color="deep-purple mr2">
+          <v-btn fab x-small color="indigo mr2">
             <v-icon @click="toggleSortAscending">{{state.sortAscending ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</v-icon>
           </v-btn>
         </div>
@@ -127,11 +133,14 @@
               :activeFilters="state.activeSubjectFilters"
               v-on:toggle-filter = "onToggleSubjectFilter"
               v-on:toggle-tail = "onToggleTail"
-              activeClass="cyan"
+              activeClass="teal"
             />
           </v-col>
           <v-col>
-            <h3 class="mb3">Videos in selection <span class="fw1">{{itemsFilteredSorted.length}}</span></h3>
+            <h3 class="mb3">
+              Videos in selection <span class="fw1">{{itemsFilteredSorted.length}}</span>
+              <span class="fw1 grey--text"> (of {{Object.values(decadeCounts)[state.selectedDecadeIndex]}} in decade)</span>
+            </h3>
             <div class="relative dflex flex-wrap">
               <CollectionItem
                 v-for = "item in itemsFilteredSorted" 
@@ -180,7 +189,7 @@ import dataItems from "@/assets/data/openbeelden-items-clean.json";
 import CollectionItem from "@/components/CollectionItem";
 import FilterList from "@/components/FilterList";
 import StateStory from "@/components/StateStory";
-import VueApexCharts from 'vue-apexcharts'
+import PeriodChart from "@/components/PeriodChart";
 import BackToTop from 'vue-backtotop'
 
 export default {
@@ -189,7 +198,7 @@ export default {
     CollectionItem,
     FilterList,
     StateStory,
-    apexcharts: VueApexCharts,
+    PeriodChart,
     BackToTop
   },
   data () {
@@ -216,44 +225,9 @@ export default {
       itemMargin: 4,
       clientWidth: this.getClientWidth(),
       colors: {
-        gray: '#666',
-        blue: '#2196F3',
-      },
-      chartOptions: {
-        chart: {
-          id: 'decade-bar-chart',
-          toolbar: { tools: { download: false } },
-          type: 'bar',
-          events: {
-            dataPointSelection: (event, chartContext, config) => {
-              if (config.dataPointIndex >= 0) {
-                this.onDecadeClick(config.dataPointIndex)
-              }
-            }
-          }
-        },
-        colors: ['#666'],
-        theme: { mode: 'dark' },
-        plotOptions: {
-          bar: {
-            columnWidth: '98%',
-            distributed: true,
-          }
-        },
-        yaxis: { show: false },
-        grid: { show: false },
-        legend: { show: false },
-        dataLabels: { enabled: false },
-        responsive: [
-          {
-            breakpoint: 9999,
-            options: { chart: { height: '300' } }
-          },
-          {
-            breakpoint: 800,
-            options: { chart: { height: '200' } }
-          }
-        ]
+        primary: '#311B92', 
+        secondary: '#009688', 
+        background: '#121212'
       },
       chartSeries: [],
       snackbar:{
@@ -283,6 +257,14 @@ export default {
     },
     itemsFiltered () {
       return this.itemsPerDecade[this.selectedDecade]
+        .filter(
+          i => 
+            this.filterByLocation(i) && 
+            this.filterBySubject(i)
+        )
+    },
+    itemsFilteredAllDecades () {
+      return this.items
         .filter(
           i => 
             this.filterByLocation(i) && 
@@ -352,22 +334,10 @@ export default {
       return _.orderBy(subjects, ['count', 'name'], ['desc', 'asc'])
     },
     decadeCounts () {
-      // get decades present in data
-      let decadesPresent =  _.countBy(this.items, i => this.dateToDecade(i['date']))
-      
-      // add intermediary decades
-      let decadesAll = _.range(this.decadeMin, this.decadeMax, 10).map(d => d + 's')
-      decadesAll.map(d => {
-        if (!Object.keys(decadesPresent).includes(d)) {
-          decadesPresent[d] = 0
-        }
-      })
-
-      const decadesSorted = {};
-      Object.keys(decadesPresent).sort().forEach(function(key) {
-        decadesSorted[key] = decadesPresent[key];
-      });
-      return decadesSorted
+      return this.getDecadeCounts(this.items, this.decadeMin, this.decadeMax)
+    },
+    decadeCountsForSelection () {
+      return this.getDecadeCounts(this.itemsFilteredAllDecades, this.decadeMin, this.decadeMax)
     },
   },
   methods: {
@@ -426,32 +396,29 @@ export default {
     filterBySubject (item) {
       return this.state.activeSubjectFilters.every(sf => item['subjects'].includes(sf)) || !this.state.activeSubjectFilters.length
     },
-    updateChart () {      
-      this.chartOptions = {...this.chartOptions, ...{
-        xaxis: {
-          categories: Object.keys(this.decadeCounts)
-        },
-        colors: this.getColorList(),
-      }}
-      this.chartSeries = [{
-        name: 'Item count',
-        data: Object.values(this.decadeCounts),
-      }]
-    },
     onDecadeClick (dataPointIndex) {
       // set decade
       this.state.selectedDecadeIndex = dataPointIndex
-
-      // color bars to show state 
-      let colorList = this.getColorList()
-      this.chartOptions = {...this.chartOptions, ...{
-        colors: colorList
-      }}
     },
-    getColorList () {
-      return Array.from(Object.keys(this.decadeCounts))
-              .fill(this.colors.gray)
-              .fill(this.colors.blue, this.state.selectedDecadeIndex, this.state.selectedDecadeIndex + 1)
+    getDecadeCounts (items, decadeMin, decadeMax) {
+      // get decades present in data
+      let decadesPresent =  _.countBy(items, i => this.dateToDecade(i['date']))
+      
+      // add intermediary decades
+      _.range(decadeMin, decadeMax + 10, 10)
+        .map(d => {
+          let decade = d + 's'
+          if (!Object.keys(decadesPresent).includes(decade)) {
+            decadesPresent[decade] = 0
+          }
+        })
+
+      // sort keys
+      const decadesSorted = {};
+      Object.keys(decadesPresent).sort().forEach(function(key) {
+        decadesSorted[key] = decadesPresent[key];
+      });
+      return decadesSorted
     },
     showSnackbar (markup) {
       this.snackbar.state = false
@@ -516,9 +483,7 @@ export default {
     },
   },
   created() {
-    // Object.assign(this.state, this.$route.query )
     _.assignWith(this.state, this.$route.query, this.qsCustomizer)
-    this.updateChart()
     window.addEventListener("resize", _.debounce(this.onResize), 400)
   },
   destroyed() {
@@ -529,11 +494,18 @@ export default {
 
 <style>
 :root {
-  --bg-color: #222;
-  --text-color: #EEE;
+  --bg-color: #121212;
+  --text-color: #EDEDED;
+  --selected-decade-color: #6C5EAD;
 }
 html, body {
   background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+
+.theme--dark.v-application {
+  background: var(--bg-color);
   color: var(--text-color);
 }
 
@@ -556,10 +528,6 @@ a {
   display: flex;
 }
 
-.min-w-50 {
-  min-width: 50%;
-}
-
 .theme--dark.v-label {
   color: #fff !important;
   font-weight: 700;
@@ -571,25 +539,6 @@ https://github.com/vuetifyjs/vuetify/commit/4f151bbdf4388e76d92920ca19c6271c022e
 */
 .v-chip.v-size--small .v-icon.v-chip__close {
   font-size: 18px;
-}
-
-.fit-barchart {
-  margin-top: -88px;
-  margin-left: 4px;
-  margin-right: 2px; 
-}
-@media screen and ( min-width: 448px) {
-  .fit-barchart {
-    margin-top: -68px;
-  }  
-}
-
-.apexcharts-canvas.apexcharts-theme-dark {
-    background: none !important;
-}
-
-.dib-i {
-  display: inline-block !important;
 }
 
 .filterGroupWidth {

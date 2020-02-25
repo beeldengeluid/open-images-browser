@@ -2,8 +2,8 @@
 <div class="mv3">
   <p>
     The current selection, ranging
-    from <span class="ph1 blue white--text font-mono">{{computed.selectedYearRange[0]}}</span>
-    to <span class="ph1 blue white--text font-mono">{{computed.selectedYearRange[1]}}</span>,
+    from <span class="ph1 washed-purple white--text font-mono">{{computed.selectedYearRange[0]}}</span>
+    to <span class="ph1 washed-purple white--text font-mono">{{computed.selectedYearRange[1]}}</span>,
     <span v-if="state.activeLocationFilters.length || state.activeSubjectFilters.length">
       <br>
       <span>filtered for</span>
@@ -23,7 +23,7 @@
           <v-chip  
             v-for="subjectFilter in state.activeSubjectFilters" :key="subjectFilter"
             :value="subjectFilter"
-            label small class="ml1 cyan white--text font-mono"
+            label small class="ml1 teal white--text font-mono"
             @click="toggleSubjectFilter(subjectFilter)"
           >
             <v-icon small left>local_offer</v-icon>
@@ -36,8 +36,8 @@
     <br>
     contains <span class="ph1 white black--text f3 fw5 font-mono">{{computed.activeLength}}</span> out of <span class="ph1 white black--text font-mono">{{computed.totalLength}}</span> videos,
     <br>
-    sorted by <span class="ph1 deep-purple font-mono">{{state.sortBy}}</span>
-    in <span class="ph1 deep-purple font-mono">{{state.sortAscending ? 'ascending' : 'descending'}}</span> order.
+    sorted by <span class="ph1 indigo font-mono">{{state.sortBy}}</span>
+    in <span class="ph1 indigo font-mono">{{state.sortAscending ? 'ascending' : 'descending'}}</span> order.
   </p>
 </div>
 </template>
@@ -69,5 +69,7 @@ export default {
 </script>
 
 <style scoped>
-
+.washed-purple {
+  background-color: var(--selected-decade-color);
+}
 </style>
