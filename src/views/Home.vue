@@ -71,12 +71,12 @@
         </div>
         <div class="dib dflex items-center">
           <span class="mr2 fw7">Sort by</span>
-          <v-chip-group v-model="state.sortBy" active-class="deep-purple" mandatory class="fw5 font-mono">
+          <v-chip-group v-model="state.sortBy" active-class="indigo" mandatory class="fw5 font-mono">
             <v-chip v-for="sortField in sortFields" :key="sortField" :value="sortField">
               {{ sortField }}
             </v-chip>
           </v-chip-group>
-          <v-btn fab x-small color="deep-purple mr2">
+          <v-btn fab x-small color="indigo mr2">
             <v-icon @click="toggleSortAscending">{{state.sortAscending ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</v-icon>
           </v-btn>
         </div>
@@ -132,7 +132,7 @@
               :activeFilters="state.activeSubjectFilters"
               v-on:toggle-filter = "onToggleSubjectFilter"
               v-on:toggle-tail = "onToggleTail"
-              activeClass="cyan"
+              activeClass="teal"
             />
           </v-col>
           <v-col>
@@ -489,11 +489,18 @@ export default {
 
 <style>
 :root {
-  --bg-color: #222;
-  --text-color: #EEE;
+  --bg-color: #121212;
+  --text-color: #EDEDED;
+  --selected-decade-color: #6C5EAD;
 }
 html, body {
   background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+
+.theme--dark.v-application {
+  background: var(--bg-color);
   color: var(--text-color);
 }
 

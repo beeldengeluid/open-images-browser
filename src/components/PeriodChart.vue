@@ -14,8 +14,8 @@ export default {
   data: function () {
     return {
       colors: {
-        gray: '#666',
-        blue: '#2196F3',
+        primary: '#311B92',
+        secondary: '#009688',
       },
     }
   },
@@ -53,29 +53,27 @@ export default {
             }
           }
         },
-        colors: this.colorList,
+        colors: [this.colors.primary, this.colors.secondary],
+        stroke: {
+          width: [0,5]
+        },
         theme: { mode: 'dark' },
         plotOptions: {
           bar: {
             columnWidth: '98%',
-            distributed: true,
           }
         },
         xaxis: {
-          categories: Object.keys(this.barSeries)
+          categories: Object.keys(this.barSeries),
         },
         yaxis: [
+          { title: { text: 'Total Items' } }, 
           {
-            // show: false,
-            title: { text: 'Total Items' }
-          }, 
-          {
-            // show: false,
             opposite: true,
             title: { text: 'Filtered Items' }
           }
         ],
-        grid: { show: false },
+        grid: { show: true },
         legend: { show: true },
         dataLabels: {
           enabled: true,
@@ -92,18 +90,17 @@ export default {
           }
         ]
       }
-    }, 
-    colorList () {
-      return Array.from(Object.keys(this.barSeries))
-              .fill(this.colors.gray)
-              .fill(this.colors.blue, this.selectedDecadeIndex, this.selectedDecadeIndex + 1)
     },
   },
 }
 </script>
 
 <style>
-  .apexcharts-canvas.apexcharts-theme-dark {
-      background: none !important;
-  }
+.apexcharts-canvas.apexcharts-theme-dark {
+    background: none !important;
+}
+.apexcharts-series path[selected=true] {
+  fill: var(--selected-decade-color);
+  filter: none;
+}
 </style>
