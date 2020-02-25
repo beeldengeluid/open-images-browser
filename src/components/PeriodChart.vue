@@ -24,6 +24,10 @@ export default {
     barSeries: { type: Object },
     lineSeries: { type: Object },
   },
+  mounted () {
+    let bars = document.querySelectorAll(".apexcharts-series path.apexcharts-bar-area");
+    bars[this.selectedDecadeIndex].setAttribute('selected', true)
+  },
   computed: {
     series () {
       return [
