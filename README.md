@@ -1,8 +1,10 @@
-# MediaScape kickoff: Open Beelden Browser
+# Open Images Browser
 
-Initial exploration of the [MediaScape project](https://www.vogin.nl/portfolio-item/mediascape-2019/), aimed at exploring the utility of [generous interfaces](http://www.digitalhumanities.org/dhq/vol/9/1/000205/000205.html) for audio-visual archives.
+Initial exploration for the [MediaScape project](https://www.vogin.nl/portfolio-item/mediascape-2019/), aimed at exploring the utility of [generous interfaces](http://www.digitalhumanities.org/dhq/vol/9/1/000205/000205.html) for audio-visual archives.
 
-Try the latest version (work in progress): https://mediascape-kickoff.phivk.now.sh/
+This first prototype utilizes facet-based filtering as the main interaction model. It allows users to step-wise create combinations of filters in order to surface subsets of collection items that match their interests. It employs data visualisation and UI techniques to generously communicate the distribution of items per available filter.
+
+Try the latest version (work in progress): https://openimagesbrowser.now.sh
 
 ## Installation
 
