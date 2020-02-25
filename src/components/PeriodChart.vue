@@ -1,6 +1,6 @@
 <template>
 <div>
-  <apexcharts width="100%" :options="options"  :series="series" class="apex-bar-chart"></apexcharts>
+  <apexcharts width="100%" :options="options"  :series="series" class="apex-bar-chart" ref="apexPeriodChart"></apexcharts>
 </div>
 </template>
 
@@ -25,8 +25,7 @@ export default {
     lineSeries: { type: Object },
   },
   mounted () {
-    let bars = document.querySelectorAll(".apexcharts-series path.apexcharts-bar-area");
-    bars[this.selectedDecadeIndex].setAttribute('selected', true)
+    this.$refs.apexPeriodChart.toggleDataPointSelection(0,this.selectedDecadeIndex)
   },
   computed: {
     series () {
