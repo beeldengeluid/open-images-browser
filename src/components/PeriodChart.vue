@@ -79,6 +79,7 @@ export default {
         ],
         grid: { show: true },
         legend: { show: true },
+        tooltip: { enabled: false },
         dataLabels: {
           enabled: true,
           enabledOnSeries: [1]
