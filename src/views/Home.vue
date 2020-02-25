@@ -1,72 +1,35 @@
 <template>
   <v-app id="app">
     <v-content class="ma3 mt5 tl">
-
       <h1>Open Images Browser</h1>
-      
-      <div class="mv3">
-        <p>
-          <span>Below you can explore videos from the </span> 
-          <v-tooltip bottom>
-            <template v-slot:activator="{ on }">
-              <a href="https://openbeelden.nl/" target="_blank" v-on="on">Open Images Collection ↗︎</a>
-            </template>
-            <span>Open Images is an open media platform that offers online access to audiovisual archive material to stimulate creative reuse.</span>
-          </v-tooltip>
-          <span>.</span>
-        </p>
-        <p>
-          <span>The current selection, ranging from </span><span class="ph1 blue white--text">{{selectedYearRange[0]}}</span> to <span class="ph1 blue white--text">{{selectedYearRange[1]}}</span>
-          <span v-if="state.activeLocationFilters.length || state.activeSubjectFilters.length">, filtered for </span>
-          <span v-if="state.activeLocationFilters.length">
-            <v-chip-group
-              prev-icon="keyboard_arrow_left" next-icon="keyboard_arrow_right"  
-              class="font-mono dib-i v-mid"
-            >
-              <v-chip  
-                v-for="locationFilter in state.activeLocationFilters" :key="locationFilter"
-                :value="locationFilter"
-                @click:close="onToggleLocationFilter(locationFilter)" close close-icon="cancel"
-                label small class="teal white--text"
-              >
-                <strong>{{ locationFilter }}</strong>
-              </v-chip>
-            </v-chip-group>
-          </span>
-          <span v-if="state.activeSubjectFilters.length">
-            <v-chip-group
-              prev-icon="keyboard_arrow_left" next-icon="keyboard_arrow_right"  
-              class="font-mono dib-i v-mid"
-            >
-              <v-chip  
-                v-for="subjectFilter in state.activeSubjectFilters" :key="subjectFilter"
-                :value="subjectFilter"
-                @click:close="onToggleSubjectFilter(subjectFilter)" close close-icon="cancel"
-                label small class="cyan white--text"
-              >
-                <strong>{{ subjectFilter }}</strong>
-              </v-chip>
-            </v-chip-group>,
-          </span>
-          <span> contains </span><span class="ph1 indigo white--text">{{itemsSelectedSorted.length}}</span><span> out of {{this.items.length}} videos.</span>
-          <br>
-          <span>Videos are sorted by </span><span class="ph1 deep-purple font-mono">{{state.sortBy}}</span><span> in </span>
-          <span class="ph1 deep-purple">{{state.sortAscending ? 'ascending' : 'descending'}} 
-            <v-icon @click="toggleSortAscending" small>{{state.sortAscending ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</v-icon> 
-          </span> order.
-          <br>
-          <span>Videos are displayed </span><span class="ph1 orange white--text">{{noThumbsPerRow}}</span><span> per row</span>
-          <span v-if="state.displayFieldsSelected.length">, along with their </span>
-          <span v-for="(field, index) in state.displayFieldsSelected" :key="field">
-            <span v-if="state.displayFieldsSelected.length > 1 && index == state.displayFieldsSelected.length - 1"> &amp; </span>
-            <span class="ph1 green white--text">{{field}}</span>
-            <span v-if="state.displayFieldsSelected.length > 1 && index < state.displayFieldsSelected.length - 2">, </span>
-          </span>
-          <span>.</span>
-        </p>
-      </div>
+      <p>
+        <span>Below you can explore videos from the </span> 
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on }">
+            <a href="https://openbeelden.nl/" target="_blank" v-on="on">Open Images Collection ↗︎</a>
+          </template>
+          <span>Open Images is an open media platform that offers online access to audiovisual archive material to stimulate creative reuse.</span>
+        </v-tooltip>
+        <span>.</span>
+      </p>
+      <StateStory 
+        :state="state" 
+        :computed="{
+          selectedYearRange: selectedYearRange,
+          activeLength: itemsFilteredSorted.length,
+          totalLength: items.length,
+        }"
+        v-on:toggle-location-filter = "onToggleLocationFilter"
+        v-on:toggle-subject-filter = "onToggleSubjectFilter"
+      />
       <div>
-        <apexcharts  width="100%" :options="chartOptions"  :series="chartSeries" class="apex-bar-chart"></apexcharts>
+        <PeriodChart 
+          :barSeries="decadeCounts" 
+          :lineSeries="decadeCountsForSelection" 
+          v-on:decade-click="onDecadeClick"
+          :selectedDecadeIndex="state.selectedDecadeIndex" 
+          :colors="{ bar: this.colors.primary, line: this.colors.secondary, background: this.colors.background }" 
+        />
         <div class="db dn-l">
           <div class="dflex items-center justify-start">
             <div class="fw7 w5">Top locations in decade</div>
@@ -109,12 +72,12 @@
         </div>
         <div class="dib dflex items-center">
           <span class="mr2 fw7">Sort by</span>
-          <v-chip-group v-model="state.sortBy" active-class="deep-purple" mandatory class="fw5 font-mono">
+          <v-chip-group v-model="state.sortBy" active-class="indigo" mandatory class="fw5 font-mono">
             <v-chip v-for="sortField in sortFields" :key="sortField" :value="sortField">
               {{ sortField }}
             </v-chip>
           </v-chip-group>
-          <v-btn fab x-small color="deep-purple mr2">
+          <v-btn fab x-small color="indigo mr2">
             <v-icon @click="toggleSortAscending">{{state.sortAscending ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</v-icon>
           </v-btn>
         </div>
@@ -160,6 +123,7 @@
               :activeFilters="state.activeLocationFilters"
               v-on:toggle-filter = "onToggleLocationFilter"
               v-on:toggle-tail = "onToggleTail"
+              activeClass="teal"
             />
           </v-col>
           <v-col cols="auto" class="dn db-l">
@@ -169,13 +133,17 @@
               :activeFilters="state.activeSubjectFilters"
               v-on:toggle-filter = "onToggleSubjectFilter"
               v-on:toggle-tail = "onToggleTail"
+              activeClass="teal"
             />
           </v-col>
           <v-col>
-            <h3 class="mb3">Videos in selection <span class="fw1">{{itemsSelectedSorted.length}}</span></h3>
+            <h3 class="mb3">
+              Videos in selection <span class="fw1">{{itemsFilteredSorted.length}}</span>
+              <span class="fw1 grey--text"> (of {{Object.values(decadeCounts)[state.selectedDecadeIndex]}} in decade)</span>
+            </h3>
             <div class="relative dflex flex-wrap">
               <CollectionItem
-                v-for = "item in itemsSelectedSorted" 
+                v-for = "item in itemsFilteredSorted" 
                 :key             = "item['id']"
                 :width           = "itemWidth + 'px'"
                 :height          = "itemHeight + 'px'"
@@ -220,7 +188,8 @@ import _ from 'lodash';
 import dataItems from "@/assets/data/openbeelden-items-clean.json";
 import CollectionItem from "@/components/CollectionItem";
 import FilterList from "@/components/FilterList";
-import VueApexCharts from 'vue-apexcharts'
+import StateStory from "@/components/StateStory";
+import PeriodChart from "@/components/PeriodChart";
 import BackToTop from 'vue-backtotop'
 
 export default {
@@ -228,7 +197,8 @@ export default {
   components: {
     CollectionItem,
     FilterList,
-    apexcharts: VueApexCharts,
+    StateStory,
+    PeriodChart,
     BackToTop
   },
   data () {
@@ -255,44 +225,9 @@ export default {
       itemMargin: 4,
       clientWidth: this.getClientWidth(),
       colors: {
-        gray: '#666',
-        indigo: '#3f51b5',
-      },
-      chartOptions: {
-        chart: {
-          id: 'decade-bar-chart',
-          toolbar: { tools: { download: false } },
-          type: 'bar',
-          events: {
-            dataPointSelection: (event, chartContext, config) => {
-              if (config.dataPointIndex >= 0) {
-                this.onDecadeClick(config.dataPointIndex)
-              }
-            }
-          }
-        },
-        colors: ['#666'],
-        theme: { mode: 'dark' },
-        plotOptions: {
-          bar: {
-            columnWidth: '98%',
-            distributed: true,
-          }
-        },
-        yaxis: { show: false },
-        grid: { show: false },
-        legend: { show: false },
-        dataLabels: { enabled: false },
-        responsive: [
-          {
-            breakpoint: 9999,
-            options: { chart: { height: '300' } }
-          },
-          {
-            breakpoint: 800,
-            options: { chart: { height: '200' } }
-          }
-        ]
+        primary: '#311B92', 
+        secondary: '#009688', 
+        background: '#121212'
       },
       chartSeries: [],
       snackbar:{
@@ -303,6 +238,9 @@ export default {
     }
   },
   computed: {
+    itemsPerDecade () {
+      return _.groupBy(this.items, i => this.dateToDecade(i['date']))
+    },
     itemWidth () {
       let horizontalMarkupMargin = 32
       return (this.clientWidth - horizontalMarkupMargin) / this.noThumbsPerRow - this.itemMargin
@@ -317,27 +255,33 @@ export default {
       return _.range(this.zoom.max + 1)
               .map(value => Math.pow(2, value))
     },
-    itemsFilteredByYear () {
-      return this.items.filter(i => this.filterByYear(i))
+    itemsFiltered () {
+      return this.itemsPerDecade[this.selectedDecade]
+        .filter(
+          i => 
+            this.filterByLocation(i) && 
+            this.filterBySubject(i)
+        )
     },
-    itemsSelectedSorted () {
-      // filter
-      let selected = this.itemsFilteredByYear.filter(
-        i => this.filterByLocation(i) && this.filterBySubject(i)
-      )
-      // sort
-      if (this.state.sortAscending) {
-        selected.sort((a, b) => (a[this.state.sortBy] > b[this.state.sortBy]) ? 1 : -1)
-      } else {
-        selected.sort((a, b) => (a[this.state.sortBy] < b[this.state.sortBy]) ? 1 : -1)
-      }
-      return selected
+    itemsFilteredAllDecades () {
+      return this.items
+        .filter(
+          i => 
+            this.filterByLocation(i) && 
+            this.filterBySubject(i)
+        )
+    },
+    itemsFilteredSorted () {
+      let order = this.state.sortAscending ? 'asc' : 'desc'
+      return _.orderBy(this.itemsFiltered, [this.state.sortBy], [order])
     },
     selectedYearRange () {
-      let decade = Object.keys(this.decadeCounts)[this.state.selectedDecadeIndex]
-      let decadeYearMin = parseInt(decade.slice(0,4))
+      let decadeYearMin = parseInt(this.selectedDecade.slice(0,4))
       let decadeYearMax = decadeYearMin + 9
       return [decadeYearMin, decadeYearMax]
+    },
+    selectedDecade () {
+      return  Object.keys(this.decadeCounts)[this.state.selectedDecadeIndex]
     },
     yearMin () {
       return Math.min(... this.items.map(i => i['date'].slice(0, 4)))
@@ -352,7 +296,7 @@ export default {
       return Math.floor(this.yearMax / 10) * 10
     },
     locationCountsForSelection () {
-      let locations = _.flatMap(this.itemsSelectedSorted, i => i['locations'])
+      let locations = _.flatMap(this.itemsFilteredSorted, i => i['locations'])
       return _.countBy(locations)
     },
     noLocationsForSelection () {
@@ -371,7 +315,7 @@ export default {
       return _.orderBy(locations, ['count', 'name'], ['desc', 'asc'])    
     },
     subjectCountsForSelection () {
-      let subjects = _.flatMap(this.itemsSelectedSorted, i => i['subjects']) 
+      let subjects = _.flatMap(this.itemsFilteredSorted, i => i['subjects']) 
       return _.countBy(subjects)
     },
     noSubjectsForSelection () {
@@ -390,22 +334,10 @@ export default {
       return _.orderBy(subjects, ['count', 'name'], ['desc', 'asc'])
     },
     decadeCounts () {
-      // get decades present in data
-      let decadesPresent =  _.countBy(this.items, i => i['date'].slice(0,3)+'0s')
-      
-      // add intermediary decades
-      let decadesAll = _.range(this.decadeMin, this.decadeMax, 10).map(d => d + 's')
-      decadesAll.map(d => {
-        if (!Object.keys(decadesPresent).includes(d)) {
-          decadesPresent[d] = 0
-        }
-      })
-
-      const decadesSorted = {};
-      Object.keys(decadesPresent).sort().forEach(function(key) {
-        decadesSorted[key] = decadesPresent[key];
-      });
-      return decadesSorted
+      return this.getDecadeCounts(this.items, this.decadeMin, this.decadeMax)
+    },
+    decadeCountsForSelection () {
+      return this.getDecadeCounts(this.itemsFilteredAllDecades, this.decadeMin, this.decadeMax)
     },
   },
   methods: {
@@ -414,6 +346,9 @@ export default {
     },
     dateToYear (date) {
       return date.slice(0,4)
+    },
+    dateToDecade (date) {
+      return date.slice(0,3)+'0s'
     },
     getClientWidth () {
       return document.body.clientWidth || document.documentElement.clientWidth
@@ -461,32 +396,29 @@ export default {
     filterBySubject (item) {
       return this.state.activeSubjectFilters.every(sf => item['subjects'].includes(sf)) || !this.state.activeSubjectFilters.length
     },
-    updateChart () {      
-      this.chartOptions = {...this.chartOptions, ...{
-        xaxis: {
-          categories: Object.keys(this.decadeCounts)
-        },
-        colors: this.getColorList(),
-      }}
-      this.chartSeries = [{
-        name: 'Item count',
-        data: Object.values(this.decadeCounts),
-      }]
-    },
     onDecadeClick (dataPointIndex) {
       // set decade
       this.state.selectedDecadeIndex = dataPointIndex
-
-      // color bars to show state 
-      let colorList = this.getColorList()
-      this.chartOptions = {...this.chartOptions, ...{
-        colors: colorList
-      }}
     },
-    getColorList () {
-      return Array.from(Object.keys(this.decadeCounts))
-              .fill(this.colors.gray)
-              .fill(this.colors.indigo, this.state.selectedDecadeIndex, this.state.selectedDecadeIndex + 1)
+    getDecadeCounts (items, decadeMin, decadeMax) {
+      // get decades present in data
+      let decadesPresent =  _.countBy(items, i => this.dateToDecade(i['date']))
+      
+      // add intermediary decades
+      _.range(decadeMin, decadeMax + 10, 10)
+        .map(d => {
+          let decade = d + 's'
+          if (!Object.keys(decadesPresent).includes(decade)) {
+            decadesPresent[decade] = 0
+          }
+        })
+
+      // sort keys
+      const decadesSorted = {};
+      Object.keys(decadesPresent).sort().forEach(function(key) {
+        decadesSorted[key] = decadesPresent[key];
+      });
+      return decadesSorted
     },
     showSnackbar (markup) {
       this.snackbar.state = false
@@ -525,7 +457,7 @@ export default {
         this.showSnackbar(`📍 Added location filter <strong>${added[0]}</strong>`)
       } else {
         let removed = _.difference(oldValue, newValue)
-        this.showSnackbar(`❌ Removed location filter <strong>${removed}</strong>`)
+        this.showSnackbar(`❌ Removed location filter <strong>${removed[0]}</strong>`)
       }
       this.$router.push({ query: Object.assign({}, this.$route.query, { activeLocationFilters: newValue })})
     },
@@ -535,25 +467,23 @@ export default {
         this.showSnackbar(`🏷 Added subject filter <strong>${added[0]}</strong>`)
       } else {
         let removed = _.difference(oldValue, newValue)
-        this.showSnackbar(`❌ Removed subject filter <strong>${removed}</strong>`)
+        this.showSnackbar(`❌ Removed subject filter <strong>${removed[0]}</strong>`)
       }
       this.$router.push({ query: Object.assign({}, this.$route.query, { activeSubjectFilters: newValue })})
     },
     'state.displayFieldsSelected': function (newValue, oldValue) {
       let added = _.difference(newValue, oldValue)
       if (added.length) {
-        this.showSnackbar(`👀 Displaying <strong>${added}</strong>`)
+        this.showSnackbar(`👀 Displaying <strong>${added[0]}</strong>`)
       } else {
         let removed = _.difference(oldValue, newValue)
-        this.showSnackbar(`🙈 Not displaying <strong>${removed}</strong>`)
+        this.showSnackbar(`🙈 Not displaying <strong>${removed[0]}</strong>`)
       }
       this.$router.push({ query: Object.assign({}, this.$route.query, { displayFieldsSelected: newValue })})
     },
   },
   created() {
-    // Object.assign(this.state, this.$route.query )
     _.assignWith(this.state, this.$route.query, this.qsCustomizer)
-    this.updateChart()
     window.addEventListener("resize", _.debounce(this.onResize), 400)
   },
   destroyed() {
@@ -564,11 +494,18 @@ export default {
 
 <style>
 :root {
-  --bg-color: #222;
-  --text-color: #EEE;
+  --bg-color: #121212;
+  --text-color: #EDEDED;
+  --selected-decade-color: #6C5EAD;
 }
 html, body {
   background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+
+.theme--dark.v-application {
+  background: var(--bg-color);
   color: var(--text-color);
 }
 
@@ -591,10 +528,6 @@ a {
   display: flex;
 }
 
-.min-w-50 {
-  min-width: 50%;
-}
-
 .theme--dark.v-label {
   color: #fff !important;
   font-weight: 700;
@@ -608,25 +541,6 @@ https://github.com/vuetifyjs/vuetify/commit/4f151bbdf4388e76d92920ca19c6271c022e
   font-size: 18px;
 }
 
-.fit-barchart {
-  margin-top: -88px;
-  margin-left: 4px;
-  margin-right: 2px; 
-}
-@media screen and ( min-width: 448px) {
-  .fit-barchart {
-    margin-top: -68px;
-  }  
-}
-
-.apexcharts-canvas.apexcharts-theme-dark {
-    background: none !important;
-}
-
-.dib-i {
-  display: inline-block !important;
-}
-
 .filterGroupWidth {
   width: calc(100% - 180px);
 }
@@ -637,5 +551,8 @@ https://github.com/vuetifyjs/vuetify/commit/4f151bbdf4388e76d92920ca19c6271c022e
 
 .zoom-slider .v-input__prepend-outer, .zoom-slider .v-input__append-outer {
   margin-top: 0;
+}
+.zoom-slider .v-slider__tick {
+  background-color: hsla(0,0%,100%,.5);
 }
 </style>
