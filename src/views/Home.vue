@@ -60,7 +60,7 @@
                 v-for="subject in subjectsForSelection" :key="subject.name"
                 @click="onToggleSubjectFilter(subject.name)"
                 :value="subject.name"
-                :class="state.activeSubjectFilters.includes(subject.name) ? 'cyan white--text' : ''"
+                :class="state.activeSubjectFilters.includes(subject.name) ? 'teal white--text' : ''"
                 label small
               >
                 <strong class="mr1">{{ subject.name }}</strong>
