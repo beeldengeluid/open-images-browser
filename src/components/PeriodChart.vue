@@ -104,3 +104,16 @@ export default {
   },
 }
 </script>
+
+<style>
+/* temp fix for states issue in Firefox
+   https://github.com/apexcharts/apexcharts.js/issues/1338 */
+.apexcharts-series path[selected=true] {
+  fill: rgba(108, 94, 173, 0.9);
+  filter: none;
+}
+.apexcharts-series path:not([selected]):hover{
+  fill: rgba(108, 94, 173, 0.9);
+  filter: none;
+}
+</style>
