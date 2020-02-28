@@ -2,7 +2,7 @@
   <div
     :style="{ width: width, height: height }"
     :class="{ 'is-expanded': isExpanded }"
-    class="collection-item relative grow-nonexpanded mr1 mb1"
+    class="collection-item relative grow-nonexpanded mr1 mb1 shadow-2"
   >
     <div v-if="!isExpanded" @click="toggleExpanded" class="h-100 bg-black pointer">
       <v-lazy :options="{ threshold: .1 }" transition="fade-transition" class="h-100">
@@ -29,7 +29,7 @@
     </div>
 
     <div v-if="isExpanded" class="flex expansion-container">
-      <div class="expansion-left tc bg-black">
+      <div class="expansion-left tc bg-black ba b--grey--darken-3">
         <video 
           :src="videoSrc"
           :poster="thumbSrc"
@@ -234,5 +234,9 @@ export default {
 .fade-enter-active,
 .fade-leave-active {
   transition: 0.25s ease-out;
+}
+
+.b--grey--darken-3 {
+  border-color: #424242;
 }
 </style>
