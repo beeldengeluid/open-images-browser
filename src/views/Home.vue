@@ -1,6 +1,6 @@
 <template>
   <v-app id="app">
-    <v-content class="ma3">
+    <v-content class="ma2 ma3-ns">
       <h1>Open Images Browser</h1>
       <p>
         <span>Below you can explore videos from the </span> 
