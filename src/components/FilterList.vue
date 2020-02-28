@@ -9,6 +9,7 @@
         :class="activeFilters.includes(filter.name) ? activeClass +' white--text' : ''"
         label small
         class="font-mono"
+        :title="`${filter.name} (${filter.count})`"
       >
         <strong class="mr1">{{ filter.name }}</strong><span>{{filter.count}}</span>
         <v-icon right small>{{activeFilters.includes(filter.name) ? 'cancel' : 'filter_list'}} </v-icon>

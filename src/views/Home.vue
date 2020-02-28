@@ -115,7 +115,7 @@
       </div>
       <v-container fluid>
         <v-row>
-          <v-col cols="auto" class="dn db-l">
+          <v-col cols="auto" class="dn db-l mw5">
             <h3 class="mb3">
               <span class="bb b--secondary">Locations in selection <span class="fw1">{{noLocationsForSelection}}</span></span>
             </h3>
@@ -127,7 +127,7 @@
               activeClass="teal"
             />
           </v-col>
-          <v-col cols="auto" class="dn db-l">
+          <v-col cols="auto" class="dn db-l mw5">
             <h3 class="mb3">
               <span class="bb b--secondary">Subjects in selection <span class="fw1">{{noSubjectsForSelection}}</span></span>
             </h3>
