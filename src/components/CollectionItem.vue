@@ -4,24 +4,31 @@
     :class="{ 'is-expanded': isExpanded }"
     class="collection-item relative grow-nonexpanded mr1 mb1"
   >
-    <div @click="toggleExpanded" v-if="!isExpanded" class="h-100 bg-black pointer"> <!-- the collapsed version -->
+    <div v-if="!isExpanded" @click="toggleExpanded" class="h-100 bg-black pointer">
       <v-lazy :options="{ threshold: .1 }" transition="fade-transition" class="h-100">
-        <div>
-          <img
-            v-if="displayThumb"
-            :src="thumbSrc"
-            :title="title"
-            class="absolute top-0 bottom-0 m-auto"
-          >
-          <div v-if="displayTitle || displayYear" class="absolute left-0 top-0 pa1 bg-black-50 pevents-none">
-            <div v-if="displayTitle">{{title}}</div>
-            <div v-if="displayYear">{{year}}</div>
+        <v-hover>
+          <div slot-scope="{ hover }">
+            <img
+              v-if="displayThumb"
+              :src="thumbSrc"
+              :title="title"
+              class="absolute top-0 bottom-0 m-auto"
+            >
+            <div v-if="displayTitle || displayYear" class="absolute left-0 top-0 pa1 bg-black-50 pevents-none">
+              <div v-if="displayTitle">{{title}}</div>
+              <div v-if="displayYear">{{year}}</div>
+            </div>
+            <transition name="fade">
+              <div v-if="hover" class="absolute right-0 bottom-0">
+                <v-icon>fullscreen</v-icon>
+              </div>
+            </transition>
           </div>
-        </div>
+        </v-hover>
       </v-lazy>
     </div>
 
-    <div v-if="isExpanded" class="flex expansion-container"> <!-- the expanded version -->
+    <div v-if="isExpanded" class="flex expansion-container">
       <div class="expansion-left tc bg-black">
         <video 
           :src="videoSrc"
@@ -217,5 +224,15 @@ export default {
 
 .m-auto{
   margin: auto;
+}
+
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: 0.25s ease-out;
 }
 </style>
