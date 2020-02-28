@@ -81,28 +81,6 @@
           </v-btn>
         </div>
         <div class="dflex mt4 flex-wrap items-center justify-between">
-          <v-slider
-            v-model="zoom.value"
-            :min="zoom.min" :max="zoom.max" :step="zoom.step"
-            ticks="always"
-            tick-size="4"
-            :tick-labels="zoomLabels"
-            :label="zoom.label"
-            color="orange" 
-            hide-details
-            class="zoom-slider mr4 mb4 min-w-24rem"
-          >
-            <template v-slot:prepend>
-              <v-btn icon @click="zoom.value--">
-                <v-icon>zoom_in</v-icon>
-              </v-btn>
-            </template>
-            <template v-slot:append>
-              <v-btn icon @click="zoom.value++">
-                <v-icon>zoom_out</v-icon>
-              </v-btn>
-            </template>
-          </v-slider>
           <div class="dflex items-center mb4">
             <span class="pr2 fw7">Display</span>
             <v-chip-group v-model="state.displayFieldsSelected" active-class="green" multiple class="fw5 font-mono">
@@ -144,6 +122,12 @@
               <span class="bb b--secondary">Videos in selection <span class="fw1">{{itemsFilteredSorted.length}}</span></span>&nbsp;
               <span class="fw1 grey--text bb b--primary-accent">(of {{Object.values(decadeCounts)[state.selectedDecadeIndex]}} in decade)</span>
             </h3>
+            <ZoomSlider
+              v-model="zoom.value"
+              :min="zoom.min" :max="zoom.max" :step="zoom.step"
+              :tickLabels="zoomLabels"
+              class="mb3 mb4-ns"
+            ></ZoomSlider>
             <div class="relative dflex flex-wrap">
               <CollectionItem
                 v-for = "item in itemsFilteredSorted" 
@@ -189,19 +173,21 @@
 import '../../node_modules/tachyons/css/tachyons.min.css';
 import _ from 'lodash';
 import dataItems from "@/assets/data/openbeelden-items-clean.json";
-import CollectionItem from "@/components/CollectionItem";
-import FilterList from "@/components/FilterList";
 import StateStory from "@/components/StateStory";
 import PeriodChart from "@/components/PeriodChart";
+import FilterList from "@/components/FilterList";
+import ZoomSlider from "@/components/ZoomSlider";
+import CollectionItem from "@/components/CollectionItem";
 import BackToTop from 'vue-backtotop'
 
 export default {
   name: 'OpenBeeldenBrowser',
   components: {
-    CollectionItem,
-    FilterList,
     StateStory,
     PeriodChart,
+    FilterList,
+    ZoomSlider,
+    CollectionItem,
     BackToTop
   },
   data () {
@@ -218,11 +204,10 @@ export default {
       sortFields: ['id','date', 'title'],
       displayFields: ['title', 'year', 'thumb'],
       zoom: {
-        value: 4,
+        value: 3,
         min: 0,
         max: 6,
         step: 1,
-        label: 'Zoom Out level',
       },
       itemAspectRatio: 352 / 288,
       itemMargin: 4,
@@ -552,13 +537,6 @@ https://github.com/vuetifyjs/vuetify/commit/4f151bbdf4388e76d92920ca19c6271c022e
 
 .min-w-24rem {
   min-width: 24rem;
-}
-
-.zoom-slider .v-input__prepend-outer, .zoom-slider .v-input__append-outer {
-  margin-top: 0;
-}
-.zoom-slider .v-slider__tick {
-  background-color: hsla(0,0%,100%,.5);
 }
 
 .b--primary-accent {
