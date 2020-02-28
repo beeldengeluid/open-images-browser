@@ -1,6 +1,6 @@
 <template>
   <v-app id="app">
-    <v-content class="ma3 mt5 tl">
+    <v-content class="ma3">
       <h1>Open Images Browser</h1>
       <p>
         <span>Below you can explore videos from the </span> 
@@ -8,9 +8,8 @@
           <template v-slot:activator="{ on }">
             <a href="https://openbeelden.nl/" target="_blank" v-on="on">Open Images Collection ↗︎</a>
           </template>
-          <span>Open Images is an open media platform that offers online access to audiovisual archive material to stimulate creative reuse.</span>
-        </v-tooltip>
-        <span>.</span>
+          an open media platform that offers online access to audiovisual archive material to stimulate creative reuse
+        </v-tooltip>.
       </p>
       <StateStory 
         :state="state" 
