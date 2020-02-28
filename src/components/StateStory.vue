@@ -2,8 +2,8 @@
 <div class="mv3">
   <p>
     The current selection, ranging
-    from <span class="ph1 washed-purple white--text font-mono">{{computed.selectedYearRange[0]}}</span>
-    to <span class="ph1 washed-purple white--text font-mono">{{computed.selectedYearRange[1]}}</span>,
+    from <span class="ph1 bg-primary-accent white--text font-mono">{{computed.selectedYearRange[0]}}</span>
+    to <span class="ph1 bg-primary-accent white--text font-mono">{{computed.selectedYearRange[1]}}</span>,
     <span v-if="state.activeLocationFilters.length || state.activeSubjectFilters.length">
       <br>
       <span>filtered for</span>
@@ -67,9 +67,3 @@ export default {
   },
 }
 </script>
-
-<style scoped>
-.washed-purple {
-  background-color: var(--selected-decade-color);
-}
-</style>

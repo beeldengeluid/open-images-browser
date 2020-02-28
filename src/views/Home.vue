@@ -116,7 +116,9 @@
       <v-container fluid>
         <v-row>
           <v-col cols="auto" class="dn db-l">
-            <h3 class="mb3">Locations in selection <span class="fw1">{{noLocationsForSelection}}</span></h3>
+            <h3 class="mb3">
+              <span class="bb b--secondary">Locations in selection <span class="fw1">{{noLocationsForSelection}}</span></span>
+            </h3>
             <FilterList 
               :filters="locationsForSelection"
               :activeFilters="state.activeLocationFilters"
@@ -126,7 +128,9 @@
             />
           </v-col>
           <v-col cols="auto" class="dn db-l">
-            <h3 class="mb3">Subjects in selection <span class="fw1">{{noSubjectsForSelection}}</span></h3>
+            <h3 class="mb3">
+              <span class="bb b--secondary">Subjects in selection <span class="fw1">{{noSubjectsForSelection}}</span></span>
+            </h3>
             <FilterList 
               :filters="subjectsForSelection"
               :activeFilters="state.activeSubjectFilters"
@@ -136,9 +140,9 @@
             />
           </v-col>
           <v-col>
-            <h3 class="mb3">
-              Videos in selection <span class="fw1">{{itemsFilteredSorted.length}}</span>
-              <span class="fw1 grey--text"> (of {{Object.values(decadeCounts)[state.selectedDecadeIndex]}} in decade)</span>
+            <h3 class="mb3 ">
+              <span class="bb b--secondary">Videos in selection <span class="fw1">{{itemsFilteredSorted.length}}</span></span>&nbsp;
+              <span class="fw1 grey--text bb b--primary-accent">(of {{Object.values(decadeCounts)[state.selectedDecadeIndex]}} in decade)</span>
             </h3>
             <div class="relative dflex flex-wrap">
               <CollectionItem
@@ -224,7 +228,7 @@ export default {
       itemMargin: 4,
       clientWidth: this.getClientWidth(),
       colors: {
-        primary: '#311B92', 
+        primary: '#5E35B1', 
         secondary: '#009688', 
         background: '#121212'
       },
@@ -495,7 +499,9 @@ export default {
 :root {
   --bg-color: #121212;
   --text-color: #EDEDED;
-  --selected-decade-color: #6C5EAD;
+  --primary-color: #5E35B1;
+  --primary-accent-color: #7E57C2;
+  --secondary-color: #009688;
 }
 html, body {
   background-color: var(--bg-color);
@@ -553,5 +559,18 @@ https://github.com/vuetifyjs/vuetify/commit/4f151bbdf4388e76d92920ca19c6271c022e
 }
 .zoom-slider .v-slider__tick {
   background-color: hsla(0,0%,100%,.5);
+}
+
+.b--primary-accent {
+  border-color: var(--primary-accent-color)
+}
+.b--secondary {
+  border-color: var(--secondary-color)
+}
+.bg-primary {
+  background-color: var(--primary-color);
+}
+.bg-primary-accent {
+  background-color: var(--primary-accent-color);
 }
 </style>
