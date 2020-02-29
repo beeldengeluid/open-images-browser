@@ -34,41 +34,23 @@
         <h3 class="mb2">
           <span class="bb b--secondary">Locations in selection <span class="fw1">{{noLocationsForSelection}}</span></span>
         </h3>
-        <v-chip-group
-          prev-icon="keyboard_arrow_left" next-icon="keyboard_arrow_right" 
-          multiple class="font-mono mb3"
-        >
-          <v-chip  
-            v-for="location in locationsForSelection" :key="location.name"
-            @click="onToggleLocationFilter(location.name)"
-            :value="location.name"
-            :class="state.activeLocationFilters.includes(location.name) ? 'teal white--text' : ''"
-            label small
-          >
-            <strong class="mr1">{{ location.name }}</strong>
-            <span>{{locationCountsForSelection[location.name]}}</span>
-            <v-icon right small>{{state.activeLocationFilters.includes(location.name) ? 'cancel' : 'filter_list'}} </v-icon>
-          </v-chip>
-        </v-chip-group>
+        <FilterList 
+          :filters="locationsForSelection"
+          :activeFilters="state.activeLocationFilters"
+          v-on:toggle-filter = "onToggleLocationFilter"
+          v-on:toggle-tail = "onToggleTail"
+          activeClass="teal"
+        />
         <h3 class="mb2">
           <span class="bb b--secondary">Subjects in selection <span class="fw1">{{noSubjectsForSelection}}</span></span>
         </h3>
-        <v-chip-group
-          prev-icon="keyboard_arrow_left" next-icon="keyboard_arrow_right" 
-          multiple class="font-mono mb2"
-        >
-          <v-chip  
-            v-for="subject in subjectsForSelection" :key="subject.name"
-            @click="onToggleSubjectFilter(subject.name)"
-            :value="subject.name"
-            :class="state.activeSubjectFilters.includes(subject.name) ? 'teal white--text' : ''"
-            label small
-          >
-            <strong class="mr1">{{ subject.name }}</strong>
-            <span>{{subjectCountsForSelection[subject.name]}}</span>
-            <v-icon right small>{{state.activeSubjectFilters.includes(subject.name) ? 'cancel' : 'filter_list'}} </v-icon>
-          </v-chip>
-        </v-chip-group>
+        <FilterList 
+          :filters="subjectsForSelection"
+          :activeFilters="state.activeSubjectFilters"
+          v-on:toggle-filter = "onToggleSubjectFilter"
+          v-on:toggle-tail = "onToggleTail"
+          activeClass="teal"
+        />
       </div>
       <v-container fluid class="pa0">
         <v-row>
@@ -492,7 +474,6 @@ html, body {
   background-color: var(--bg-color);
   color: var(--text-color);
 }
-
 
 .theme--dark.v-application {
   background: var(--bg-color);

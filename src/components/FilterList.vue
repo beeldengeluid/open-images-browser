@@ -1,21 +1,35 @@
 <template>
-  <div
-    class="filter-list"
-  >
-    <div v-for="filter in filtersToDisplay" :key="filter.name">
+  <div class="filter-list">
+    <v-chip-group class="db dn-l font-mono mb3" multiple>
       <v-chip
+        v-for="filter in filtersToDisplay" :key="filter.name"
         @click="$emit('toggle-filter', filter.name)"
         :value="filter.name"
         :class="activeFilters.includes(filter.name) ? activeClass +' white--text' : ''"
         label small
-        class="font-mono"
+        class="font-mono ma0"
         :title="`${filter.name} (${filter.count})`"
       >
         <strong class="mr1">{{ filter.name }}</strong><span>{{filter.count}}</span>
         <v-icon right small>{{activeFilters.includes(filter.name) ? 'cancel' : 'filter_list'}} </v-icon>
       </v-chip>
-    </div>
-    <div>
+    </v-chip-group>
+    <v-chip-group class="dn db-l font-mono mb3" column multiple>
+      <div v-for="filter in filtersToDisplay" :key="filter.name" class="w-100">
+        <v-chip
+          @click="$emit('toggle-filter', filter.name)"
+          :value="filter.name"
+          :class="activeFilters.includes(filter.name) ? activeClass +' white--text' : ''"
+          label small
+          class="font-mono ma0"
+          :title="`${filter.name} (${filter.count})`"
+        >
+          <strong class="mr1">{{ filter.name }}</strong><span>{{filter.count}}</span>
+          <v-icon right small>{{activeFilters.includes(filter.name) ? 'cancel' : 'filter_list'}} </v-icon>
+        </v-chip>
+      </div>
+    </v-chip-group>
+    <div class="dn db-l">
       <div v-if="isTailHidden" class="mt2 w4-5 f6">
         ... long tail of {{tail.length}} single occurrences hidden
       </div>
