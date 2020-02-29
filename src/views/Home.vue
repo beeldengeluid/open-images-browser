@@ -1,16 +1,18 @@
 <template>
   <v-app id="app">
     <v-content class="ma2 ma3-ns">
-      <h1>Open Images Browser</h1>
-      <p>
-        <span>Below you can explore videos from the </span> 
-        <v-tooltip bottom>
-          <template v-slot:activator="{ on }">
-            <a href="https://openbeelden.nl/" target="_blank" v-on="on">Open Images Collection ↗︎</a>
-          </template>
-          an open media platform that offers online access to audiovisual archive material to stimulate creative reuse
-        </v-tooltip>.
-      </p>
+      <header>
+        <h1>Open Images Browser</h1>
+        <p>
+          <span>Below you can explore videos from the </span> 
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on }">
+              <a href="https://openbeelden.nl/" target="_blank" v-on="on">Open Images Collection ↗︎</a>
+            </template>
+            an open media platform that offers online access to audiovisual archive material to stimulate creative reuse
+          </v-tooltip>.
+        </p>
+      </header>
       <StateStory 
         :state="state" 
         :computed="{
@@ -21,77 +23,54 @@
         v-on:toggle-location-filter = "onToggleLocationFilter"
         v-on:toggle-subject-filter = "onToggleSubjectFilter"
       />
-      <div>
-        <PeriodChart 
-          :barSeries="decadeCounts" 
-          :lineSeries="decadeCountsForSelection" 
-          v-on:decade-click="onDecadeClick"
-          :selectedDecadeIndex="state.selectedDecadeIndex" 
-          :colors="{ bar: this.colors.primary, line: this.colors.secondary, background: this.colors.background }" 
-        />
-        <div class="db dn-l">
-          <div class="dflex items-center justify-start">
-            <div class="fw7 w5">Top locations in decade</div>
-            <v-chip-group
-              prev-icon="keyboard_arrow_left" next-icon="keyboard_arrow_right" 
-              multiple class="font-mono filterGroupWidth"
-            >
-              <v-chip  
-                v-for="location in locationsForSelection" :key="location.name"
-                @click="onToggleLocationFilter(location.name)"
-                :value="location.name"
-                :class="state.activeLocationFilters.includes(location.name) ? 'teal white--text' : ''"
-                label small
-              >
-                <strong class="mr1">{{ location.name }}</strong>
-                <span>{{locationCountsForSelection[location.name]}}</span>
-                <v-icon right small>{{state.activeLocationFilters.includes(location.name) ? 'cancel' : 'filter_list'}} </v-icon>
-              </v-chip>
-            </v-chip-group>
-          </div>
-          <div class="dflex items-center justify-start">
-            <div class="fw7 w5">Top subjects in decade</div>
-            <v-chip-group
-              prev-icon="keyboard_arrow_left" next-icon="keyboard_arrow_right" 
-              multiple class="font-mono filterGroupWidth"
-            >
-              <v-chip  
-                v-for="subject in subjectsForSelection" :key="subject.name"
-                @click="onToggleSubjectFilter(subject.name)"
-                :value="subject.name"
-                :class="state.activeSubjectFilters.includes(subject.name) ? 'teal white--text' : ''"
-                label small
-              >
-                <strong class="mr1">{{ subject.name }}</strong>
-                <span>{{subjectCountsForSelection[subject.name]}}</span>
-                <v-icon right small>{{state.activeSubjectFilters.includes(subject.name) ? 'cancel' : 'filter_list'}} </v-icon>
-              </v-chip>
-            </v-chip-group>
-          </div>
-        </div>
-        <div class="dib dflex items-center">
-          <span class="mr2 fw7">Sort by</span>
-          <v-chip-group v-model="state.sortBy" active-class="indigo" mandatory class="fw5 font-mono">
-            <v-chip v-for="sortField in sortFields" :key="sortField" :value="sortField">
-              {{ sortField }}
-            </v-chip>
-          </v-chip-group>
-          <v-btn fab x-small color="indigo mr2">
-            <v-icon @click="toggleSortAscending">{{state.sortAscending ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</v-icon>
-          </v-btn>
-        </div>
-        <div class="dflex mt4 flex-wrap items-center justify-between">
-          <div class="dflex items-center mb4">
-            <span class="pr2 fw7">Display</span>
-            <v-chip-group v-model="state.displayFieldsSelected" active-class="green" multiple class="fw5 font-mono">
-              <v-chip v-for="displayField in displayFields" :key="displayField" :value="displayField">
-                {{displayField}}
-              </v-chip>
-            </v-chip-group>
-          </div>
-        </div>
+      <PeriodChart 
+        :barSeries="decadeCounts" 
+        :lineSeries="decadeCountsForSelection" 
+        v-on:decade-click="onDecadeClick"
+        :selectedDecadeIndex="state.selectedDecadeIndex" 
+        :colors="{ bar: this.colors.primary, line: this.colors.secondary, background: this.colors.background }" 
+      />
+      <div class="db dn-l">
+        <h3 class="mb2">
+          <span class="bb b--secondary">Locations in selection <span class="fw1">{{noLocationsForSelection}}</span></span>
+        </h3>
+        <v-chip-group
+          prev-icon="keyboard_arrow_left" next-icon="keyboard_arrow_right" 
+          multiple class="font-mono mb3"
+        >
+          <v-chip  
+            v-for="location in locationsForSelection" :key="location.name"
+            @click="onToggleLocationFilter(location.name)"
+            :value="location.name"
+            :class="state.activeLocationFilters.includes(location.name) ? 'teal white--text' : ''"
+            label small
+          >
+            <strong class="mr1">{{ location.name }}</strong>
+            <span>{{locationCountsForSelection[location.name]}}</span>
+            <v-icon right small>{{state.activeLocationFilters.includes(location.name) ? 'cancel' : 'filter_list'}} </v-icon>
+          </v-chip>
+        </v-chip-group>
+        <h3 class="mb2">
+          <span class="bb b--secondary">Subjects in selection <span class="fw1">{{noSubjectsForSelection}}</span></span>
+        </h3>
+        <v-chip-group
+          prev-icon="keyboard_arrow_left" next-icon="keyboard_arrow_right" 
+          multiple class="font-mono mb2"
+        >
+          <v-chip  
+            v-for="subject in subjectsForSelection" :key="subject.name"
+            @click="onToggleSubjectFilter(subject.name)"
+            :value="subject.name"
+            :class="state.activeSubjectFilters.includes(subject.name) ? 'teal white--text' : ''"
+            label small
+          >
+            <strong class="mr1">{{ subject.name }}</strong>
+            <span>{{subjectCountsForSelection[subject.name]}}</span>
+            <v-icon right small>{{state.activeSubjectFilters.includes(subject.name) ? 'cancel' : 'filter_list'}} </v-icon>
+          </v-chip>
+        </v-chip-group>
       </div>
-      <v-container fluid>
+      <v-container fluid class="pa0">
         <v-row>
           <v-col cols="auto" class="dn db-l mw5">
             <h3 class="mb3">
@@ -122,6 +101,27 @@
               <span class="bb b--secondary">Videos in selection <span class="fw1">{{itemsFilteredSorted.length}}</span></span>&nbsp;
               <span class="fw1 grey--text bb b--primary-accent">(of {{Object.values(decadeCounts)[state.selectedDecadeIndex]}} in decade)</span>
             </h3>
+            <div class="dflex flex-wrap mb3">
+              <div class="dflex items-center mr3 mr4-l">
+                <span class="mr2 fw7">Sort by</span>
+                <v-chip-group v-model="state.sortBy" active-class="indigo" mandatory class="fw5 font-mono">
+                  <v-chip v-for="sortField in sortFields" :key="sortField" :value="sortField">
+                    {{ sortField }}
+                  </v-chip>
+                </v-chip-group>
+                <v-btn fab x-small color="indigo mr2">
+                  <v-icon @click="toggleSortAscending">{{state.sortAscending ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</v-icon>
+                </v-btn>
+              </div>
+              <div class="dflex items-center">
+                <span class="pr2 fw7">Display</span>
+                <v-chip-group v-model="state.displayFieldsSelected" active-class="green" multiple class="fw5 font-mono">
+                  <v-chip v-for="displayField in displayFields" :key="displayField" :value="displayField">
+                    {{displayField}}
+                  </v-chip>
+                </v-chip-group>
+              </div>
+            </div>
             <ZoomSlider
               v-model="zoom.value"
               :min="zoom.min" :max="zoom.max" :step="zoom.step"
