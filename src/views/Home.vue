@@ -27,7 +27,7 @@
         @click="resetState"
         class="mt2" outlined 
       >
-        Reset Selection
+        Clear Selection
       </v-btn>
       <PeriodChart 
         :barSeries="decadeCounts" 
@@ -181,7 +181,12 @@ export default {
   data () {
     return {
       items: dataItems,
-      state: {},
+      state: {
+        selectedDecadeIndex: 7,
+        sortBy: 'date',
+        sortAscending: true,
+        displayFieldsSelected: ['thumb', 'year'],
+      },
       sortFields: ['id','date', 'title'],
       displayFields: ['title', 'year', 'thumb'],
       zoom: {
@@ -207,12 +212,8 @@ export default {
     }
   },
   defaultState: {
-    sortBy: 'date',
-    selectedDecadeIndex: 7,
-    sortAscending: true,
-    activeLocationFilters: ['Nederland'],
+    activeLocationFilters: [],
     activeSubjectFilters: [],
-    displayFieldsSelected: ['thumb', 'year'],
   },
   computed: {
     itemsPerDecade () {
