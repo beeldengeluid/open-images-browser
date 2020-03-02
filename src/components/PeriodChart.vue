@@ -102,6 +102,11 @@ export default {
       }
     },
   },
+  watch: {
+    selectedDecadeIndex (newValue) {
+      this.$refs.apexPeriodChart.toggleDataPointSelection(0,newValue)
+    }
+  },
 }
 </script>
 

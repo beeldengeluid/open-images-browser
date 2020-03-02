@@ -23,6 +23,12 @@
         v-on:toggle-location-filter = "onToggleLocationFilter"
         v-on:toggle-subject-filter = "onToggleSubjectFilter"
       />
+      <v-btn 
+        @click="resetState"
+        class="mt2" outlined 
+      >
+        Reset Selection
+      </v-btn>
       <PeriodChart 
         :barSeries="decadeCounts" 
         :lineSeries="decadeCountsForSelection" 
@@ -175,14 +181,7 @@ export default {
   data () {
     return {
       items: dataItems,
-      state: {
-        sortBy: 'date',
-        selectedDecadeIndex: 7,
-        sortAscending: true,
-        activeLocationFilters: ['Nederland'],
-        activeSubjectFilters: [],
-        displayFieldsSelected: ['thumb', 'year'],
-      },
+      state: {},
       sortFields: ['id','date', 'title'],
       displayFields: ['title', 'year', 'thumb'],
       zoom: {
@@ -206,6 +205,14 @@ export default {
         timeout: 4000,
       }
     }
+  },
+  defaultState: {
+    sortBy: 'date',
+    selectedDecadeIndex: 7,
+    sortAscending: true,
+    activeLocationFilters: ['Nederland'],
+    activeSubjectFilters: [],
+    displayFieldsSelected: ['thumb', 'year'],
   },
   computed: {
     itemsPerDecade () {
@@ -407,6 +414,9 @@ export default {
     qsCustomizer (objValue, srcValue) {
       return typeof objValue === 'number' ? parseInt(srcValue, 10) : srcValue
     },
+    resetState () {
+      this.state = Object.assign({}, this.state, this.$options.defaultState)
+    },
   },
   watch: {
     'state.sortBy': function (newValue) {
@@ -427,7 +437,9 @@ export default {
         this.showSnackbar(`📍 Added location filter <strong>${added[0]}</strong>`)
       } else {
         let removed = _.difference(oldValue, newValue)
-        this.showSnackbar(`❌ Removed location filter <strong>${removed[0]}</strong>`)
+        if (removed.length) {
+          this.showSnackbar(`❌ Removed location filter <strong>${removed[0]}</strong>`)
+        }
       }
       this.$router.push({ query: Object.assign({}, this.$route.query, { activeLocationFilters: newValue })})
     },
@@ -437,7 +449,9 @@ export default {
         this.showSnackbar(`🏷 Added subject filter <strong>${added[0]}</strong>`)
       } else {
         let removed = _.difference(oldValue, newValue)
-        this.showSnackbar(`❌ Removed subject filter <strong>${removed[0]}</strong>`)
+        if (removed.length) {
+          this.showSnackbar(`❌ Removed subject filter <strong>${removed[0]}</strong>`)
+        }
       }
       this.$router.push({ query: Object.assign({}, this.$route.query, { activeSubjectFilters: newValue })})
     },
@@ -447,12 +461,15 @@ export default {
         this.showSnackbar(`👀 Displaying <strong>${added[0]}</strong>`)
       } else {
         let removed = _.difference(oldValue, newValue)
-        this.showSnackbar(`🙈 Not displaying <strong>${removed[0]}</strong>`)
+        if (removed.length) {
+          this.showSnackbar(`🙈 Not displaying <strong>${removed[0]}</strong>`)
+        }
       }
       this.$router.push({ query: Object.assign({}, this.$route.query, { displayFieldsSelected: newValue })})
     },
   },
   created() {
+    this.state = Object.assign({}, this.state, this.$options.defaultState)
     _.assignWith(this.state, this.$route.query, this.qsCustomizer)
     window.addEventListener("resize", _.debounce(this.onResize), 400)
   },
