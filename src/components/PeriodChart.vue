@@ -104,7 +104,10 @@ export default {
   },
   watch: {
     selectedDecadeIndex (newValue) {
-      this.$refs.apexPeriodChart.toggleDataPointSelection(0,newValue)
+      // toggle DataPointSelection in case selectedDecadeIndex is changed indirectly (not via click), e.g. by resetState
+      if (this.$refs.apexPeriodChart.chart.w.globals.selectedDataPoints[0][0] !== newValue) {
+        this.$refs.apexPeriodChart.toggleDataPointSelection(0,newValue)
+      }
     }
   },
 }
