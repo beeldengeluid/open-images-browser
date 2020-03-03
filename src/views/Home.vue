@@ -23,12 +23,6 @@
         v-on:toggle-location-filter = "onToggleLocationFilter"
         v-on:toggle-subject-filter = "onToggleSubjectFilter"
       />
-      <v-btn 
-        @click="resetState"
-        class="mt2" outlined 
-      >
-        Clear Selection
-      </v-btn>
       <PeriodChart 
         :barSeries="decadeCounts" 
         :lineSeries="decadeCountsForSelection" 
@@ -85,10 +79,19 @@
             />
           </v-col>
           <v-col>
-            <h3 class="mb3 ">
-              <span class="bb b--secondary">Videos in selection <span class="fw1">{{itemsFilteredSorted.length}}</span></span>&nbsp;
-              <span class="fw1 grey--text bb b--primary-accent">(of {{Object.values(decadeCounts)[state.selectedDecadeIndex]}} in decade)</span>
-            </h3>
+            <div class="mb3">
+              <h3 class="dib mr3 mb2">
+                <span class="bb b--secondary mr2">Videos in selection <span class="fw1">{{itemsFilteredSorted.length}}</span></span>
+                <span class="fw1 grey--text bb b--primary-accent">(of {{Object.values(decadeCounts)[state.selectedDecadeIndex]}} in decade)</span>
+              </h3>
+              <v-btn 
+                @click="resetState"
+                v-show="hasActiveFilters"
+                small outlined
+              >
+                Clear Selection
+              </v-btn>
+            </div>
             <div class="dflex flex-wrap mb3">
               <div class="dflex items-center mr3 mr4-l">
                 <span class="mr2 fw7">Sort by</span>
@@ -310,6 +313,9 @@ export default {
           })
 
       return _.orderBy(subjects, ['count', 'name'], ['desc', 'asc'])
+    },
+    hasActiveFilters () {
+      return this.state.activeLocationFilters.length || this.state.activeSubjectFilters.length
     },
     decadeCounts () {
       return this.getDecadeCounts(this.items, this.decadeMin, this.decadeMax)
