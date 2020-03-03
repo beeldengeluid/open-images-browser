@@ -102,6 +102,14 @@ export default {
       }
     },
   },
+  watch: {
+    selectedDecadeIndex (newValue) {
+      // toggle DataPointSelection in case selectedDecadeIndex is changed indirectly (not via click), e.g. by resetState
+      if (this.$refs.apexPeriodChart.chart.w.globals.selectedDataPoints[0][0] !== newValue) {
+        this.$refs.apexPeriodChart.toggleDataPointSelection(0,newValue)
+      }
+    }
+  },
 }
 </script>
 
@@ -109,11 +117,11 @@ export default {
 /* temp fix for states issue in Firefox
    https://github.com/apexcharts/apexcharts.js/issues/1338 */
 .apexcharts-series path[selected=true] {
-  fill: rgba(108, 94, 173, 0.9);
+  fill: var(--primary-accent-color);
   filter: none;
 }
 .apexcharts-series path:not([selected]):hover{
-  fill: rgba(108, 94, 173, 0.9);
+  fill: var(--primary-accent-color);
   filter: none;
 }
 </style>

@@ -1,17 +1,18 @@
 <template>
   <v-app id="app">
-    <v-content class="ma3 mt5 tl">
-      <h1>Open Images Browser</h1>
-      <p>
-        <span>Below you can explore videos from the </span> 
-        <v-tooltip bottom>
-          <template v-slot:activator="{ on }">
-            <a href="https://openbeelden.nl/" target="_blank" v-on="on">Open Images Collection ↗︎</a>
-          </template>
-          <span>Open Images is an open media platform that offers online access to audiovisual archive material to stimulate creative reuse.</span>
-        </v-tooltip>
-        <span>.</span>
-      </p>
+    <v-content class="ma2 ma3-ns">
+      <header>
+        <h1>Open Images Browser</h1>
+        <p>
+          <span>Below you can explore videos from the </span> 
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on }">
+              <a href="https://openbeelden.nl/" target="_blank" v-on="on">Open Images Collection ↗︎</a>
+            </template>
+            an open media platform that offers online access to audiovisual archive material to stimulate creative reuse
+          </v-tooltip>.
+        </p>
+      </header>
       <StateStory 
         :state="state" 
         :computed="{
@@ -22,102 +23,41 @@
         v-on:toggle-location-filter = "onToggleLocationFilter"
         v-on:toggle-subject-filter = "onToggleSubjectFilter"
       />
-      <div>
-        <PeriodChart 
-          :barSeries="decadeCounts" 
-          :lineSeries="decadeCountsForSelection" 
-          v-on:decade-click="onDecadeClick"
-          :selectedDecadeIndex="state.selectedDecadeIndex" 
-          :colors="{ bar: this.colors.primary, line: this.colors.secondary, background: this.colors.background }" 
+      <PeriodChart 
+        :barSeries="decadeCounts" 
+        :lineSeries="decadeCountsForSelection" 
+        v-on:decade-click="onDecadeClick"
+        :selectedDecadeIndex="state.selectedDecadeIndex" 
+        :colors="{ bar: this.colors.inactive, line: this.colors.secondary, background: this.colors.background }" 
+      />
+      <div class="db dn-l">
+        <h3 class="mb2">
+          <span class="bb b--secondary">Locations in selection <span class="fw1">{{noLocationsForSelection}}</span></span>
+        </h3>
+        <FilterList 
+          :filters="locationsForSelection"
+          :activeFilters="state.activeLocationFilters"
+          v-on:toggle-filter = "onToggleLocationFilter"
+          v-on:toggle-tail = "onToggleTail"
+          activeClass="teal"
         />
-        <div class="db dn-l">
-          <div class="dflex items-center justify-start">
-            <div class="fw7 w5">Top locations in decade</div>
-            <v-chip-group
-              prev-icon="keyboard_arrow_left" next-icon="keyboard_arrow_right" 
-              multiple class="font-mono filterGroupWidth"
-            >
-              <v-chip  
-                v-for="location in locationsForSelection" :key="location.name"
-                @click="onToggleLocationFilter(location.name)"
-                :value="location.name"
-                :class="state.activeLocationFilters.includes(location.name) ? 'teal white--text' : ''"
-                label small
-              >
-                <strong class="mr1">{{ location.name }}</strong>
-                <span>{{locationCountsForSelection[location.name]}}</span>
-                <v-icon right small>{{state.activeLocationFilters.includes(location.name) ? 'cancel' : 'filter_list'}} </v-icon>
-              </v-chip>
-            </v-chip-group>
-          </div>
-          <div class="dflex items-center justify-start">
-            <div class="fw7 w5">Top subjects in decade</div>
-            <v-chip-group
-              prev-icon="keyboard_arrow_left" next-icon="keyboard_arrow_right" 
-              multiple class="font-mono filterGroupWidth"
-            >
-              <v-chip  
-                v-for="subject in subjectsForSelection" :key="subject.name"
-                @click="onToggleSubjectFilter(subject.name)"
-                :value="subject.name"
-                :class="state.activeSubjectFilters.includes(subject.name) ? 'teal white--text' : ''"
-                label small
-              >
-                <strong class="mr1">{{ subject.name }}</strong>
-                <span>{{subjectCountsForSelection[subject.name]}}</span>
-                <v-icon right small>{{state.activeSubjectFilters.includes(subject.name) ? 'cancel' : 'filter_list'}} </v-icon>
-              </v-chip>
-            </v-chip-group>
-          </div>
-        </div>
-        <div class="dib dflex items-center">
-          <span class="mr2 fw7">Sort by</span>
-          <v-chip-group v-model="state.sortBy" active-class="indigo" mandatory class="fw5 font-mono">
-            <v-chip v-for="sortField in sortFields" :key="sortField" :value="sortField">
-              {{ sortField }}
-            </v-chip>
-          </v-chip-group>
-          <v-btn fab x-small color="indigo mr2">
-            <v-icon @click="toggleSortAscending">{{state.sortAscending ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</v-icon>
-          </v-btn>
-        </div>
-        <div class="dflex mt4 flex-wrap items-center justify-between">
-          <v-slider
-            v-model="zoom.value"
-            :min="zoom.min" :max="zoom.max" :step="zoom.step"
-            ticks="always"
-            tick-size="4"
-            :tick-labels="zoomLabels"
-            :label="zoom.label"
-            color="orange" 
-            hide-details
-            class="zoom-slider mr4 mb4 min-w-24rem"
-          >
-            <template v-slot:prepend>
-              <v-btn icon @click="zoom.value--">
-                <v-icon>zoom_in</v-icon>
-              </v-btn>
-            </template>
-            <template v-slot:append>
-              <v-btn icon @click="zoom.value++">
-                <v-icon>zoom_out</v-icon>
-              </v-btn>
-            </template>
-          </v-slider>
-          <div class="dflex items-center mb4">
-            <span class="pr2 fw7">Display</span>
-            <v-chip-group v-model="state.displayFieldsSelected" active-class="green" multiple class="fw5 font-mono">
-              <v-chip v-for="displayField in displayFields" :key="displayField" :value="displayField">
-                {{displayField}}
-              </v-chip>
-            </v-chip-group>
-          </div>
-        </div>
+        <h3 class="mb2">
+          <span class="bb b--secondary">Subjects in selection <span class="fw1">{{noSubjectsForSelection}}</span></span>
+        </h3>
+        <FilterList 
+          :filters="subjectsForSelection"
+          :activeFilters="state.activeSubjectFilters"
+          v-on:toggle-filter = "onToggleSubjectFilter"
+          v-on:toggle-tail = "onToggleTail"
+          activeClass="teal"
+        />
       </div>
-      <v-container fluid>
+      <v-container fluid class="pa0">
         <v-row>
-          <v-col cols="auto" class="dn db-l">
-            <h3 class="mb3">Locations in selection <span class="fw1">{{noLocationsForSelection}}</span></h3>
+          <v-col cols="auto" class="dn db-l mw5">
+            <h3 class="mb3">
+              <span class="bb b--secondary">Locations in selection <span class="fw1">{{noLocationsForSelection}}</span></span>
+            </h3>
             <FilterList 
               :filters="locationsForSelection"
               :activeFilters="state.activeLocationFilters"
@@ -126,8 +66,10 @@
               activeClass="teal"
             />
           </v-col>
-          <v-col cols="auto" class="dn db-l">
-            <h3 class="mb3">Subjects in selection <span class="fw1">{{noSubjectsForSelection}}</span></h3>
+          <v-col cols="auto" class="dn db-l mw5">
+            <h3 class="mb3">
+              <span class="bb b--secondary">Subjects in selection <span class="fw1">{{noSubjectsForSelection}}</span></span>
+            </h3>
             <FilterList 
               :filters="subjectsForSelection"
               :activeFilters="state.activeSubjectFilters"
@@ -137,10 +79,46 @@
             />
           </v-col>
           <v-col>
-            <h3 class="mb3">
-              Videos in selection <span class="fw1">{{itemsFilteredSorted.length}}</span>
-              <span class="fw1 grey--text"> (of {{Object.values(decadeCounts)[state.selectedDecadeIndex]}} in decade)</span>
-            </h3>
+            <div class="mb3">
+              <h3 class="dib mr3 mb2">
+                <span class="bb b--secondary mr2">Videos in selection <span class="fw1">{{itemsFilteredSorted.length}}</span></span>
+                <span class="fw1 grey--text bb b--primary-accent">(of {{Object.values(decadeCounts)[state.selectedDecadeIndex]}} in decade)</span>
+              </h3>
+              <v-btn 
+                @click="resetState"
+                v-show="hasActiveFilters"
+                small outlined
+              >
+                Clear Selection
+              </v-btn>
+            </div>
+            <div class="dflex flex-wrap mb3">
+              <div class="dflex items-center mr3 mr4-l">
+                <span class="mr2 fw7">Sort by</span>
+                <v-chip-group v-model="state.sortBy" active-class="indigo" mandatory class="fw5 font-mono">
+                  <v-chip v-for="sortField in sortFields" :key="sortField" :value="sortField">
+                    {{ sortField }}
+                  </v-chip>
+                </v-chip-group>
+                <v-btn fab x-small color="indigo mr2">
+                  <v-icon @click="toggleSortAscending">{{state.sortAscending ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</v-icon>
+                </v-btn>
+              </div>
+              <div class="dflex items-center">
+                <span class="pr2 fw7">Display</span>
+                <v-chip-group v-model="state.displayFieldsSelected" active-class="green" multiple class="fw5 font-mono">
+                  <v-chip v-for="displayField in displayFields" :key="displayField" :value="displayField">
+                    {{displayField}}
+                  </v-chip>
+                </v-chip-group>
+              </div>
+            </div>
+            <ZoomSlider
+              v-model="zoom.value"
+              :min="zoom.min" :max="zoom.max" :step="zoom.step"
+              :tickLabels="zoomLabels"
+              class="mb3 mb4-ns"
+            ></ZoomSlider>
             <div class="relative dflex flex-wrap">
               <CollectionItem
                 v-for = "item in itemsFilteredSorted" 
@@ -186,48 +164,48 @@
 import '../../node_modules/tachyons/css/tachyons.min.css';
 import _ from 'lodash';
 import dataItems from "@/assets/data/openbeelden-items-clean.json";
-import CollectionItem from "@/components/CollectionItem";
-import FilterList from "@/components/FilterList";
 import StateStory from "@/components/StateStory";
 import PeriodChart from "@/components/PeriodChart";
+import FilterList from "@/components/FilterList";
+import ZoomSlider from "@/components/ZoomSlider";
+import CollectionItem from "@/components/CollectionItem";
 import BackToTop from 'vue-backtotop'
 
 export default {
   name: 'OpenBeeldenBrowser',
   components: {
-    CollectionItem,
-    FilterList,
     StateStory,
     PeriodChart,
+    FilterList,
+    ZoomSlider,
+    CollectionItem,
     BackToTop
   },
   data () {
     return {
       items: dataItems,
       state: {
-        sortBy: 'date',
         selectedDecadeIndex: 7,
+        sortBy: 'date',
         sortAscending: true,
-        activeLocationFilters: ['Nederland'],
-        activeSubjectFilters: [],
         displayFieldsSelected: ['thumb', 'year'],
       },
       sortFields: ['id','date', 'title'],
       displayFields: ['title', 'year', 'thumb'],
       zoom: {
-        value: 4,
+        value: 3,
         min: 0,
         max: 6,
         step: 1,
-        label: 'Zoom Out level',
       },
       itemAspectRatio: 352 / 288,
       itemMargin: 4,
       clientWidth: this.getClientWidth(),
       colors: {
-        primary: '#311B92', 
+        primary: '#5E35B1', 
         secondary: '#009688', 
-        background: '#121212'
+        background: '#121212',
+        inactive: '#555',
       },
       chartSeries: [],
       snackbar:{
@@ -236,6 +214,10 @@ export default {
         timeout: 4000,
       }
     }
+  },
+  defaultState: {
+    activeLocationFilters: [],
+    activeSubjectFilters: [],
   },
   computed: {
     itemsPerDecade () {
@@ -332,6 +314,9 @@ export default {
           })
 
       return _.orderBy(subjects, ['count', 'name'], ['desc', 'asc'])
+    },
+    hasActiveFilters () {
+      return this.state.activeLocationFilters.length || this.state.activeSubjectFilters.length
     },
     decadeCounts () {
       return this.getDecadeCounts(this.items, this.decadeMin, this.decadeMax)
@@ -437,6 +422,9 @@ export default {
     qsCustomizer (objValue, srcValue) {
       return typeof objValue === 'number' ? parseInt(srcValue, 10) : srcValue
     },
+    resetState () {
+      this.state = Object.assign({}, this.state, this.$options.defaultState)
+    },
   },
   watch: {
     'state.sortBy': function (newValue) {
@@ -457,7 +445,9 @@ export default {
         this.showSnackbar(`📍 Added location filter <strong>${added[0]}</strong>`)
       } else {
         let removed = _.difference(oldValue, newValue)
-        this.showSnackbar(`❌ Removed location filter <strong>${removed[0]}</strong>`)
+        if (removed.length) {
+          this.showSnackbar(`❌ Removed location filter <strong>${removed[0]}</strong>`)
+        }
       }
       this.$router.push({ query: Object.assign({}, this.$route.query, { activeLocationFilters: newValue })})
     },
@@ -467,7 +457,9 @@ export default {
         this.showSnackbar(`🏷 Added subject filter <strong>${added[0]}</strong>`)
       } else {
         let removed = _.difference(oldValue, newValue)
-        this.showSnackbar(`❌ Removed subject filter <strong>${removed[0]}</strong>`)
+        if (removed.length) {
+          this.showSnackbar(`❌ Removed subject filter <strong>${removed[0]}</strong>`)
+        }
       }
       this.$router.push({ query: Object.assign({}, this.$route.query, { activeSubjectFilters: newValue })})
     },
@@ -477,12 +469,15 @@ export default {
         this.showSnackbar(`👀 Displaying <strong>${added[0]}</strong>`)
       } else {
         let removed = _.difference(oldValue, newValue)
-        this.showSnackbar(`🙈 Not displaying <strong>${removed[0]}</strong>`)
+        if (removed.length) {
+          this.showSnackbar(`🙈 Not displaying <strong>${removed[0]}</strong>`)
+        }
       }
       this.$router.push({ query: Object.assign({}, this.$route.query, { displayFieldsSelected: newValue })})
     },
   },
   created() {
+    this.state = Object.assign({}, this.state, this.$options.defaultState)
     _.assignWith(this.state, this.$route.query, this.qsCustomizer)
     window.addEventListener("resize", _.debounce(this.onResize), 400)
   },
@@ -496,13 +491,14 @@ export default {
 :root {
   --bg-color: #121212;
   --text-color: #EDEDED;
-  --selected-decade-color: #6C5EAD;
+  --primary-color: #5E35B1;
+  --primary-accent-color: #7E57C2;
+  --secondary-color: #009688;
 }
 html, body {
   background-color: var(--bg-color);
   color: var(--text-color);
 }
-
 
 .theme--dark.v-application {
   background: var(--bg-color);
@@ -549,10 +545,16 @@ https://github.com/vuetifyjs/vuetify/commit/4f151bbdf4388e76d92920ca19c6271c022e
   min-width: 24rem;
 }
 
-.zoom-slider .v-input__prepend-outer, .zoom-slider .v-input__append-outer {
-  margin-top: 0;
+.b--primary-accent {
+  border-color: var(--primary-accent-color)
 }
-.zoom-slider .v-slider__tick {
-  background-color: hsla(0,0%,100%,.5);
+.b--secondary {
+  border-color: var(--secondary-color)
+}
+.bg-primary {
+  background-color: var(--primary-color);
+}
+.bg-primary-accent {
+  background-color: var(--primary-accent-color);
 }
 </style>
