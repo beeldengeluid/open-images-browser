@@ -54,29 +54,33 @@
       </div>
       <v-container fluid class="pa0">
         <v-row>
-          <v-col cols="auto" class="dn db-l mw5">
-            <h3 class="mb3">
-              <span class="bb b--secondary">Locations in selection <span class="fw1">{{noLocationsForSelection}}</span></span>
-            </h3>
-            <FilterList 
-              :filters="locationsForSelection"
-              :activeFilters="state.activeLocationFilters"
-              v-on:toggle-filter = "onToggleLocationFilter"
-              v-on:toggle-tail = "onToggleTail"
-              activeClass="teal"
-            />
+          <v-col cols="auto" class="dn db-l">
+            <div class="mw5">
+              <h3 class="mb3">
+                <span class="bb b--secondary">Locations in selection <span class="fw1">{{noLocationsForSelection}}</span></span>
+              </h3>
+              <FilterList 
+                :filters="locationsForSelection"
+                :activeFilters="state.activeLocationFilters"
+                v-on:toggle-filter = "onToggleLocationFilter"
+                v-on:toggle-tail = "onToggleTail"
+                activeClass="teal"
+              />
+            </div>
           </v-col>
-          <v-col cols="auto" class="dn db-l mw5">
-            <h3 class="mb3">
-              <span class="bb b--secondary">Subjects in selection <span class="fw1">{{noSubjectsForSelection}}</span></span>
-            </h3>
-            <FilterList 
-              :filters="subjectsForSelection"
-              :activeFilters="state.activeSubjectFilters"
-              v-on:toggle-filter = "onToggleSubjectFilter"
-              v-on:toggle-tail = "onToggleTail"
-              activeClass="teal"
-            />
+          <v-col cols="auto" class="dn db-l">
+            <div class="mw5">
+              <h3 class="mb3">
+                <span class="bb b--secondary">Subjects in selection <span class="fw1">{{noSubjectsForSelection}}</span></span>
+              </h3>
+              <FilterList 
+                :filters="subjectsForSelection"
+                :activeFilters="state.activeSubjectFilters"
+                v-on:toggle-filter = "onToggleSubjectFilter"
+                v-on:toggle-tail = "onToggleTail"
+                activeClass="teal"
+              />
+            </div>
           </v-col>
           <v-col>
             <div class="mb3">
