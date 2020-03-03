@@ -28,7 +28,7 @@
         :lineSeries="decadeCountsForSelection" 
         v-on:decade-click="onDecadeClick"
         :selectedDecadeIndex="state.selectedDecadeIndex" 
-        :colors="{ bar: this.colors.primary, line: this.colors.secondary, background: this.colors.background }" 
+        :colors="{ bar: this.colors.inactive, line: this.colors.secondary, background: this.colors.background }" 
       />
       <div class="db dn-l">
         <h3 class="mb2">
@@ -204,7 +204,8 @@ export default {
       colors: {
         primary: '#5E35B1', 
         secondary: '#009688', 
-        background: '#121212'
+        background: '#121212',
+        inactive: '#555',
       },
       chartSeries: [],
       snackbar:{
