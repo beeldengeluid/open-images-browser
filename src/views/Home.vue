@@ -23,11 +23,17 @@
         v-on:toggle-location-filter = "onToggleLocationFilter"
         v-on:toggle-subject-filter = "onToggleSubjectFilter"
       />
+      <v-btn
+        @click="randomizeFilters"
+        outlined
+      >
+        Random!
+      </v-btn>
       <PeriodChart 
         :barSeries="decadeCounts" 
         :lineSeries="decadeCountsForSelection" 
         v-on:decade-click="onDecadeClick"
-        :selectedDecadeIndex="state.selectedDecadeIndex" 
+        :decadeIndex="state.decadeIndex" 
         :colors="{ bar: this.colors.inactive, line: this.colors.secondary, background: this.colors.background }" 
       />
       <div class="db dn-l">
@@ -86,10 +92,10 @@
             <div class="mb3">
               <h3 class="dib mr3 mb2">
                 <span class="bb b--secondary mr2">Videos in selection <span class="fw1">{{itemsFilteredSorted.length}}</span></span>
-                <span class="fw1 grey--text bb b--primary-accent">(of {{Object.values(decadeCounts)[state.selectedDecadeIndex]}} in decade)</span>
+                <span class="fw1 grey--text bb b--primary-accent">(of {{decades[state.decadeIndex].count}} in decade)</span>
               </h3>
               <v-btn 
-                @click="resetState"
+                @click="resetFilters"
                 v-show="hasActiveFilters"
                 small outlined
               >
@@ -189,7 +195,7 @@ export default {
     return {
       items: dataItems,
       state: {
-        selectedDecadeIndex: 7,
+        decadeIndex: 7,
         sortBy: 'date',
         sortAscending: true,
         displayFieldsSelected: ['thumb', 'year'],
@@ -242,7 +248,7 @@ export default {
               .map(value => Math.pow(2, value))
     },
     itemsFiltered () {
-      return this.itemsPerDecade[this.selectedDecade]
+      return this.itemsPerDecade[this.decades[this.state.decadeIndex].name]
         .filter(
           i => 
             this.filterByLocation(i) && 
@@ -262,12 +268,9 @@ export default {
       return _.orderBy(this.itemsFiltered, [this.state.sortBy], [order])
     },
     selectedYearRange () {
-      let decadeYearMin = parseInt(this.selectedDecade.slice(0,4))
+      let decadeYearMin = parseInt(this.decades[this.state.decadeIndex].name.slice(0,4))
       let decadeYearMax = decadeYearMin + 9
       return [decadeYearMin, decadeYearMax]
-    },
-    selectedDecade () {
-      return  Object.keys(this.decadeCounts)[this.state.selectedDecadeIndex]
     },
     yearMin () {
       return Math.min(... this.items.map(i => i['date'].slice(0, 4)))
@@ -289,15 +292,7 @@ export default {
       return _.size(this.locationCountsForSelection)
     },
     locationsForSelection () {
-      let locations = 
-        Object.keys(this.locationCountsForSelection)
-          .map( key => {
-            return {
-              'name': key,
-              'count': this.locationCountsForSelection[key]
-            }
-          })
-
+      let locations = this.objectToCollection(this.locationCountsForSelection, 'name', 'count')
       return _.orderBy(locations, ['count', 'name'], ['desc', 'asc'])    
     },
     subjectCountsForSelection () {
@@ -308,15 +303,7 @@ export default {
       return _.size(this.subjectCountsForSelection)
     },
     subjectsForSelection () {
-      let subjects = 
-        Object.keys(this.subjectCountsForSelection)
-          .map( key => {
-            return {
-              'name': key,
-              'count': this.subjectCountsForSelection[key]
-            }
-          })
-
+      let subjects = this.objectToCollection(this.subjectCountsForSelection, 'name', 'count')
       return _.orderBy(subjects, ['count', 'name'], ['desc', 'asc'])
     },
     hasActiveFilters () {
@@ -325,11 +312,22 @@ export default {
     decadeCounts () {
       return this.getDecadeCounts(this.items, this.decadeMin, this.decadeMax)
     },
+    decades () {
+      return this.objectToCollection(this.decadeCounts, 'name', 'count')
+    },
     decadeCountsForSelection () {
       return this.getDecadeCounts(this.itemsFilteredAllDecades, this.decadeMin, this.decadeMax)
     },
   },
   methods: {
+    objectToCollection (countsObject, keyForKey, keyForValue) {
+      return Object.keys(countsObject).map(k => { 
+        return {
+          [keyForKey]: k,
+          [keyForValue]: countsObject[k]
+        }
+      })
+    },
     toggleSortAscending () {
       this.state.sortAscending = ! this.state.sortAscending
     },
@@ -387,7 +385,7 @@ export default {
     },
     onDecadeClick (dataPointIndex) {
       // set decade
-      this.state.selectedDecadeIndex = dataPointIndex
+      this.state.decadeIndex = dataPointIndex
     },
     getDecadeCounts (items, decadeMin, decadeMax) {
       // get decades present in data
@@ -407,6 +405,7 @@ export default {
       Object.keys(decadesPresent).sort().forEach(function(key) {
         decadesSorted[key] = decadesPresent[key];
       });
+
       return decadesSorted
     },
     showSnackbar (markup) {
@@ -426,8 +425,24 @@ export default {
     qsCustomizer (objValue, srcValue) {
       return typeof objValue === 'number' ? parseInt(srcValue, 10) : srcValue
     },
-    resetState () {
+    resetFilters () {
       this.state = Object.assign({}, this.state, this.$options.defaultState)
+    },
+    randomItemFromArray (array) {
+      return array[Math.floor(Math.random() * array.length)]
+    },
+    randomizeFilters () {
+      /*eslint-disable*/
+      // random decade
+      let decadeIndicesAvailable = 
+        _.range(_.size(this.decades))
+          .filter(
+            index => 
+              this.decades[index].count > 0 &&
+              index !== this.state.decadeIndex
+          )
+      this.state.decadeIndex = this.randomItemFromArray(decadeIndicesAvailable)
+      console.log("this.state.decadeIndex", this.state.decadeIndex);
     },
   },
   watch: {
@@ -435,9 +450,9 @@ export default {
       this.showSnackbar(`${this.state.sortAscending ? '☝️' : '👇'} Sorting by <strong>${newValue}</strong>`)
       this.$router.push({ query: Object.assign({}, this.$route.query, { sortBy: newValue })})
     },
-    'state.selectedDecadeIndex': function (newValue) {
-      this.showSnackbar(`✅ Selected <strong>${Object.keys(this.decadeCounts)[newValue]}</strong> decade`)
-      this.$router.push({ query: Object.assign({}, this.$route.query, { selectedDecadeIndex: newValue })})
+    'state.decadeIndex': function (newValue) {
+      this.showSnackbar(`✅ Selected <strong>${this.decades[newValue].name}</strong> decade`)
+      this.$router.push({ query: Object.assign({}, this.$route.query, { decadeIndex: newValue })})
     },
     'state.sortAscending': function (newValue) {
       this.showSnackbar(`${newValue ? '☝️' : '👇'} Sorting in <strong>${newValue ? 'ascending' : 'descending'}</strong> order`)
