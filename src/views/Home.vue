@@ -431,9 +431,8 @@ export default {
     randomItemFromArray (array) {
       return array[Math.floor(Math.random() * array.length)]
     },
-    randomizeFilters () {
       /*eslint-disable*/
-      // random decade
+    randomizeDecade () {
       let decadeIndicesAvailable = 
         _.range(_.size(this.decades))
           .filter(
@@ -443,6 +442,48 @@ export default {
           )
       this.state.decadeIndex = this.randomItemFromArray(decadeIndicesAvailable)
       console.log("this.state.decadeIndex", this.state.decadeIndex);
+    },
+    randomizeLocation () {
+      let locationsAvailable = this.locationsForSelection.filter(l => l.count > 1)
+      if (locationsAvailable.length) {
+        let randomLocation = this.randomItemFromArray(locationsAvailable).name
+        this.state.activeLocationFilters = [randomLocation]
+        return true
+        console.log("randomLocation", randomLocation);  
+      } 
+      else {
+        return false
+      }
+    },
+    randomizeSubject () {
+      let subjectsAvailable = this.subjectsForSelection.filter(s => s.count > 1)
+      if (subjectsAvailable.length) {
+        let randomSubject = this.randomItemFromArray(subjectsAvailable).name
+        this.state.activeSubjectFilters = [randomSubject]
+        return true
+        console.log("randomSubject", randomSubject);  
+      } 
+      else {
+        return false
+      }
+    },
+    randomizeFilters () {
+      this.resetFilters()      
+      this.randomizeDecade()
+      if (_.random(1)) {
+        let isLocationRandomized = this.randomizeLocation()
+        if (!isLocationRandomized) {
+          // no filters in this decade, recursively retry
+          this.randomizeFilters()
+        }
+      }
+      else {
+        let isSubjectRandomized = this.randomizeSubject()
+        if (!isSubjectRandomized) {
+          // no filters in this decade, recursively retry
+          this.randomizeFilters()
+        }
+      }
     },
   },
   watch: {
