@@ -196,7 +196,7 @@ export default {
   width: 100%;
 }
 
-@media screen and ( min-width: calc(2 * 352px + 32px)) {
+@media screen and (min-width: 1140px) {
   .is-expanded .expansion-container {
     flex-wrap: nowrap;
   }
