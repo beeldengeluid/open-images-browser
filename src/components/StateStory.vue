@@ -12,7 +12,7 @@
           v-for="locationFilter in state.activeFilters['locations']" :key="locationFilter"
           :value="locationFilter"
           label small class="ml1 teal white--text font-mono"
-          @click="toggleLocationFilter(locationFilter)"
+          @click="$emit('toggle-active-filter', 'locations', locationFilter)"
         >
           <v-icon small left>room</v-icon>
           <strong>{{ locationFilter }}</strong>
@@ -24,7 +24,7 @@
             v-for="subjectFilter in state.activeFilters['subjects']" :key="subjectFilter"
             :value="subjectFilter"
             label small class="ml1 teal white--text font-mono"
-            @click="toggleSubjectFilter(subjectFilter)"
+            @click="$emit('toggle-active-filter', 'subjects', subjectFilter)"
           >
             <v-icon small left>local_offer</v-icon>
             <strong>{{ subjectFilter }}</strong>
@@ -55,14 +55,6 @@ export default {
     },
     computed: {
       type: Object,
-    },
-  },
-  methods: {
-    toggleSubjectFilter (subjectFilter) {
-      this.$emit('toggle-subject-filter', subjectFilter)
-    },
-    toggleLocationFilter (locationFilter) {
-      this.$emit('toggle-location-filter', locationFilter)
     },
   },
 }

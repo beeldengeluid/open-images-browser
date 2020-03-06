@@ -54,7 +54,7 @@
             <v-chip  
               v-for="subject in subjects" :key="subject" 
               :value="subject"
-              @click="toggleSubjectFilter(subject)"
+              @click="$emit('toggle-active-filter', 'subjects', subject)"
               label
               :class="activeSubjectFilters.includes(subject) ? 'teal white--text' : ''"
             >
@@ -77,7 +77,7 @@
             <v-chip  
               v-for="location in locations" :key="location" 
               :value="location"
-              @click="toggleLocationFilter(location)"
+              @click="$emit('toggle-active-filter', 'locations', location)"
               label
               :class="activeLocationFilters.includes(location) ? 'teal white--text' : ''"
             >
@@ -151,14 +151,6 @@ export default {
   methods: {
     toggleExpanded: function () {
       this.isExpanded = !this.isExpanded
-    },
-    toggleLocationFilter (locationFilter) {
-      this.$emit('toggle-location-filter', locationFilter)
-      this.$forceUpdate()
-    },
-    toggleSubjectFilter (subjectFilter) {
-      this.$emit('toggle-subject-filter', subjectFilter)
-      this.$forceUpdate()
     },
   },
 }

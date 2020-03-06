@@ -20,8 +20,7 @@
           activeLength: itemsFilteredSorted.length,
           totalLength: items.length,
         }"
-        v-on:toggle-location-filter = "onToggleLocationFilter"
-        v-on:toggle-subject-filter = "onToggleSubjectFilter"
+        v-on:toggle-active-filter = "onToggleActiveFilter"
       />
       <v-btn
         @click="randomizeSelection"
@@ -43,7 +42,7 @@
         <FilterList 
           :filters="filtersForSelection['locations']"
           :activeFilters="state.activeFilters['locations']"
-          v-on:toggle-filter = "onToggleLocationFilter"
+          v-on:toggle-active-filter = "onToggleActiveFilter('locations', $event)"
           v-on:toggle-tail = "onToggleTail"
           activeClass="teal"
         />
@@ -53,7 +52,7 @@
         <FilterList 
           :filters="filtersForSelection['subjects']"
           :activeFilters="state.activeFilters['subjects']"
-          v-on:toggle-filter = "onToggleSubjectFilter"
+          v-on:toggle-active-filter = "onToggleActiveFilter('subjects', $event)"
           v-on:toggle-tail = "onToggleTail"
           activeClass="teal"
         />
@@ -68,7 +67,7 @@
               <FilterList 
                 :filters="filtersForSelection['locations']"
                 :activeFilters="state.activeFilters['locations']"
-                v-on:toggle-filter = "onToggleLocationFilter"
+                v-on:toggle-active-filter = "onToggleActiveFilter('locations', $event)"
                 v-on:toggle-tail = "onToggleTail"
                 activeClass="teal"
               />
@@ -82,7 +81,7 @@
               <FilterList 
                 :filters="filtersForSelection['subjects']"
                 :activeFilters="state.activeFilters['subjects']"
-                v-on:toggle-filter = "onToggleSubjectFilter"
+                v-on:toggle-active-filter = "onToggleActiveFilter('subjects', $event)"
                 v-on:toggle-tail = "onToggleTail"
                 activeClass="teal"
               />
@@ -150,8 +149,7 @@
                 :activeSubjectFilters  = "state.activeFilters['subjects']"
                 :locationCountsForSelection = "filterCountsForSelection['locations']"
                 :subjectCountsForSelection  = "filterCountsForSelection['subjects']"
-                v-on:toggle-location-filter = "onToggleLocationFilter"
-                v-on:toggle-subject-filter  = "onToggleSubjectFilter"
+                v-on:toggle-active-filter = "onToggleActiveFilter"
               />
             </div>
           </v-col>
@@ -359,35 +357,20 @@ export default {
     onResize () {
       this.clientWidth = this.getClientWidth()
     },
-    onToggleLocationFilter (filterValue) {
-      if (this.state.activeFilters['locations'].includes(filterValue)) {
-        this.removeLocationFilter(filterValue)
+    onToggleActiveFilter (filterType, filterValue) {
+      if (this.state.activeFilters[filterType].includes(filterValue)) {
+        this.removeActiveFilter(filterType, filterValue)
       } else {
-        this.addLocationFilter(filterValue)
+        this.addActiveFilter(filterType, filterValue)
       }
     },
-    addLocationFilter (filterValue) {
+    addActiveFilter (filterType, filterValue) {
       /* for unclear reason .push() doesn't register correctly in the watch() 
          function, so using .concat() instead */
-      this.state.activeFilters['locations'] = this.state.activeFilters['locations'].concat([filterValue])
+      this.state.activeFilters[filterType] = this.state.activeFilters[filterType].concat([filterValue])
     },
-    removeLocationFilter (filterValue) {
-      this.state.activeFilters['locations'] = this.state.activeFilters['locations'].filter(lf => lf !== filterValue)
-    },
-    onToggleSubjectFilter (filterValue) {
-      if (this.state.activeFilters['subjects'].includes(filterValue)) {
-        this.removeSubjectFilter(filterValue)
-      } else {
-        this.addSubjectFilter(filterValue)
-      }
-    },
-    addSubjectFilter (filterValue) {
-      /* for unclear reason .push() doesn't register correctly in the watch() 
-         function, so using .concat() instead */
-      this.state.activeFilters['subjects'] = this.state.activeFilters['subjects'].concat([filterValue])
-    },
-    removeSubjectFilter (filterValue) {
-      this.state.activeFilters['subjects'] = this.state.activeFilters['subjects'].filter(lf => lf !== filterValue)
+    removeActiveFilter (filterType, filterValue) {
+      this.state.activeFilters[filterType] = this.state.activeFilters[filterType].filter(lf => lf !== filterValue)
     },
     filterByYear (item) {
       return this.dateToYear(item['date']) >= this.selectedYearRange[0] &&
