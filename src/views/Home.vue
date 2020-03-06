@@ -13,30 +13,24 @@
           </v-tooltip>.
         </p>
       </header>
-      <v-container fluid class="pa0">
-        <v-row no-gutters>
-          <v-col cols="auto">
-            <StateStory 
-              :state="state" 
-              :computed="{
-                selectedYearRange: selectedYearRange,
-                activeLength: itemsFilteredSorted.length,
-                totalLength: items.length,
-              }"
-              v-on:toggle-active-filter = "onToggleActiveFilter"
-            />
-          </v-col>
-          <v-col class="mt3 tr">
-            <v-btn
-              @click="randomizeSelection"
-              outlined small
-              class="relative-bottom"
-            >
-              Randomize Selection
-            </v-btn>
-          </v-col>
-        </v-row>
-      </v-container>
+      <div class="flex flex-wrap">
+        <StateStory 
+          :state="state" 
+          :computed="{
+            selectedYearRange: selectedYearRange,
+            activeLength: itemsFilteredSorted.length,
+            totalLength: items.length,
+          }"
+          v-on:toggle-active-filter = "onToggleActiveFilter"
+        />
+        <v-btn
+          @click="randomizeSelection"
+          outlined small
+          class="ml-auto self-end mt3"
+        >
+          Randomize Selection
+        </v-btn>
+      </div>
       <PeriodChart 
         :barSeries="decadeCounts" 
         :lineSeries="decadeCountsForSelection" 
@@ -97,8 +91,8 @@
             </div>
           </v-col>
           <v-col>
-            <div class="mb3">
-              <h3 class="dib mr3 mb2">
+            <div class="mb3 flex flex-wrap">
+              <h3 class="dib mr3 mb3">
                 <span class="bb b--secondary mr2">Videos in selection <span class="fw1">{{itemsFilteredSorted.length}}</span></span>
                 <span class="fw1 grey--text bb b--primary-accent">(of {{decades[state.decadeIndex].count}} in decade)</span>
               </h3>
@@ -106,6 +100,7 @@
                 @click="resetState"
                 v-show="hasActiveFilters"
                 small outlined
+                class="ml-auto"
               >
                 Clear Selection
               </v-btn>
