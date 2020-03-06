@@ -24,7 +24,7 @@
         v-on:toggle-subject-filter = "onToggleSubjectFilter"
       />
       <v-btn
-        @click="randomizeFilters"
+        @click="randomizeSelection"
         outlined
       >
         Random!
@@ -42,7 +42,7 @@
         </h3>
         <FilterList 
           :filters="filtersForSelection['locations']"
-          :activeFilters="state.activeLocationFilters"
+          :activeFilters="state.activeFilters['locations']"
           v-on:toggle-filter = "onToggleLocationFilter"
           v-on:toggle-tail = "onToggleTail"
           activeClass="teal"
@@ -52,7 +52,7 @@
         </h3>
         <FilterList 
           :filters="filtersForSelection['subjects']"
-          :activeFilters="state.activeSubjectFilters"
+          :activeFilters="state.activeFilters['subjects']"
           v-on:toggle-filter = "onToggleSubjectFilter"
           v-on:toggle-tail = "onToggleTail"
           activeClass="teal"
@@ -67,7 +67,7 @@
               </h3>
               <FilterList 
                 :filters="filtersForSelection['locations']"
-                :activeFilters="state.activeLocationFilters"
+                :activeFilters="state.activeFilters['locations']"
                 v-on:toggle-filter = "onToggleLocationFilter"
                 v-on:toggle-tail = "onToggleTail"
                 activeClass="teal"
@@ -81,7 +81,7 @@
               </h3>
               <FilterList 
                 :filters="filtersForSelection['subjects']"
-                :activeFilters="state.activeSubjectFilters"
+                :activeFilters="state.activeFilters['subjects']"
                 v-on:toggle-filter = "onToggleSubjectFilter"
                 v-on:toggle-tail = "onToggleTail"
                 activeClass="teal"
@@ -146,8 +146,8 @@
                 :displayTitle    = "state.displayFieldsSelected.includes('title')"
                 :displayYear     = "state.displayFieldsSelected.includes('year')"
                 :displayThumb    = "state.displayFieldsSelected.includes('thumb')"
-                :activeLocationFilters = "state.activeLocationFilters"
-                :activeSubjectFilters  = "state.activeSubjectFilters"
+                :activeLocationFilters = "state.activeFilters['locations']"
+                :activeSubjectFilters  = "state.activeFilters['subjects']"
                 :locationCountsForSelection = "filterCountsForSelection['locations']"
                 :subjectCountsForSelection  = "filterCountsForSelection['subjects']"
                 v-on:toggle-location-filter = "onToggleLocationFilter"
@@ -199,8 +199,10 @@ export default {
         sortBy: 'date',
         sortAscending: true,
         displayFieldsSelected: ['thumb', 'year'],
-        activeLocationFilters: [],
-        activeSubjectFilters: [],
+        activeFilters: {
+          locations: [],
+          subjects: [],
+        },
       },
       zoom: {
         value: 3,
@@ -219,8 +221,10 @@ export default {
   },
   static: {
     defaultState: {
-      activeLocationFilters: [],
-      activeSubjectFilters: [],
+      activeFilters: {
+        locations: [],
+        subjects: [],
+      },
     },
     sortFields: ['id','date', 'title'],
     displayFields: ['title', 'year', 'thumb'],
@@ -319,7 +323,7 @@ export default {
       }, {})
     },
     hasActiveFilters () {
-      return this.state.activeLocationFilters.length || this.state.activeSubjectFilters.length
+      return this.state.activeFilters['locations'].length || this.state.activeFilters['subjects'].length
     },
     decadeCounts () {
       return this.getDecadeCounts(this.items, this.decadeMin, this.decadeMax)
@@ -356,7 +360,7 @@ export default {
       this.clientWidth = this.getClientWidth()
     },
     onToggleLocationFilter (filterValue) {
-      if (this.state.activeLocationFilters.includes(filterValue)) {
+      if (this.state.activeFilters['locations'].includes(filterValue)) {
         this.removeLocationFilter(filterValue)
       } else {
         this.addLocationFilter(filterValue)
@@ -365,13 +369,13 @@ export default {
     addLocationFilter (filterValue) {
       /* for unclear reason .push() doesn't register correctly in the watch() 
          function, so using .concat() instead */
-      this.state.activeLocationFilters = this.state.activeLocationFilters.concat([filterValue])
+      this.state.activeFilters['locations'] = this.state.activeFilters['locations'].concat([filterValue])
     },
     removeLocationFilter (filterValue) {
-      this.state.activeLocationFilters = this.state.activeLocationFilters.filter(lf => lf !== filterValue)
+      this.state.activeFilters['locations'] = this.state.activeFilters['locations'].filter(lf => lf !== filterValue)
     },
     onToggleSubjectFilter (filterValue) {
-      if (this.state.activeSubjectFilters.includes(filterValue)) {
+      if (this.state.activeFilters['subjects'].includes(filterValue)) {
         this.removeSubjectFilter(filterValue)
       } else {
         this.addSubjectFilter(filterValue)
@@ -380,20 +384,20 @@ export default {
     addSubjectFilter (filterValue) {
       /* for unclear reason .push() doesn't register correctly in the watch() 
          function, so using .concat() instead */
-      this.state.activeSubjectFilters = this.state.activeSubjectFilters.concat([filterValue])
+      this.state.activeFilters['subjects'] = this.state.activeFilters['subjects'].concat([filterValue])
     },
     removeSubjectFilter (filterValue) {
-      this.state.activeSubjectFilters = this.state.activeSubjectFilters.filter(lf => lf !== filterValue)
+      this.state.activeFilters['subjects'] = this.state.activeFilters['subjects'].filter(lf => lf !== filterValue)
     },
     filterByYear (item) {
       return this.dateToYear(item['date']) >= this.selectedYearRange[0] &&
              this.dateToYear(item['date']) <= this.selectedYearRange[1]
     },
     filterByLocation (item) {
-      return this.state.activeLocationFilters.every(lf => item['locations'].includes(lf)) || !this.state.activeLocationFilters.length
+      return this.state.activeFilters['locations'].every(lf => item['locations'].includes(lf)) || !this.state.activeFilters['locations'].length
     },
     filterBySubject (item) {
-      return this.state.activeSubjectFilters.every(sf => item['subjects'].includes(sf)) || !this.state.activeSubjectFilters.length
+      return this.state.activeFilters['subjects'].every(sf => item['subjects'].includes(sf)) || !this.state.activeFilters['subjects'].length
     },
     onDecadeClick (dataPointIndex) {
       // set decade
@@ -438,7 +442,7 @@ export default {
       return typeof objValue === 'number' ? parseInt(srcValue, 10) : srcValue
     },
     resetState () {
-      this.state = Object.assign({}, this.state, this.$options.static.defaultState)
+      this.state.activeFilters = Object.assign({}, this.$options.static.defaultState.activeFilters)
     },
     randomItemFromArray (array) {
       return array[Math.floor(Math.random() * array.length)]
@@ -454,11 +458,23 @@ export default {
       this.state.decadeIndex = this.randomItemFromArray(decadeIndicesAvailable)
       
     },
+    // randomizeFilter (filterField) {
+    //   let locationsAvailable = this.filtersForSelection['locations'].filter(l => l.count > 1)
+    //   if (locationsAvailable.length) {
+    //     let randomLocation = this.randomItemFromArray(locationsAvailable).name
+    //     this.state.activeFilters['locations'] = [randomLocation]
+    //     return true
+          
+    //   } 
+    //   else {
+    //     return false
+    //   }
+    // },
     randomizeLocation () {
       let locationsAvailable = this.filtersForSelection['locations'].filter(l => l.count > 1)
       if (locationsAvailable.length) {
         let randomLocation = this.randomItemFromArray(locationsAvailable).name
-        this.state.activeLocationFilters = [randomLocation]
+        this.state.activeFilters['locations'] = [randomLocation]
         return true
           
       } 
@@ -470,7 +486,7 @@ export default {
       let subjectsAvailable = this.filtersForSelection['subjects'].filter(s => s.count > 1)
       if (subjectsAvailable.length) {
         let randomSubject = this.randomItemFromArray(subjectsAvailable).name
-        this.state.activeSubjectFilters = [randomSubject]
+        this.state.activeFilters['subjects'] = [randomSubject]
         return true
           
       } 
@@ -478,21 +494,21 @@ export default {
         return false
       }
     },
-    randomizeFilters () {
+    randomizeSelection () {
       this.resetState()      
       this.randomizeDecade()
       if (_.random(1)) {
         let isLocationRandomized = this.randomizeLocation()
         if (!isLocationRandomized) {
           // no filters in this decade, recursively retry
-          this.randomizeFilters()
+          this.randomizeSelection()
         }
       }
       else {
         let isSubjectRandomized = this.randomizeSubject()
         if (!isSubjectRandomized) {
           // no filters in this decade, recursively retry
-          this.randomizeFilters()
+          this.randomizeSelection()
         }
       }
     },
@@ -510,29 +526,19 @@ export default {
       this.showSnackbar(`${newValue ? '☝️' : '👇'} Sorting in <strong>${newValue ? 'ascending' : 'descending'}</strong> order`)
       this.$router.push({ query: Object.assign({}, this.$route.query, { sortAscending: newValue })})
     },
-    'state.activeLocationFilters': function (newValue, oldValue) {
-      let added = _.difference(newValue, oldValue)
-      if (added.length) {
-        this.showSnackbar(`📍 Added location filter <strong>${added[0]}</strong>`)
-      } else {
-        let removed = _.difference(oldValue, newValue)
-        if (removed.length) {
-          this.showSnackbar(`❌ Removed location filter <strong>${removed[0]}</strong>`)
+    'state.activeFilters': function (newValue, oldValue) {
+      this.$options.static.filterFields.forEach(field => {
+        let added = _.difference(newValue[field], oldValue[field])
+        if (added.length) {
+          this.showSnackbar(`📍 Added location filter <strong>${added[0]}</strong>`)
+        } else {
+          let removed = _.difference(oldValue[field], newValue[field])
+          if (removed.length) {
+            this.showSnackbar(`❌ Removed location filter <strong>${removed[0]}</strong>`)
+          }
         }
-      }
-      this.$router.push({ query: Object.assign({}, this.$route.query, { activeLocationFilters: newValue })})
-    },
-    'state.activeSubjectFilters': function (newValue, oldValue) {
-      let added = _.difference(newValue, oldValue)
-      if (added.length) {
-        this.showSnackbar(`🏷 Added subject filter <strong>${added[0]}</strong>`)
-      } else {
-        let removed = _.difference(oldValue, newValue)
-        if (removed.length) {
-          this.showSnackbar(`❌ Removed subject filter <strong>${removed[0]}</strong>`)
-        }
-      }
-      this.$router.push({ query: Object.assign({}, this.$route.query, { activeSubjectFilters: newValue })})
+        this.$router.push({ query: Object.assign({}, this.$route.query, { activeFilters: newValue })})        
+      })
     },
     'state.displayFieldsSelected': function (newValue, oldValue) {
       let added = _.difference(newValue, oldValue)
@@ -549,6 +555,8 @@ export default {
   },
   created() {
     _.assignWith(this.state, this.$route.query, this.qsCustomizer)
+    // ensure activeFilters has both all default defined in case not in query
+    this.state = Object.assign({}, this.state, this.$options.static.defaultState)
     window.addEventListener("resize", _.debounce(this.onResize), 400)
   },
   destroyed() {

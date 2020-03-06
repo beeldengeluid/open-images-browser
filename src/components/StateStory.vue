@@ -4,12 +4,12 @@
     The current selection, ranging
     from <span class="ph1 bg-primary-accent white--text font-mono">{{computed.selectedYearRange[0]}}</span>
     to <span class="ph1 bg-primary-accent white--text font-mono">{{computed.selectedYearRange[1]}}</span>,
-    <span v-if="state.activeLocationFilters.length || state.activeSubjectFilters.length">
+    <span v-if="state.activeFilters['locations'].length || state.activeFilters['subjects'].length">
       <br>
       <span>filtered for</span>
-      <span v-if="state.activeLocationFilters.length">
+      <span v-if="state.activeFilters['locations'].length">
         <v-chip  
-          v-for="locationFilter in state.activeLocationFilters" :key="locationFilter"
+          v-for="locationFilter in state.activeFilters['locations']" :key="locationFilter"
           :value="locationFilter"
           label small class="ml1 teal white--text font-mono"
           @click="toggleLocationFilter(locationFilter)"
@@ -19,9 +19,9 @@
           <v-icon small right>cancel</v-icon>
         </v-chip>
       </span>
-      <span v-if="state.activeSubjectFilters.length">
+      <span v-if="state.activeFilters['subjects'].length">
           <v-chip  
-            v-for="subjectFilter in state.activeSubjectFilters" :key="subjectFilter"
+            v-for="subjectFilter in state.activeFilters['subjects']" :key="subjectFilter"
             :value="subjectFilter"
             label small class="ml1 teal white--text font-mono"
             @click="toggleSubjectFilter(subjectFilter)"
