@@ -524,9 +524,10 @@ export default {
     },
   },
   created() {
-    _.assignWith(this.state, this.$route.query, this.qsCustomizer)
-    // ensure activeFilters has both all default defined in case not in query
-    this.state = Object.assign({}, this.state, this.$options.static.defaultState)
+    let queryParams = _.assignWith(this.state, this.$route.query, this.qsCustomizer)
+    // ensure activeFilters has all default keys defined in case not in queryParams
+    this.state.activeFilters = Object.assign({}, this.$options.static.defaultState.activeFilters, queryParams.activeFilters)
+
     window.addEventListener("resize", _.debounce(this.onResize), 400)
   },
   destroyed() {
