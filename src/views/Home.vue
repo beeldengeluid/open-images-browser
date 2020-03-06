@@ -257,17 +257,17 @@ export default {
     itemsFiltered () {
       return this.itemsPerDecade[this.decades[this.state.decadeIndex].name]
         .filter(
-          i => 
-            this.filterByLocation(i) && 
-            this.filterBySubject(i)
+          i => this.$options.static.filterFields.every(
+            filterField => this.filterByFilterField (filterField, i)
+          )
         )
     },
     itemsFilteredAllDecades () {
       return this.items
         .filter(
-          i => 
-            this.filterByLocation(i) && 
-            this.filterBySubject(i)
+          i => this.$options.static.filterFields.every(
+            filterField => this.filterByFilterField (filterField, i)
+          )
         )
     },
     itemsFilteredSorted () {
@@ -321,7 +321,7 @@ export default {
       }, {})
     },
     hasActiveFilters () {
-      return this.state.activeFilters['locations'].length || this.state.activeFilters['subjects'].length
+      return _.flatten(_.values(this.state.activeFilters)).length > 0
     },
     decadeCounts () {
       return this.getDecadeCounts(this.items, this.decadeMin, this.decadeMax)
@@ -376,11 +376,8 @@ export default {
       return this.dateToYear(item['date']) >= this.selectedYearRange[0] &&
              this.dateToYear(item['date']) <= this.selectedYearRange[1]
     },
-    filterByLocation (item) {
-      return this.state.activeFilters['locations'].every(lf => item['locations'].includes(lf)) || !this.state.activeFilters['locations'].length
-    },
-    filterBySubject (item) {
-      return this.state.activeFilters['subjects'].every(sf => item['subjects'].includes(sf)) || !this.state.activeFilters['subjects'].length
+    filterByFilterField (FilterField, item) {
+      return this.state.activeFilters[FilterField].every(lf => item[FilterField].includes(lf)) || !this.state.activeFilters[FilterField].length
     },
     onDecadeClick (dataPointIndex) {
       // set decade
@@ -439,20 +436,18 @@ export default {
               index !== this.state.decadeIndex
           )
       this.state.decadeIndex = this.randomItemFromArray(decadeIndicesAvailable)
-      
     },
-    // randomizeFilter (filterField) {
-    //   let locationsAvailable = this.filtersForSelection['locations'].filter(l => l.count > 1)
-    //   if (locationsAvailable.length) {
-    //     let randomLocation = this.randomItemFromArray(locationsAvailable).name
-    //     this.state.activeFilters['locations'] = [randomLocation]
-    //     return true
-          
-    //   } 
-    //   else {
-    //     return false
-    //   }
-    // },
+    randomizeFilter (filterType) {
+      let filtersAvailable = this.filtersForSelection[filterType].filter(filter => filter.count > 1)
+      if (filtersAvailable.length) {
+        let randomFilter = this.randomItemFromArray(filtersAvailable).name
+        this.state.activeFilters[filterType] = [randomFilter]
+        return true
+      } 
+      else {
+        return false
+      }
+    },
     randomizeLocation () {
       let locationsAvailable = this.filtersForSelection['locations'].filter(l => l.count > 1)
       if (locationsAvailable.length) {
@@ -480,19 +475,11 @@ export default {
     randomizeSelection () {
       this.resetState()      
       this.randomizeDecade()
-      if (_.random(1)) {
-        let isLocationRandomized = this.randomizeLocation()
-        if (!isLocationRandomized) {
-          // no filters in this decade, recursively retry
-          this.randomizeSelection()
-        }
-      }
-      else {
-        let isSubjectRandomized = this.randomizeSubject()
-        if (!isSubjectRandomized) {
-          // no filters in this decade, recursively retry
-          this.randomizeSelection()
-        }
+      
+      let isRandomized = this.randomizeFilter(this.$options.static.filterFields[_.random(1)])
+      if (!isRandomized) {
+        // no filters in this decade, recursively retry
+        this.randomizeSelection()
       }
     },
   },
