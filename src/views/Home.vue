@@ -34,7 +34,7 @@
         :lineSeries="decadeCountsForSelection" 
         v-on:decade-click="onDecadeClick"
         :decadeIndex="state.decadeIndex" 
-        :colors="{ bar: this.colors.inactive, line: this.colors.secondary, background: this.colors.background }" 
+        :colors="{ bar: $options.static.colors.inactive, line: $options.static.colors.secondary, background: $options.static.colors.background }" 
       />
       <div class="db dn-l">
         <h3 class="mb2">
@@ -106,7 +106,7 @@
               <div class="dflex items-center mr3 mr4-l">
                 <span class="mr2 fw7">Sort by</span>
                 <v-chip-group v-model="state.sortBy" active-class="indigo" mandatory class="fw5 font-mono">
-                  <v-chip v-for="sortField in sortFields" :key="sortField" :value="sortField">
+                  <v-chip v-for="sortField in $options.static.sortFields" :key="sortField" :value="sortField">
                     {{ sortField }}
                   </v-chip>
                 </v-chip-group>
@@ -117,7 +117,7 @@
               <div class="dflex items-center">
                 <span class="pr2 fw7">Display</span>
                 <v-chip-group v-model="state.displayFieldsSelected" active-class="green" multiple class="fw5 font-mono">
-                  <v-chip v-for="displayField in displayFields" :key="displayField" :value="displayField">
+                  <v-chip v-for="displayField in $options.static.displayFields" :key="displayField" :value="displayField">
                     {{displayField}}
                   </v-chip>
                 </v-chip-group>
@@ -200,23 +200,13 @@ export default {
         sortAscending: true,
         displayFieldsSelected: ['thumb', 'year'],
       },
-      sortFields: ['id','date', 'title'],
-      displayFields: ['title', 'year', 'thumb'],
       zoom: {
         value: 3,
         min: 0,
         max: 6,
         step: 1,
       },
-      itemAspectRatio: 352 / 288,
-      itemMargin: 4,
-      clientWidth: this.getClientWidth(),
-      colors: {
-        primary: '#5E35B1', 
-        secondary: '#009688', 
-        background: '#121212',
-        inactive: '#555',
-      },
+      clientWidth: this.getClientWidth(),      
       chartSeries: [],
       snackbar:{
         state: false,
@@ -225,9 +215,21 @@ export default {
       }
     }
   },
-  defaultState: {
-    activeLocationFilters: [],
-    activeSubjectFilters: [],
+  static: {
+    defaultState: {
+      activeLocationFilters: [],
+      activeSubjectFilters: [],
+    },
+    sortFields: ['id','date', 'title'],
+    displayFields: ['title', 'year', 'thumb'],
+    itemAspectRatio: 352 / 288,
+    itemMargin: 4,
+    colors: {
+      primary: '#5E35B1', 
+      secondary: '#009688', 
+      background: '#121212',
+      inactive: '#555',
+    },
   },
   computed: {
     itemsPerDecade () {
@@ -235,10 +237,10 @@ export default {
     },
     itemWidth () {
       let horizontalMarkupMargin = 32
-      return (this.clientWidth - horizontalMarkupMargin) / this.noThumbsPerRow - this.itemMargin
+      return (this.clientWidth - horizontalMarkupMargin) / this.noThumbsPerRow - this.$options.static.itemMargin
     },
     itemHeight () {
-      return this.itemWidth / this.itemAspectRatio
+      return this.itemWidth / this.$options.static.itemAspectRatio
     },
     noThumbsPerRow () {
       return Math.pow(2, this.zoom.value)
@@ -428,7 +430,7 @@ export default {
       return typeof objValue === 'number' ? parseInt(srcValue, 10) : srcValue
     },
     resetFilters () {
-      this.state = Object.assign({}, this.state, this.$options.defaultState)
+      this.state = Object.assign({}, this.state, this.$options.static.defaultState)
     },
     randomItemFromArray (array) {
       return array[Math.floor(Math.random() * array.length)]
@@ -539,7 +541,7 @@ export default {
     },
   },
   created() {
-    this.state = Object.assign({}, this.state, this.$options.defaultState)
+    this.state = Object.assign({}, this.state, this.$options.static.defaultState)
     _.assignWith(this.state, this.$route.query, this.qsCustomizer)
     window.addEventListener("resize", _.debounce(this.onResize), 400)
   },
