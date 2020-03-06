@@ -38,20 +38,20 @@
       />
       <div class="db dn-l">
         <h3 class="mb2">
-          <span class="bb b--secondary">Locations in selection <span class="fw1">{{filtersForSelection['location'].length}}</span></span>
+          <span class="bb b--secondary">Locations in selection <span class="fw1">{{filtersForSelection['locations'].length}}</span></span>
         </h3>
         <FilterList 
-          :filters="filtersForSelection['location']"
+          :filters="filtersForSelection['locations']"
           :activeFilters="state.activeLocationFilters"
           v-on:toggle-filter = "onToggleLocationFilter"
           v-on:toggle-tail = "onToggleTail"
           activeClass="teal"
         />
         <h3 class="mb2">
-          <span class="bb b--secondary">Subjects in selection <span class="fw1">{{filtersForSelection['subject'].length}}</span></span>
+          <span class="bb b--secondary">Subjects in selection <span class="fw1">{{filtersForSelection['subjects'].length}}</span></span>
         </h3>
         <FilterList 
-          :filters="filtersForSelection['subject']"
+          :filters="filtersForSelection['subjects']"
           :activeFilters="state.activeSubjectFilters"
           v-on:toggle-filter = "onToggleSubjectFilter"
           v-on:toggle-tail = "onToggleTail"
@@ -63,10 +63,10 @@
           <v-col cols="auto" class="dn db-l">
             <div class="mw5">
               <h3 class="mb3">
-                <span class="bb b--secondary">Locations in selection <span class="fw1">{{filtersForSelection['location'].length}}</span></span>
+                <span class="bb b--secondary">Locations in selection <span class="fw1">{{filtersForSelection['locations'].length}}</span></span>
               </h3>
               <FilterList 
-                :filters="filtersForSelection['location']"
+                :filters="filtersForSelection['locations']"
                 :activeFilters="state.activeLocationFilters"
                 v-on:toggle-filter = "onToggleLocationFilter"
                 v-on:toggle-tail = "onToggleTail"
@@ -77,10 +77,10 @@
           <v-col cols="auto" class="dn db-l">
             <div class="mw5">
               <h3 class="mb3">
-                <span class="bb b--secondary">Subjects in selection <span class="fw1">{{filtersForSelection['subject'].length}}</span></span>
+                <span class="bb b--secondary">Subjects in selection <span class="fw1">{{filtersForSelection['subjects'].length}}</span></span>
               </h3>
               <FilterList 
-                :filters="filtersForSelection['subject']"
+                :filters="filtersForSelection['subjects']"
                 :activeFilters="state.activeSubjectFilters"
                 v-on:toggle-filter = "onToggleSubjectFilter"
                 v-on:toggle-tail = "onToggleTail"
@@ -95,7 +95,7 @@
                 <span class="fw1 grey--text bb b--primary-accent">(of {{decades[state.decadeIndex].count}} in decade)</span>
               </h3>
               <v-btn 
-                @click="resetFilters"
+                @click="resetState"
                 v-show="hasActiveFilters"
                 small outlined
               >
@@ -148,8 +148,8 @@
                 :displayThumb    = "state.displayFieldsSelected.includes('thumb')"
                 :activeLocationFilters = "state.activeLocationFilters"
                 :activeSubjectFilters  = "state.activeSubjectFilters"
-                :locationCountsForSelection = "countsForSelection['location']"
-                :subjectCountsForSelection  = "countsForSelection['subject']"
+                :locationCountsForSelection = "filterCountsForSelection['locations']"
+                :subjectCountsForSelection  = "filterCountsForSelection['subjects']"
                 v-on:toggle-location-filter = "onToggleLocationFilter"
                 v-on:toggle-subject-filter  = "onToggleSubjectFilter"
               />
@@ -199,6 +199,8 @@ export default {
         sortBy: 'date',
         sortAscending: true,
         displayFieldsSelected: ['thumb', 'year'],
+        activeLocationFilters: [],
+        activeSubjectFilters: [],
       },
       zoom: {
         value: 3,
@@ -222,6 +224,7 @@ export default {
     },
     sortFields: ['id','date', 'title'],
     displayFields: ['title', 'year', 'thumb'],
+    filterFields: ['locations', 'subjects'],
     itemAspectRatio: 352 / 288,
     itemMargin: 4,
     colors: {
@@ -286,29 +289,34 @@ export default {
     decadeMax () {
       return Math.floor(this.yearMax / 10) * 10
     },
-    countsForSelection () {
-      let locationNames = _.flatMap(this.itemsFilteredSorted, i => i['locations'])
-      let locationCountsForSelection = _.countBy(locationNames)
-
-      let subjectNames = _.flatMap(this.itemsFilteredSorted, i => i['subjects']) 
-      let subjectCountsForSelection = _.countBy(subjectNames)
-
-      return {
-        location: locationCountsForSelection,
-        subject: subjectCountsForSelection,
+    filterCountsForSelection () {
+      const getCounts = (items, fieldName) => {
+        let names = _.flatMap(items, i => i[fieldName])
+        return _.countBy(names)
       }
+
+      /// more readable, less elegant?
+      // filterCounts = {}
+      // this.$options.static.filterFields.forEach(filterField => {
+      //   filterCounts[filterField] = getCounts(this.itemsFilteredSorted, fitlerField)
+      // })
+      // return filterCounts
+      
+      return this.$options.static.filterFields.reduce((filterCountsAccumulator, currentFilterField) => {
+        filterCountsAccumulator[currentFilterField] = getCounts(this.itemsFilteredSorted, currentFilterField)
+        return filterCountsAccumulator
+      }, {})
     },
     filtersForSelection () {
-      let locationsForSelection = this.objectToCollection(this.countsForSelection['location'], 'name', 'count')
-      let locationsForSelectionSorted = _.orderBy(locationsForSelection, ['count', 'name'], ['desc', 'asc'])
-
-      let subjectsForSelection = this.objectToCollection(this.countsForSelection['subject'], 'name', 'count')
-      let subjectsForSelectionSorted = _.orderBy(subjectsForSelection, ['count', 'name'], ['desc', 'asc'])
-
-      return {
-        location: locationsForSelectionSorted,
-        subject: subjectsForSelectionSorted,
+      const getFiltersOrdered = (filterCounts) => {
+        let filtersForSelection = this.objectToCollection(filterCounts, 'name', 'count')
+        return _.orderBy(filtersForSelection, ['count', 'name'], ['desc', 'asc'])        
       }
+
+      return this.$options.static.filterFields.reduce((filtersAccumulator, currentFilterField) => {
+        filtersAccumulator[currentFilterField] = getFiltersOrdered(this.filterCountsForSelection[currentFilterField])
+        return filtersAccumulator
+      }, {})
     },
     hasActiveFilters () {
       return this.state.activeLocationFilters.length || this.state.activeSubjectFilters.length
@@ -429,13 +437,12 @@ export default {
     qsCustomizer (objValue, srcValue) {
       return typeof objValue === 'number' ? parseInt(srcValue, 10) : srcValue
     },
-    resetFilters () {
+    resetState () {
       this.state = Object.assign({}, this.state, this.$options.static.defaultState)
     },
     randomItemFromArray (array) {
       return array[Math.floor(Math.random() * array.length)]
     },
-      /*eslint-disable*/
     randomizeDecade () {
       let decadeIndicesAvailable = 
         _.range(_.size(this.decades))
@@ -445,34 +452,34 @@ export default {
               index !== this.state.decadeIndex
           )
       this.state.decadeIndex = this.randomItemFromArray(decadeIndicesAvailable)
-      console.log("this.state.decadeIndex", this.state.decadeIndex);
+      
     },
     randomizeLocation () {
-      let locationsAvailable = this.filtersForSelection['location'].filter(l => l.count > 1)
+      let locationsAvailable = this.filtersForSelection['locations'].filter(l => l.count > 1)
       if (locationsAvailable.length) {
         let randomLocation = this.randomItemFromArray(locationsAvailable).name
         this.state.activeLocationFilters = [randomLocation]
         return true
-        console.log("randomLocation", randomLocation);  
+          
       } 
       else {
         return false
       }
     },
     randomizeSubject () {
-      let subjectsAvailable = this.filtersForSelection['subject'].filter(s => s.count > 1)
+      let subjectsAvailable = this.filtersForSelection['subjects'].filter(s => s.count > 1)
       if (subjectsAvailable.length) {
         let randomSubject = this.randomItemFromArray(subjectsAvailable).name
         this.state.activeSubjectFilters = [randomSubject]
         return true
-        console.log("randomSubject", randomSubject);  
+          
       } 
       else {
         return false
       }
     },
     randomizeFilters () {
-      this.resetFilters()      
+      this.resetState()      
       this.randomizeDecade()
       if (_.random(1)) {
         let isLocationRandomized = this.randomizeLocation()
@@ -541,7 +548,6 @@ export default {
     },
   },
   created() {
-    this.state = Object.assign({}, this.state, this.$options.static.defaultState)
     _.assignWith(this.state, this.$route.query, this.qsCustomizer)
     window.addEventListener("resize", _.debounce(this.onResize), 400)
   },
