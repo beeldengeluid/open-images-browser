@@ -13,21 +13,30 @@
           </v-tooltip>.
         </p>
       </header>
-      <StateStory 
-        :state="state" 
-        :computed="{
-          selectedYearRange: selectedYearRange,
-          activeLength: itemsFilteredSorted.length,
-          totalLength: items.length,
-        }"
-        v-on:toggle-active-filter = "onToggleActiveFilter"
-      />
-      <v-btn
-        @click="randomizeSelection"
-        outlined
-      >
-        Random!
-      </v-btn>
+      <v-container fluid class="pa0">
+        <v-row no-gutters>
+          <v-col cols="auto">
+            <StateStory 
+              :state="state" 
+              :computed="{
+                selectedYearRange: selectedYearRange,
+                activeLength: itemsFilteredSorted.length,
+                totalLength: items.length,
+              }"
+              v-on:toggle-active-filter = "onToggleActiveFilter"
+            />
+          </v-col>
+          <v-col class="mt3 tr">
+            <v-btn
+              @click="randomizeSelection"
+              outlined small
+              class="relative-bottom"
+            >
+              Randomize Selection
+            </v-btn>
+          </v-col>
+        </v-row>
+      </v-container>
       <PeriodChart 
         :barSeries="decadeCounts" 
         :lineSeries="decadeCountsForSelection" 
@@ -605,5 +614,9 @@ https://github.com/vuetifyjs/vuetify/commit/4f151bbdf4388e76d92920ca19c6271c022e
 }
 .bg-primary-accent {
   background-color: var(--primary-accent-color);
+}
+.relative-bottom {
+  top: 100%;
+  transform: translateY(-100%);
 }
 </style>
