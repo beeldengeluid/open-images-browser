@@ -513,11 +513,11 @@ export default {
       this.$options.static.filterFields.forEach(field => {
         let added = _.difference(newValue[field], oldValue[field])
         if (added.length) {
-          this.showSnackbar(`📍 Added location filter <strong>${added[0]}</strong>`)
+          this.showSnackbar(`👓 Added ${field} filter <strong>${added[0]}</strong>`)
         } else {
           let removed = _.difference(oldValue[field], newValue[field])
           if (removed.length) {
-            this.showSnackbar(`❌ Removed location filter <strong>${removed[0]}</strong>`)
+            this.showSnackbar(`❌ Removed ${field} filter <strong>${removed[0]}</strong>`)
           }
         }
         this.$router.push({ query: Object.assign({}, this.$route.query, { activeFilters: newValue })})        
