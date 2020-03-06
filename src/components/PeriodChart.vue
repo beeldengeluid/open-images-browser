@@ -16,13 +16,13 @@ export default {
     }
   },
   props: {
-    selectedDecadeIndex: { type: Number },
+    decadeIndex: { type: Number },
     barSeries: { type: Object },
     lineSeries: { type: Object },
     colors: { type: Object },
   },
   mounted () {
-    this.$refs.apexPeriodChart.toggleDataPointSelection(0,this.selectedDecadeIndex)
+    this.$refs.apexPeriodChart.toggleDataPointSelection(0,this.decadeIndex)
   },
   computed: {
     series () {
@@ -103,8 +103,8 @@ export default {
     },
   },
   watch: {
-    selectedDecadeIndex (newValue) {
-      // toggle DataPointSelection in case selectedDecadeIndex is changed indirectly (not via click), e.g. by resetState
+    decadeIndex (newValue) {
+      // toggle DataPointSelection in case decadeIndex is changed indirectly (not via click), e.g. by resetState
       if (this.$refs.apexPeriodChart.chart.w.globals.selectedDataPoints[0][0] !== newValue) {
         this.$refs.apexPeriodChart.toggleDataPointSelection(0,newValue)
       }
