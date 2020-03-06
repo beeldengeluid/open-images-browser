@@ -28,7 +28,7 @@
           outlined small
           class="ml-auto self-end mt3"
         >
-          Randomize Selection
+          <v-icon left>shuffle</v-icon>Randomize Selection
         </v-btn>
       </div>
       <PeriodChart 
@@ -102,7 +102,7 @@
                 small outlined
                 class="ml-auto"
               >
-                Clear Selection
+                <v-icon left>delete_outline</v-icon>Clear Selection
               </v-btn>
             </div>
             <div class="dflex flex-wrap mb3">
