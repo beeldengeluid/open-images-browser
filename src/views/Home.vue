@@ -200,7 +200,7 @@ export default {
         decadeIndex: 7,
         sortBy: 'date',
         sortAscending: true,
-        displayFieldsSelected: ['thumb', 'year'],
+        displayFieldsSelected: ['thumb', 'title', 'year'],
         activeFilters: {
           locations: [],
           subjects: [],
@@ -218,7 +218,7 @@ export default {
         state: false,
         text: "",
         timeout: 4000,
-      }
+      },
     }
   },
   static: {
@@ -527,7 +527,7 @@ export default {
       this.$router.push({ query: Object.assign({}, this.$route.query, { displayFieldsSelected: newValue })})
     },
   },
-  created() {
+  created () {
     let queryParams = _.assignWith(this.state, this.$route.query, this.qsCustomizer)
     // ensure activeFilters has all default keys defined in case not in queryParams
     this.state.activeFilters = Object.assign({}, this.$options.static.defaultState.activeFilters, queryParams.activeFilters)
