@@ -2,7 +2,7 @@
   <div
     :style="{ width: width, height: height }"
     :class="{ 'is-expanded': isExpanded }"
-    class="collection-item relative grow-nonexpanded mr1 mb1 shadow-2"
+    class="collection-item relative grow-nonexpanded mr1 mb1 shadow-2 overflow-hidden"
   >
     <div v-if="!isExpanded" @click="toggleExpanded" class="h-100 bg-black pointer">
       <v-lazy :options="{ threshold: .1 }" transition="fade-transition" class="h-100">
@@ -14,10 +14,8 @@
               :title="title"
               class="absolute top-0 bottom-0 m-auto"
             >
-            <div v-if="displayTitle || displayYear" class="absolute left-0 top-0 pa1 bg-black-50 pevents-none">
-              <div v-if="displayTitle">{{title}}</div>
-              <div v-if="displayYear">{{year}}</div>
-            </div>
+            <div v-if="displayTitle" class="absolute top-0 left-0 pa1 bg-black-50 pevents-none f6 lh-solid">{{title}}</div>
+            <div v-if="displayYear" class="absolute bottom-0 left-0 pa1 bg-black-50 pevents-none f6 lh-solid">{{year}}</div>
             <transition name="fade">
               <div v-if="hover" class="absolute right-0 bottom-0">
                 <v-icon>fullscreen</v-icon>
@@ -54,7 +52,7 @@
             <v-chip  
               v-for="subject in subjects" :key="subject" 
               :value="subject"
-              @click="toggleSubjectFilter(subject)"
+              @click="$emit('toggle-active-filter', 'subjects', subject)"
               label
               :class="activeSubjectFilters.includes(subject) ? 'teal white--text' : ''"
             >
@@ -77,7 +75,7 @@
             <v-chip  
               v-for="location in locations" :key="location" 
               :value="location"
-              @click="toggleLocationFilter(location)"
+              @click="$emit('toggle-active-filter', 'locations', location)"
               label
               :class="activeLocationFilters.includes(location) ? 'teal white--text' : ''"
             >
@@ -152,14 +150,6 @@ export default {
     toggleExpanded: function () {
       this.isExpanded = !this.isExpanded
     },
-    toggleLocationFilter (locationFilter) {
-      this.$emit('toggle-location-filter', locationFilter)
-      this.$forceUpdate()
-    },
-    toggleSubjectFilter (subjectFilter) {
-      this.$emit('toggle-subject-filter', subjectFilter)
-      this.$forceUpdate()
-    },
   },
 }
 </script>
@@ -204,7 +194,7 @@ export default {
   width: 100%;
 }
 
-@media screen and ( min-width: calc(2 * 352px + 32px)) {
+@media screen and (min-width: 1140px) {
   .is-expanded .expansion-container {
     flex-wrap: nowrap;
   }

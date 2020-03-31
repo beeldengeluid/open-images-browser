@@ -4,7 +4,7 @@
       <v-chip-group class="font-mono mb3" multiple>
         <v-chip
           v-for="filter in filtersToDisplay" :key="filter.name"
-          @click="$emit('toggle-filter', filter.name)"
+          @click="$emit('toggle-active-filter', filter.name)"
           :value="filter.name"
           :class="activeFilters.includes(filter.name) ? activeClass +' white--text' : ''"
           label small
@@ -20,7 +20,7 @@
       <v-chip-group class="font-mono mb3" column multiple>
         <div v-for="filter in filtersToDisplay" :key="filter.name" class="w-100">
           <v-chip
-            @click="$emit('toggle-filter', filter.name)"
+            @click="$emit('toggle-active-filter', filter.name)"
             :value="filter.name"
             :class="activeFilters.includes(filter.name) ? activeClass +' white--text' : ''"
             label small

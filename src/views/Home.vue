@@ -13,41 +13,49 @@
           </v-tooltip>.
         </p>
       </header>
-      <StateStory 
-        :state="state" 
-        :computed="{
-          selectedYearRange: selectedYearRange,
-          activeLength: itemsFilteredSorted.length,
-          totalLength: items.length,
-        }"
-        v-on:toggle-location-filter = "onToggleLocationFilter"
-        v-on:toggle-subject-filter = "onToggleSubjectFilter"
-      />
+      <div class="flex flex-wrap">
+        <StateStory 
+          :state="state" 
+          :computed="{
+            selectedYearRange: selectedYearRange,
+            activeLength: itemsFilteredSorted.length,
+            totalLength: items.length,
+          }"
+          v-on:toggle-active-filter = "onToggleActiveFilter"
+        />
+        <v-btn
+          @click="randomizeSelection"
+          outlined small
+          class="ml-auto self-end mt3"
+        >
+          <v-icon left>shuffle</v-icon>Randomize Selection
+        </v-btn>
+      </div>
       <PeriodChart 
         :barSeries="decadeCounts" 
         :lineSeries="decadeCountsForSelection" 
         v-on:decade-click="onDecadeClick"
-        :selectedDecadeIndex="state.selectedDecadeIndex" 
-        :colors="{ bar: this.colors.inactive, line: this.colors.secondary, background: this.colors.background }" 
+        :decadeIndex="state.decadeIndex" 
+        :colors="{ bar: $options.static.colors.inactive, line: $options.static.colors.secondary, background: $options.static.colors.background }" 
       />
       <div class="db dn-l">
         <h3 class="mb2">
-          <span class="bb b--secondary">Locations in selection <span class="fw1">{{noLocationsForSelection}}</span></span>
+          <span class="bb b--secondary">Locations in selection <span class="fw1">{{filtersForSelection['locations'].length}}</span></span>
         </h3>
         <FilterList 
-          :filters="locationsForSelection"
-          :activeFilters="state.activeLocationFilters"
-          v-on:toggle-filter = "onToggleLocationFilter"
+          :filters="filtersForSelection['locations']"
+          :activeFilters="state.activeFilters['locations']"
+          v-on:toggle-active-filter = "onToggleActiveFilter('locations', $event)"
           v-on:toggle-tail = "onToggleTail"
           activeClass="teal"
         />
         <h3 class="mb2">
-          <span class="bb b--secondary">Subjects in selection <span class="fw1">{{noSubjectsForSelection}}</span></span>
+          <span class="bb b--secondary">Subjects in selection <span class="fw1">{{filtersForSelection['subjects'].length}}</span></span>
         </h3>
         <FilterList 
-          :filters="subjectsForSelection"
-          :activeFilters="state.activeSubjectFilters"
-          v-on:toggle-filter = "onToggleSubjectFilter"
+          :filters="filtersForSelection['subjects']"
+          :activeFilters="state.activeFilters['subjects']"
+          v-on:toggle-active-filter = "onToggleActiveFilter('subjects', $event)"
           v-on:toggle-tail = "onToggleTail"
           activeClass="teal"
         />
@@ -57,12 +65,12 @@
           <v-col cols="auto" class="dn db-l">
             <div class="mw5">
               <h3 class="mb3">
-                <span class="bb b--secondary">Locations in selection <span class="fw1">{{noLocationsForSelection}}</span></span>
+                <span class="bb b--secondary">Locations in selection <span class="fw1">{{filtersForSelection['locations'].length}}</span></span>
               </h3>
               <FilterList 
-                :filters="locationsForSelection"
-                :activeFilters="state.activeLocationFilters"
-                v-on:toggle-filter = "onToggleLocationFilter"
+                :filters="filtersForSelection['locations']"
+                :activeFilters="state.activeFilters['locations']"
+                v-on:toggle-active-filter = "onToggleActiveFilter('locations', $event)"
                 v-on:toggle-tail = "onToggleTail"
                 activeClass="teal"
               />
@@ -71,36 +79,37 @@
           <v-col cols="auto" class="dn db-l">
             <div class="mw5">
               <h3 class="mb3">
-                <span class="bb b--secondary">Subjects in selection <span class="fw1">{{noSubjectsForSelection}}</span></span>
+                <span class="bb b--secondary">Subjects in selection <span class="fw1">{{filtersForSelection['subjects'].length}}</span></span>
               </h3>
               <FilterList 
-                :filters="subjectsForSelection"
-                :activeFilters="state.activeSubjectFilters"
-                v-on:toggle-filter = "onToggleSubjectFilter"
+                :filters="filtersForSelection['subjects']"
+                :activeFilters="state.activeFilters['subjects']"
+                v-on:toggle-active-filter = "onToggleActiveFilter('subjects', $event)"
                 v-on:toggle-tail = "onToggleTail"
                 activeClass="teal"
               />
             </div>
           </v-col>
           <v-col>
-            <div class="mb3">
-              <h3 class="dib mr3 mb2">
+            <div class="mb3 flex flex-wrap">
+              <h3 class="dib mr3 mb3">
                 <span class="bb b--secondary mr2">Videos in selection <span class="fw1">{{itemsFilteredSorted.length}}</span></span>
-                <span class="fw1 grey--text bb b--primary-accent">(of {{Object.values(decadeCounts)[state.selectedDecadeIndex]}} in decade)</span>
+                <span class="fw1 grey--text bb b--primary-accent">(of {{decades[state.decadeIndex].count}} in decade)</span>
               </h3>
               <v-btn 
                 @click="resetState"
                 v-show="hasActiveFilters"
                 small outlined
+                class="ml-auto"
               >
-                Clear Selection
+                <v-icon left>delete_outline</v-icon>Clear Selection
               </v-btn>
             </div>
             <div class="dflex flex-wrap mb3">
               <div class="dflex items-center mr3 mr4-l">
                 <span class="mr2 fw7">Sort by</span>
                 <v-chip-group v-model="state.sortBy" active-class="indigo" mandatory class="fw5 font-mono">
-                  <v-chip v-for="sortField in sortFields" :key="sortField" :value="sortField">
+                  <v-chip v-for="sortField in $options.static.sortFields" :key="sortField" :value="sortField">
                     {{ sortField }}
                   </v-chip>
                 </v-chip-group>
@@ -111,7 +120,7 @@
               <div class="dflex items-center">
                 <span class="pr2 fw7">Display</span>
                 <v-chip-group v-model="state.displayFieldsSelected" active-class="green" multiple class="fw5 font-mono">
-                  <v-chip v-for="displayField in displayFields" :key="displayField" :value="displayField">
+                  <v-chip v-for="displayField in $options.static.displayFields" :key="displayField" :value="displayField">
                     {{displayField}}
                   </v-chip>
                 </v-chip-group>
@@ -140,12 +149,11 @@
                 :displayTitle    = "state.displayFieldsSelected.includes('title')"
                 :displayYear     = "state.displayFieldsSelected.includes('year')"
                 :displayThumb    = "state.displayFieldsSelected.includes('thumb')"
-                :activeLocationFilters = "state.activeLocationFilters"
-                :activeSubjectFilters  = "state.activeSubjectFilters"
-                :locationCountsForSelection = "locationCountsForSelection"
-                :subjectCountsForSelection  = "subjectCountsForSelection"
-                v-on:toggle-location-filter = "onToggleLocationFilter"
-                v-on:toggle-subject-filter  = "onToggleSubjectFilter"
+                :activeLocationFilters = "state.activeFilters['locations']"
+                :activeSubjectFilters  = "state.activeFilters['subjects']"
+                :locationCountsForSelection = "filterCountsForSelection['locations']"
+                :subjectCountsForSelection  = "filterCountsForSelection['subjects']"
+                v-on:toggle-active-filter = "onToggleActiveFilter"
               />
             </div>
           </v-col>
@@ -189,39 +197,48 @@ export default {
     return {
       items: dataItems,
       state: {
-        selectedDecadeIndex: 7,
+        decadeIndex: 7,
         sortBy: 'date',
         sortAscending: true,
-        displayFieldsSelected: ['thumb', 'year'],
+        displayFieldsSelected: ['thumb', 'title', 'year'],
+        activeFilters: {
+          locations: [],
+          subjects: [],
+        },
       },
-      sortFields: ['id','date', 'title'],
-      displayFields: ['title', 'year', 'thumb'],
       zoom: {
         value: 3,
         min: 0,
         max: 6,
         step: 1,
       },
-      itemAspectRatio: 352 / 288,
-      itemMargin: 4,
-      clientWidth: this.getClientWidth(),
-      colors: {
-        primary: '#5E35B1', 
-        secondary: '#009688', 
-        background: '#121212',
-        inactive: '#555',
-      },
+      clientWidth: this.getClientWidth(),      
       chartSeries: [],
       snackbar:{
         state: false,
         text: "",
         timeout: 4000,
-      }
+      },
     }
   },
-  defaultState: {
-    activeLocationFilters: [],
-    activeSubjectFilters: [],
+  static: {
+    defaultState: {
+      activeFilters: {
+        locations: [],
+        subjects: [],
+      },
+    },
+    sortFields: ['id','date', 'title'],
+    displayFields: ['title', 'year', 'thumb'],
+    filterFields: ['locations', 'subjects'],
+    itemAspectRatio: 352 / 288,
+    itemMargin: 4,
+    colors: {
+      primary: '#5E35B1', 
+      secondary: '#009688', 
+      background: '#121212',
+      inactive: '#555',
+    },
   },
   computed: {
     itemsPerDecade () {
@@ -229,10 +246,10 @@ export default {
     },
     itemWidth () {
       let horizontalMarkupMargin = 32
-      return (this.clientWidth - horizontalMarkupMargin) / this.noThumbsPerRow - this.itemMargin
+      return (this.clientWidth - horizontalMarkupMargin) / this.noThumbsPerRow - this.$options.static.itemMargin
     },
     itemHeight () {
-      return this.itemWidth / this.itemAspectRatio
+      return this.itemWidth / this.$options.static.itemAspectRatio
     },
     noThumbsPerRow () {
       return Math.pow(2, this.zoom.value)
@@ -242,19 +259,19 @@ export default {
               .map(value => Math.pow(2, value))
     },
     itemsFiltered () {
-      return this.itemsPerDecade[this.selectedDecade]
+      return this.itemsPerDecade[this.decades[this.state.decadeIndex].name]
         .filter(
-          i => 
-            this.filterByLocation(i) && 
-            this.filterBySubject(i)
+          i => this.$options.static.filterFields.every(
+            filterField => this.filterByFilterField (filterField, i)
+          )
         )
     },
     itemsFilteredAllDecades () {
       return this.items
         .filter(
-          i => 
-            this.filterByLocation(i) && 
-            this.filterBySubject(i)
+          i => this.$options.static.filterFields.every(
+            filterField => this.filterByFilterField (filterField, i)
+          )
         )
     },
     itemsFilteredSorted () {
@@ -262,12 +279,9 @@ export default {
       return _.orderBy(this.itemsFiltered, [this.state.sortBy], [order])
     },
     selectedYearRange () {
-      let decadeYearMin = parseInt(this.selectedDecade.slice(0,4))
+      let decadeYearMin = parseInt(this.decades[this.state.decadeIndex].name.slice(0,4))
       let decadeYearMax = decadeYearMin + 9
       return [decadeYearMin, decadeYearMax]
-    },
-    selectedDecade () {
-      return  Object.keys(this.decadeCounts)[this.state.selectedDecadeIndex]
     },
     yearMin () {
       return Math.min(... this.items.map(i => i['date'].slice(0, 4)))
@@ -281,55 +295,57 @@ export default {
     decadeMax () {
       return Math.floor(this.yearMax / 10) * 10
     },
-    locationCountsForSelection () {
-      let locations = _.flatMap(this.itemsFilteredSorted, i => i['locations'])
-      return _.countBy(locations)
-    },
-    noLocationsForSelection () {
-      return _.size(this.locationCountsForSelection)
-    },
-    locationsForSelection () {
-      let locations = 
-        Object.keys(this.locationCountsForSelection)
-          .map( key => {
-            return {
-              'name': key,
-              'count': this.locationCountsForSelection[key]
-            }
-          })
+    filterCountsForSelection () {
+      const getCounts = (items, fieldName) => {
+        let names = _.flatMap(items, i => i[fieldName])
+        return _.countBy(names)
+      }
 
-      return _.orderBy(locations, ['count', 'name'], ['desc', 'asc'])    
+      /// more readable, less elegant?
+      // filterCounts = {}
+      // this.$options.static.filterFields.forEach(filterField => {
+      //   filterCounts[filterField] = getCounts(this.itemsFilteredSorted, fitlerField)
+      // })
+      // return filterCounts
+      
+      return this.$options.static.filterFields.reduce((filterCountsAccumulator, currentFilterField) => {
+        filterCountsAccumulator[currentFilterField] = getCounts(this.itemsFilteredSorted, currentFilterField)
+        return filterCountsAccumulator
+      }, {})
     },
-    subjectCountsForSelection () {
-      let subjects = _.flatMap(this.itemsFilteredSorted, i => i['subjects']) 
-      return _.countBy(subjects)
-    },
-    noSubjectsForSelection () {
-      return _.size(this.subjectCountsForSelection)
-    },
-    subjectsForSelection () {
-      let subjects = 
-        Object.keys(this.subjectCountsForSelection)
-          .map( key => {
-            return {
-              'name': key,
-              'count': this.subjectCountsForSelection[key]
-            }
-          })
+    filtersForSelection () {
+      const getFiltersOrdered = (filterCounts) => {
+        let filtersForSelection = this.objectToCollection(filterCounts, 'name', 'count')
+        return _.orderBy(filtersForSelection, ['count', 'name'], ['desc', 'asc'])        
+      }
 
-      return _.orderBy(subjects, ['count', 'name'], ['desc', 'asc'])
+      return this.$options.static.filterFields.reduce((filtersAccumulator, currentFilterField) => {
+        filtersAccumulator[currentFilterField] = getFiltersOrdered(this.filterCountsForSelection[currentFilterField])
+        return filtersAccumulator
+      }, {})
     },
     hasActiveFilters () {
-      return this.state.activeLocationFilters.length || this.state.activeSubjectFilters.length
+      return _.flatten(_.values(this.state.activeFilters)).length > 0
     },
     decadeCounts () {
       return this.getDecadeCounts(this.items, this.decadeMin, this.decadeMax)
+    },
+    decades () {
+      return this.objectToCollection(this.decadeCounts, 'name', 'count')
     },
     decadeCountsForSelection () {
       return this.getDecadeCounts(this.itemsFilteredAllDecades, this.decadeMin, this.decadeMax)
     },
   },
   methods: {
+    objectToCollection (countsObject, keyForKey, keyForValue) {
+      return Object.keys(countsObject).map(k => { 
+        return {
+          [keyForKey]: k,
+          [keyForValue]: countsObject[k]
+        }
+      })
+    },
     toggleSortAscending () {
       this.state.sortAscending = ! this.state.sortAscending
     },
@@ -345,49 +361,31 @@ export default {
     onResize () {
       this.clientWidth = this.getClientWidth()
     },
-    onToggleLocationFilter (filterValue) {
-      if (this.state.activeLocationFilters.includes(filterValue)) {
-        this.removeLocationFilter(filterValue)
+    onToggleActiveFilter (filterType, filterValue) {
+      if (this.state.activeFilters[filterType].includes(filterValue)) {
+        this.removeActiveFilter(filterType, filterValue)
       } else {
-        this.addLocationFilter(filterValue)
+        this.addActiveFilter(filterType, filterValue)
       }
     },
-    addLocationFilter (filterValue) {
+    addActiveFilter (filterType, filterValue) {
       /* for unclear reason .push() doesn't register correctly in the watch() 
          function, so using .concat() instead */
-      this.state.activeLocationFilters = this.state.activeLocationFilters.concat([filterValue])
+      this.state.activeFilters[filterType] = this.state.activeFilters[filterType].concat([filterValue])
     },
-    removeLocationFilter (filterValue) {
-      this.state.activeLocationFilters = this.state.activeLocationFilters.filter(lf => lf !== filterValue)
-    },
-    onToggleSubjectFilter (filterValue) {
-      if (this.state.activeSubjectFilters.includes(filterValue)) {
-        this.removeSubjectFilter(filterValue)
-      } else {
-        this.addSubjectFilter(filterValue)
-      }
-    },
-    addSubjectFilter (filterValue) {
-      /* for unclear reason .push() doesn't register correctly in the watch() 
-         function, so using .concat() instead */
-      this.state.activeSubjectFilters = this.state.activeSubjectFilters.concat([filterValue])
-    },
-    removeSubjectFilter (filterValue) {
-      this.state.activeSubjectFilters = this.state.activeSubjectFilters.filter(lf => lf !== filterValue)
+    removeActiveFilter (filterType, filterValue) {
+      this.state.activeFilters[filterType] = this.state.activeFilters[filterType].filter(lf => lf !== filterValue)
     },
     filterByYear (item) {
       return this.dateToYear(item['date']) >= this.selectedYearRange[0] &&
              this.dateToYear(item['date']) <= this.selectedYearRange[1]
     },
-    filterByLocation (item) {
-      return this.state.activeLocationFilters.every(lf => item['locations'].includes(lf)) || !this.state.activeLocationFilters.length
-    },
-    filterBySubject (item) {
-      return this.state.activeSubjectFilters.every(sf => item['subjects'].includes(sf)) || !this.state.activeSubjectFilters.length
+    filterByFilterField (FilterField, item) {
+      return this.state.activeFilters[FilterField].every(lf => item[FilterField].includes(lf)) || !this.state.activeFilters[FilterField].length
     },
     onDecadeClick (dataPointIndex) {
       // set decade
-      this.state.selectedDecadeIndex = dataPointIndex
+      this.state.decadeIndex = dataPointIndex
     },
     getDecadeCounts (items, decadeMin, decadeMax) {
       // get decades present in data
@@ -407,6 +405,7 @@ export default {
       Object.keys(decadesPresent).sort().forEach(function(key) {
         decadesSorted[key] = decadesPresent[key];
       });
+
       return decadesSorted
     },
     showSnackbar (markup) {
@@ -427,7 +426,65 @@ export default {
       return typeof objValue === 'number' ? parseInt(srcValue, 10) : srcValue
     },
     resetState () {
-      this.state = Object.assign({}, this.state, this.$options.defaultState)
+      this.state.activeFilters = Object.assign({}, this.$options.static.defaultState.activeFilters)
+    },
+    randomItemFromArray (array) {
+      return array[Math.floor(Math.random() * array.length)]
+    },
+    randomizeDecade () {
+      let decadeIndicesAvailable = 
+        _.range(_.size(this.decades))
+          .filter(
+            index => 
+              this.decades[index].count > 0 &&
+              index !== this.state.decadeIndex
+          )
+      this.state.decadeIndex = this.randomItemFromArray(decadeIndicesAvailable)
+    },
+    randomizeFilter (filterType) {
+      let filtersAvailable = this.filtersForSelection[filterType].filter(filter => filter.count > 1)
+      if (filtersAvailable.length) {
+        let randomFilter = this.randomItemFromArray(filtersAvailable).name
+        this.state.activeFilters[filterType] = [randomFilter]
+        return true
+      } 
+      else {
+        return false
+      }
+    },
+    randomizeLocation () {
+      let locationsAvailable = this.filtersForSelection['locations'].filter(l => l.count > 1)
+      if (locationsAvailable.length) {
+        let randomLocation = this.randomItemFromArray(locationsAvailable).name
+        this.state.activeFilters['locations'] = [randomLocation]
+        return true
+          
+      } 
+      else {
+        return false
+      }
+    },
+    randomizeSubject () {
+      let subjectsAvailable = this.filtersForSelection['subjects'].filter(s => s.count > 1)
+      if (subjectsAvailable.length) {
+        let randomSubject = this.randomItemFromArray(subjectsAvailable).name
+        this.state.activeFilters['subjects'] = [randomSubject]
+        return true
+          
+      } 
+      else {
+        return false
+      }
+    },
+    randomizeSelection () {
+      this.resetState()      
+      this.randomizeDecade()
+      
+      let isRandomized = this.randomizeFilter(this.$options.static.filterFields[_.random(1)])
+      if (!isRandomized) {
+        // no filters in this decade, recursively retry
+        this.randomizeSelection()
+      }
     },
   },
   watch: {
@@ -435,37 +492,27 @@ export default {
       this.showSnackbar(`${this.state.sortAscending ? '☝️' : '👇'} Sorting by <strong>${newValue}</strong>`)
       this.$router.push({ query: Object.assign({}, this.$route.query, { sortBy: newValue })})
     },
-    'state.selectedDecadeIndex': function (newValue) {
-      this.showSnackbar(`✅ Selected <strong>${Object.keys(this.decadeCounts)[newValue]}</strong> decade`)
-      this.$router.push({ query: Object.assign({}, this.$route.query, { selectedDecadeIndex: newValue })})
+    'state.decadeIndex': function (newValue) {
+      this.showSnackbar(`✅ Selected <strong>${this.decades[newValue].name}</strong> decade`)
+      this.$router.push({ query: Object.assign({}, this.$route.query, { decadeIndex: newValue })})
     },
     'state.sortAscending': function (newValue) {
       this.showSnackbar(`${newValue ? '☝️' : '👇'} Sorting in <strong>${newValue ? 'ascending' : 'descending'}</strong> order`)
       this.$router.push({ query: Object.assign({}, this.$route.query, { sortAscending: newValue })})
     },
-    'state.activeLocationFilters': function (newValue, oldValue) {
-      let added = _.difference(newValue, oldValue)
-      if (added.length) {
-        this.showSnackbar(`📍 Added location filter <strong>${added[0]}</strong>`)
-      } else {
-        let removed = _.difference(oldValue, newValue)
-        if (removed.length) {
-          this.showSnackbar(`❌ Removed location filter <strong>${removed[0]}</strong>`)
+    'state.activeFilters': function (newValue, oldValue) {
+      this.$options.static.filterFields.forEach(field => {
+        let added = _.difference(newValue[field], oldValue[field])
+        if (added.length) {
+          this.showSnackbar(`👓 Added ${field} filter <strong>${added[0]}</strong>`)
+        } else {
+          let removed = _.difference(oldValue[field], newValue[field])
+          if (removed.length) {
+            this.showSnackbar(`❌ Removed ${field} filter <strong>${removed[0]}</strong>`)
+          }
         }
-      }
-      this.$router.push({ query: Object.assign({}, this.$route.query, { activeLocationFilters: newValue })})
-    },
-    'state.activeSubjectFilters': function (newValue, oldValue) {
-      let added = _.difference(newValue, oldValue)
-      if (added.length) {
-        this.showSnackbar(`🏷 Added subject filter <strong>${added[0]}</strong>`)
-      } else {
-        let removed = _.difference(oldValue, newValue)
-        if (removed.length) {
-          this.showSnackbar(`❌ Removed subject filter <strong>${removed[0]}</strong>`)
-        }
-      }
-      this.$router.push({ query: Object.assign({}, this.$route.query, { activeSubjectFilters: newValue })})
+        this.$router.push({ query: Object.assign({}, this.$route.query, { activeFilters: newValue })})        
+      })
     },
     'state.displayFieldsSelected': function (newValue, oldValue) {
       let added = _.difference(newValue, oldValue)
@@ -480,9 +527,11 @@ export default {
       this.$router.push({ query: Object.assign({}, this.$route.query, { displayFieldsSelected: newValue })})
     },
   },
-  created() {
-    this.state = Object.assign({}, this.state, this.$options.defaultState)
-    _.assignWith(this.state, this.$route.query, this.qsCustomizer)
+  created () {
+    let queryParams = _.assignWith(this.state, this.$route.query, this.qsCustomizer)
+    // ensure activeFilters has all default keys defined in case not in queryParams
+    this.state.activeFilters = Object.assign({}, this.$options.static.defaultState.activeFilters, queryParams.activeFilters)
+
     window.addEventListener("resize", _.debounce(this.onResize), 400)
   },
   destroyed() {
@@ -560,5 +609,9 @@ https://github.com/vuetifyjs/vuetify/commit/4f151bbdf4388e76d92920ca19c6271c022e
 }
 .bg-primary-accent {
   background-color: var(--primary-accent-color);
+}
+.relative-bottom {
+  top: 100%;
+  transform: translateY(-100%);
 }
 </style>
