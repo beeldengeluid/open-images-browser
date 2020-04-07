@@ -132,4 +132,7 @@ export default {
   fill: var(--primary-accent-color);
   filter: none;
 }
+.apexcharts-series path:hover {
+  cursor: pointer;
+}
 </style>
