@@ -1,15 +1,15 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
-import qs from 'qs';
+import Vue from "vue";
+import VueRouter from "vue-router";
+import Home from "../views/Home.vue";
+import qs from "qs";
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
 const routes = [
   {
-    path: '/',
-    name: 'Home',
-    component: Home
+    path: "/",
+    name: "Home",
+    component: Home,
   },
   // {
   //   path: '/about',
@@ -19,7 +19,7 @@ const routes = [
   //   // which is lazy-loaded when the route is visited.
   //   component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
   // }
-]
+];
 
 const router = new VueRouter({
   routes,
@@ -30,8 +30,8 @@ const router = new VueRouter({
   stringifyQuery(query) {
     var result = qs.stringify(query);
 
-    return result ? ('?' + result) : '';
-  }
-})
+    return result ? "?" + result : "";
+  },
+});
 
-export default router
+export default router;

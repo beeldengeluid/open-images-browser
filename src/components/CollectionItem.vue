@@ -4,8 +4,16 @@
     :class="{ 'is-expanded': isExpanded }"
     class="collection-item relative grow-nonexpanded mr1 mb1 shadow-2 overflow-hidden"
   >
-    <div v-if="!isExpanded" @click="toggleExpanded" class="h-100 bg-black pointer">
-      <v-lazy :options="{ threshold: .1 }" transition="fade-transition" class="h-100">
+    <div
+      v-if="!isExpanded"
+      @click="toggleExpanded"
+      class="h-100 bg-black pointer"
+    >
+      <v-lazy
+        :options="{ threshold: 0.1 }"
+        transition="fade-transition"
+        class="h-100"
+      >
         <v-hover>
           <div slot-scope="{ hover }">
             <img
@@ -13,9 +21,19 @@
               :src="thumbSrc"
               :title="title"
               class="absolute top-0 bottom-0 m-auto"
+            />
+            <div
+              v-if="displayTitle"
+              class="absolute top-0 left-0 pa1 bg-black-50 pevents-none f6 lh-solid"
             >
-            <div v-if="displayTitle" class="absolute top-0 left-0 pa1 bg-black-50 pevents-none f6 lh-solid">{{title}}</div>
-            <div v-if="displayYear" class="absolute bottom-0 left-0 pa1 bg-black-50 pevents-none f6 lh-solid">{{year}}</div>
+              {{ title }}
+            </div>
+            <div
+              v-if="displayYear"
+              class="absolute bottom-0 left-0 pa1 bg-black-50 pevents-none f6 lh-solid"
+            >
+              {{ year }}
+            </div>
             <transition name="fade">
               <div v-if="hover" class="absolute right-0 bottom-0">
                 <v-icon>fullscreen</v-icon>
@@ -28,67 +46,90 @@
 
     <div v-if="isExpanded" class="flex expansion-container">
       <div class="expansion-left tc bg-black ba b--grey--darken-3">
-        <video 
+        <video
           :src="videoSrc"
           :poster="thumbSrc"
-          :style="{ 'max-width': videoMaxWidth+'px' }"
+          :style="{ 'max-width': videoMaxWidth + 'px' }"
           controls
           width="100%"
-          class="outline-0 bg-black">
-        </video>
+          class="outline-0 bg-black"
+        ></video>
       </div>
       <div class="expansion-right pa3 pr4 relative grey darken-3">
-        <h2 class="mt0 f4">{{title}} <span class="fw1">({{year}})</span></h2>
+        <h2 class="mt0 f4">
+          {{ title }} <span class="fw1">({{ year }})</span>
+        </h2>
         <div v-if="subjects.length" class="mv2">
           <span class="fw6">
             <v-icon small>room</v-icon>
-            <span class="v-mid"> {{subjects.length}} Subject<span v-if="subjects.length > 1">s</span></span>
+            <span class="v-mid">
+              {{ subjects.length }} Subject<span v-if="subjects.length > 1"
+                >s</span
+              ></span
+            >
           </span>
-          <v-chip-group
-            multiple
-            column 
-            class="font-mono"
-          >
-            <v-chip  
-              v-for="subject in subjects" :key="subject" 
+          <v-chip-group multiple column class="font-mono">
+            <v-chip
+              v-for="subject in subjects"
+              :key="subject"
               :value="subject"
               @click="$emit('toggle-active-filter', 'subjects', subject)"
               label
-              :class="activeSubjectFilters.includes(subject) ? 'teal white--text' : ''"
+              :class="
+                activeSubjectFilters.includes(subject) ? 'teal white--text' : ''
+              "
             >
               <strong class="mr1">{{ subject }}</strong>
-              <span>{{subjectCountsForSelection[subject]}}</span>
-              <v-icon right>{{activeSubjectFilters.includes(subject) ? 'cancel' : 'filter_list'}} </v-icon>
+              <span>{{ subjectCountsForSelection[subject] }}</span>
+              <v-icon right
+                >{{
+                  activeSubjectFilters.includes(subject)
+                    ? "cancel"
+                    : "filter_list"
+                }}
+              </v-icon>
             </v-chip>
           </v-chip-group>
         </div>
         <div v-if="locations.length" class="mv2">
           <span class="fw6">
             <v-icon small>room</v-icon>
-            <span class="v-mid"> {{locations.length}} Location<span v-if="locations.length > 1">s</span></span>
+            <span class="v-mid">
+              {{ locations.length }} Location<span v-if="locations.length > 1"
+                >s</span
+              ></span
+            >
           </span>
-          <v-chip-group
-            multiple
-            column 
-            class="font-mono"
-          >
-            <v-chip  
-              v-for="location in locations" :key="location" 
+          <v-chip-group multiple column class="font-mono">
+            <v-chip
+              v-for="location in locations"
+              :key="location"
               :value="location"
               @click="$emit('toggle-active-filter', 'locations', location)"
               label
-              :class="activeLocationFilters.includes(location) ? 'teal white--text' : ''"
+              :class="
+                activeLocationFilters.includes(location)
+                  ? 'teal white--text'
+                  : ''
+              "
             >
               <strong class="mr1">{{ location }}</strong>
-              <span>{{locationCountsForSelection[location]}}</span>
-              <v-icon right>{{activeLocationFilters.includes(location) ? 'cancel' : 'filter_list'}} </v-icon>
+              <span>{{ locationCountsForSelection[location] }}</span>
+              <v-icon right
+                >{{
+                  activeLocationFilters.includes(location)
+                    ? "cancel"
+                    : "filter_list"
+                }}
+              </v-icon>
             </v-chip>
           </v-chip-group>
         </div>
         <div v-if="creators.length" class="mv2">
           <span class="fw6">
             <v-icon small>videocam</v-icon>
-            <span class="v-mid"> {{creators.length}} Creator</span><span v-if="creators.length > 1">s</span>
+            <span class="v-mid"> {{ creators.length }} Creator</span
+            ><span v-if="creators.length > 1">s</span>
           </span>
           <div v-for="creator in creators" :key="creator">
             {{ creator }}
@@ -97,21 +138,24 @@
         <div class="mt3">
           <a :href="url" target="_blank">See item on Open Images ↗︎</a>
         </div>
-        <v-icon @click="toggleExpanded" class="absolute ma3 top-0 right-0 pointer">close</v-icon>
+        <v-icon
+          @click="toggleExpanded"
+          class="absolute ma3 top-0 right-0 pointer"
+          >close</v-icon
+        >
       </div>
     </div>
-
   </div>
 </template>
 
 <script>
 export default {
-  name: 'CollectionItem',
-  data: function () {
+  name: "CollectionItem",
+  data: function() {
     return {
       isExpanded: false,
       videoMaxWidth: 320,
-    }
+    };
   },
   props: {
     width: String,
@@ -126,15 +170,15 @@ export default {
     locations: Array,
     displayTitle: {
       type: Boolean,
-      default: false
+      default: false,
     },
     displayYear: {
       type: Boolean,
-      default: false
+      default: false,
     },
     displayThumb: {
       type: Boolean,
-      default: true
+      default: true,
     },
     activeLocationFilters: Array,
     activeSubjectFilters: Array,
@@ -142,16 +186,16 @@ export default {
     subjectCountsForSelection: Object,
   },
   computed: {
-    year: function () {
-      return this.date.slice(0,4)
+    year: function() {
+      return this.date.slice(0, 4);
     },
   },
   methods: {
-    toggleExpanded: function () {
-      this.isExpanded = !this.isExpanded
+    toggleExpanded: function() {
+      this.isExpanded = !this.isExpanded;
     },
   },
-}
+};
 </script>
 
 <style scoped>
@@ -212,7 +256,7 @@ export default {
   }
 }
 
-.m-auto{
+.m-auto {
   margin: auto;
 }
 
