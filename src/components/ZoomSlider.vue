@@ -1,13 +1,15 @@
 <template>
   <div class="zoom-slider">
     <v-slider
-      :value="value" 
+      :value="value"
       @input="$emit('input', $event)"
-      :min="min" :max="max" :step="step"
+      :min="min"
+      :max="max"
+      :step="step"
       ticks="always"
       tick-size="4"
       :tick-labels="tickLabels"
-      color="orange" 
+      color="orange"
       hide-details
     >
       <template v-slot:prepend>
@@ -26,31 +28,31 @@
 
 <script>
 export default {
-  name: 'ZoomSlider',
-  data: function () {
-    return {
-    }
+  name: "ZoomSlider",
+  data: function() {
+    return {};
   },
   props: {
-    value: { type: Number},
+    value: { type: Number },
     min: { type: Number, default: 0 },
     max: { type: Number, default: 6 },
     step: { type: Number, default: 1 },
     tickLabels: { type: Array },
   },
   methods: {
-    increment (amount) {
-      this.$emit('increment-zoom', amount)
+    increment(amount) {
+      this.$emit("increment-zoom", amount);
     },
   },
-}
+};
 </script>
 
 <style>
-.zoom-slider .v-input__prepend-outer, .zoom-slider .v-input__append-outer {
+.zoom-slider .v-input__prepend-outer,
+.zoom-slider .v-input__append-outer {
   margin-top: 0;
 }
 .zoom-slider .v-slider__tick {
-  background-color: hsla(0,0%,100%,.5);
+  background-color: hsla(0, 0%, 100%, 0.5);
 }
 </style>
