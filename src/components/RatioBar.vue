@@ -30,14 +30,22 @@ export default {
     color: String,
   },
   computed: {
+    ratio() {
+      return this.amount / this.total;
+    },
     percentage() {
-      return ((100 * this.amount) / this.total).toPrecision(3);
+      let pct = 100 * this.ratio;
+      return pct > 10
+        ? Math.round(pct)
+        : pct > 1
+        ? pct.toPrecision(2)
+        : pct.toPrecision(1);
     },
     isBarWideEnoughForLabel() {
       return this.barWidth > 40;
     },
     barWidth() {
-      return (this.percentage / 100) * this.getClientWidth();
+      return this.ratio * this.getClientWidth();
     },
   },
   methods: {
