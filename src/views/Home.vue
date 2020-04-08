@@ -23,7 +23,7 @@
         :color="$options.static.colors.secondary"
       />
     </div>
-    <v-content class="ma2 ma3-ns">
+    <v-content class="ma2 ma3-ns mt4">
       <header>
         <h1>Open Images Browser</h1>
         <p>
