@@ -19,8 +19,14 @@
 </template>
 
 <script>
+import _ from "lodash";
 export default {
   name: "RatioBar",
+  data() {
+    return {
+      clientWidth: this.getClientWidth(),
+    };
+  },
   props: {
     amount: Number,
     total: Number,
@@ -45,13 +51,22 @@ export default {
       return this.barWidth > 40;
     },
     barWidth() {
-      return this.ratio * this.getClientWidth();
+      return this.ratio * this.clientWidth;
     },
   },
   methods: {
     getClientWidth() {
       return document.body.clientWidth || document.documentElement.clientWidth;
     },
+    onResize() {
+      this.clientWidth = this.getClientWidth();
+    },
+  },
+  created() {
+    window.addEventListener("resize", _.debounce(this.onResize), 400);
+  },
+  destroyed() {
+    window.removeEventListener("resize", this.onResize);
   },
 };
 </script>
