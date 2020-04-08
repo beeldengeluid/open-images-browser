@@ -1,15 +1,28 @@
 <template>
   <v-app id="app">
-    <RatioBar
-      :total="items.length"
-      :decade="decades[state.decadeIndex].count"
-      :selection="itemsFilteredSorted.length"
-      :colors="{
-        total: $options.static.colors.inactive,
-        decade: $options.static.colors.primary,
-        selection: $options.static.colors.secondary,
-      }"
-    />
+    <div class="fixed w-100 z-2 f6">
+      <RatioBar
+        :amount="items.length"
+        :total="items.length"
+        :label="`${items.length} videos in total`"
+        :innerLabel="true"
+        :color="$options.static.colors.inactive"
+      />
+      <RatioBar
+        :amount="decades[state.decadeIndex].count"
+        :total="items.length"
+        :label="'in decade'"
+        :labelClasses="'grey--text'"
+        :color="$options.static.colors.primary"
+      />
+      <RatioBar
+        :amount="itemsFilteredSorted.length"
+        :total="items.length"
+        :label="'in selection'"
+        :labelClasses="'grey--text'"
+        :color="$options.static.colors.secondary"
+      />
+    </div>
     <v-content class="ma2 ma3-ns">
       <header>
         <h1>Open Images Browser</h1>

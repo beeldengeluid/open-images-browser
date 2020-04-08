@@ -1,35 +1,17 @@
 <template>
-  <div class="fixed w-100 z-2 f6">
-    <div
-      class="w-100 ph1 flex justify-between"
-      :style="{ 'background-color': colors.total }"
-    >
-      <span>{{ total + " items" }}</span>
-      <span>100%</span>
-    </div>
-
+  <div>
     <div class="relative flex justify-end">
-      <span class="pr1 grey--text">in decade</span>
-      <span class="ph1" :class="{ absolute: isDecadeBarWideEnough }">{{
-        decadePercentage + "%"
+      <span class="ph1" :class="[{ inner: innerLabel }, labelClasses]">{{
+        label
+      }}</span>
+      <span class="ph1" :class="{ absolute: isBarWideEnoughForLabel }">{{
+        percentage + "%"
       }}</span>
       <div
         :style="{
-          width: decadePercentage + '%',
-          'background-color': colors.decade,
-        }"
-      ></div>
-    </div>
-
-    <div class="relative flex justify-end">
-      <span class="pr1 grey--text">in selection</span>
-      <span class="ph1" :class="{ absolute: isSelectionBarWideEnough }">{{
-        selectionPercentage + "%"
-      }}</span>
-      <div
-        :style="{
-          width: selectionPercentage + '%',
-          'background-color': colors.selection,
+          'min-height': '21px',
+          width: percentage + '%',
+          'background-color': color,
         }"
       ></div>
     </div>
@@ -40,29 +22,22 @@
 export default {
   name: "RatioBar",
   props: {
+    amount: Number,
     total: Number,
-    decade: Number,
-    selection: Number,
-    colors: Object,
+    label: String,
+    labelClasses: { type: String, required: false },
+    innerLabel: { type: Boolean, required: false, default: false },
+    color: String,
   },
   computed: {
-    decadePercentage() {
-      return ((100 * this.decade) / this.total).toPrecision(2);
+    percentage() {
+      return ((100 * this.amount) / this.total).toPrecision(3);
     },
-    selectionPercentage() {
-      return ((100 * this.selection) / this.total).toPrecision(2);
+    isBarWideEnoughForLabel() {
+      return this.barWidth > 40;
     },
-    isDecadeBarWideEnough() {
-      return this.decadeBarWidth > 40;
-    },
-    isSelectionBarWideEnough() {
-      return this.selectionBarWidth > 40;
-    },
-    decadeBarWidth() {
-      return (this.decadePercentage / 100) * this.getClientWidth();
-    },
-    selectionBarWidth() {
-      return (this.selectionPercentage / 100) * this.getClientWidth();
+    barWidth() {
+      return (this.percentage / 100) * this.getClientWidth();
     },
   },
   methods: {
@@ -72,3 +47,9 @@ export default {
   },
 };
 </script>
+<style scoped>
+.inner {
+  position: absolute;
+  left: 0;
+}
+</style>
