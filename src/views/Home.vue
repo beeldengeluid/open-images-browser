@@ -58,46 +58,42 @@
       <v-container fluid class="pa0">
         <v-row>
           <v-col cols="12" lg="2">
-            <div>
-              <h3 class="mb3">
-                <span class="bb b--secondary"
-                  >Subjects in selection
-                  <span class="fw1">{{
-                    filtersForSelection["subjects"].length
-                  }}</span></span
-                >
-              </h3>
-              <FilterList
-                :filters="filtersForSelection['subjects']"
-                :activeFilters="state.activeFilters['subjects']"
-                v-on:toggle-active-filter="
-                  onToggleActiveFilter('subjects', $event)
-                "
-                v-on:toggle-tail="onToggleTail"
-                activeClass="teal"
-              />
-            </div>
+            <h3 class="mb3">
+              <span class="bb b--secondary"
+                >Subjects in selection
+                <span class="fw1">{{
+                  filtersForSelection["subjects"].length
+                }}</span></span
+              >
+            </h3>
+            <FilterList
+              :filters="filtersForSelection['subjects']"
+              :activeFilters="state.activeFilters['subjects']"
+              v-on:toggle-active-filter="
+                onToggleActiveFilter('subjects', $event)
+              "
+              v-on:toggle-tail="onToggleTail"
+              activeClass="teal"
+            />
           </v-col>
           <v-col cols="12" lg="2">
-            <div>
-              <h3 class="mb3">
-                <span class="bb b--secondary"
-                  >Locations in selection
-                  <span class="fw1">{{
-                    filtersForSelection["locations"].length
-                  }}</span></span
-                >
-              </h3>
-              <FilterList
-                :filters="filtersForSelection['locations']"
-                :activeFilters="state.activeFilters['locations']"
-                v-on:toggle-active-filter="
-                  onToggleActiveFilter('locations', $event)
-                "
-                v-on:toggle-tail="onToggleTail"
-                activeClass="teal"
-              />
-            </div>
+            <h3 class="mb3">
+              <span class="bb b--secondary"
+                >Locations in selection
+                <span class="fw1">{{
+                  filtersForSelection["locations"].length
+                }}</span></span
+              >
+            </h3>
+            <FilterList
+              :filters="filtersForSelection['locations']"
+              :activeFilters="state.activeFilters['locations']"
+              v-on:toggle-active-filter="
+                onToggleActiveFilter('locations', $event)
+              "
+              v-on:toggle-tail="onToggleTail"
+              activeClass="teal"
+            />
           </v-col>
           <v-col cols="12" lg="8">
             <div class="mb3 flex flex-wrap">
@@ -358,23 +354,14 @@ export default {
         return _.countBy(names);
       };
 
-      /// more readable, less elegant?
-      // filterCounts = {}
-      // this.$options.static.filterFields.forEach(filterField => {
-      //   filterCounts[filterField] = getCounts(this.itemsFilteredSorted, fitlerField)
-      // })
-      // return filterCounts
-
-      return this.$options.static.filterFields.reduce(
-        (filterCountsAccumulator, currentFilterField) => {
-          filterCountsAccumulator[currentFilterField] = getCounts(
-            this.itemsFilteredSorted,
-            currentFilterField
-          );
-          return filterCountsAccumulator;
-        },
-        {}
-      );
+      let filterCounts = {};
+      this.$options.static.filterFields.forEach((filterField) => {
+        filterCounts[filterField] = getCounts(
+          this.itemsFilteredSorted,
+          filterField
+        );
+      });
+      return filterCounts;
     },
     filtersForSelection() {
       const getFiltersOrdered = (filterCounts) => {
