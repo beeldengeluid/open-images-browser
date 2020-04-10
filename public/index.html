@@ -7,7 +7,7 @@
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
     <title>Open Images Browser</title>
     <link href="https://fonts.googleapis.com/css?family=Material+Icons" rel="stylesheet">
-    <!-- Matomo -->
+    <%= process.env.NODE_ENV === 'production' ? `<!-- Matomo -->
     <script type="text/javascript">
       var _paq = window._paq || [];
       /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
@@ -21,7 +21,7 @@
         g.type='text/javascript'; g.async=true; g.defer=true; g.src='//cdn.innocraft.cloud/clariah-mediasuite.innocraft.cloud/matomo.js'; s.parentNode.insertBefore(g,s);
       })();
     </script>
-    <!-- End Matomo Code -->
+    <!-- End Matomo Code -->` : '' %>
   </head>
   <body>
     <noscript>
