@@ -4,6 +4,9 @@
       class="font-mono mb3"
       multiple
       :column="$vuetify.breakpoint.lgAndUp"
+      next-icon="keyboard_arrow_right"
+      prev-icon="keyboard_arrow_left"
+      show-arrows
     >
       <v-chip
         v-for="filter in filtersToDisplay"
