@@ -165,7 +165,7 @@
                 outlined
                 class="ml-auto"
               >
-                <v-icon left>delete_outline</v-icon>Clear Selection
+                <v-icon left>cancel</v-icon>Clear Selection
               </v-btn>
             </div>
             <div class="dflex flex-wrap mb3">
