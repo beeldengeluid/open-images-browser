@@ -1,37 +1,32 @@
 <template>
   <div class="filter-list">
-    <!-- <div class="db dn-l"> -->
-    <div class="">
-      <v-chip-group
-        class="font-mono mb3"
-        multiple
-        column="this.$vuetify.breakpoint.lgAndUp"
+    <v-chip-group
+      class="font-mono mb3"
+      multiple
+      column="this.$vuetify.breakpoint.lgAndUp"
+    >
+      <v-chip
+        v-for="filter in filtersToDisplay"
+        :key="filter.name"
+        @click="$emit('toggle-active-filter', filter.name)"
+        :value="filter.name"
+        :class="
+          activeFilters.includes(filter.name)
+            ? activeClass + ' white--text'
+            : ''
+        "
+        label
+        small
+        class="font-mono ma0"
+        :title="`${filter.name} (${filter.count})`"
       >
-        <v-chip
-          v-for="filter in filtersToDisplay"
-          :key="filter.name"
-          @click="$emit('toggle-active-filter', filter.name)"
-          :value="filter.name"
-          :class="
-            activeFilters.includes(filter.name)
-              ? activeClass + ' white--text'
-              : ''
-          "
-          label
-          small
-          class="font-mono ma0"
-          :title="`${filter.name} (${filter.count})`"
-        >
-          <strong class="mr1">{{ filter.name }}</strong
-          ><span>{{ filter.count }}</span>
-          <v-icon right small
-            >{{
-              activeFilters.includes(filter.name) ? "cancel" : "filter_list"
-            }}
-          </v-icon>
-        </v-chip>
-      </v-chip-group>
-    </div>
+        <strong class="mr1">{{ filter.name }}</strong
+        ><span>{{ filter.count }}</span>
+        <v-icon right small
+          >{{ activeFilters.includes(filter.name) ? "cancel" : "filter_list" }}
+        </v-icon>
+      </v-chip>
+    </v-chip-group>
     <div class="flex" :class="{ 'flex-column': $vuetify.breakpoint.lgAndUp }">
       <div v-show="isTailHidden" class="w4-5 f6 mb2">
         ... long tail of {{ tail.length }} single occurrences hidden
