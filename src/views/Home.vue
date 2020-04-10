@@ -57,7 +57,7 @@
       />
       <v-container fluid class="pa0">
         <v-row>
-          <v-col cols="12" md="6" lg="2">
+          <v-col cols="12" lg="2">
             <div>
               <h3 class="mb3">
                 <span class="bb b--secondary"
@@ -78,7 +78,7 @@
               />
             </div>
           </v-col>
-          <v-col cols="12" md="6" lg="2">
+          <v-col cols="12" lg="2">
             <div>
               <h3 class="mb3">
                 <span class="bb b--secondary"
@@ -99,7 +99,7 @@
               />
             </div>
           </v-col>
-          <v-col sm="12" md="12" lg="8">
+          <v-col cols="12" lg="8">
             <div class="mb3 flex flex-wrap">
               <h3 class="dib mr3 mb3">
                 <span class="bb b--secondary mr2"

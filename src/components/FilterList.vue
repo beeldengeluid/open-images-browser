@@ -3,7 +3,7 @@
     <v-chip-group
       class="font-mono mb3"
       multiple
-      column="this.$vuetify.breakpoint.lgAndUp"
+      :column="$vuetify.breakpoint.lgAndUp"
     >
       <v-chip
         v-for="filter in filtersToDisplay"
@@ -27,7 +27,7 @@
         </v-icon>
       </v-chip>
     </v-chip-group>
-    <div class="flex" :class="{ 'flex-column': $vuetify.breakpoint.lgAndUp }">
+    <div class="d-none d-lg-flex flex-column">
       <div v-show="isTailHidden" class="w4-5 f6 mb2">
         ... long tail of {{ tail.length }} single occurrences hidden
       </div>
