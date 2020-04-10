@@ -32,11 +32,11 @@
         </v-chip>
       </v-chip-group>
     </div>
-    <div class="dn db-l">
-      <div v-if="isTailHidden" class="mt2 w4-5 f6">
+    <div class="flex" :class="{ 'flex-column': $vuetify.breakpoint.lgAndUp }">
+      <div v-show="isTailHidden" class="w4-5 f6 mb2">
         ... long tail of {{ tail.length }} single occurrences hidden
       </div>
-      <v-btn v-if="hasLongTail" @click="toggleTail" class="mt2" outlined>
+      <v-btn v-if="hasLongTail" @click="toggleTail" outlined>
         {{ isTailHidden ? "Show all" : "Hide long tail" }}
       </v-btn>
     </div>
