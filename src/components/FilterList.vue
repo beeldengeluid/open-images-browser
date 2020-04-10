@@ -29,11 +29,7 @@
     </div>
     <div class="dn db-l">
       <v-chip-group class="font-mono mb3" column multiple>
-        <div
-          v-for="filter in filtersToDisplay"
-          :key="filter.name"
-          class="w-100"
-        >
+        <div v-for="filter in filtersToDisplay" :key="filter.name" class="">
           <v-chip
             @click="$emit('toggle-active-filter', filter.name)"
             :value="filter.name"

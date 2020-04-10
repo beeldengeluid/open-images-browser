@@ -55,63 +55,10 @@
           background: $options.static.colors.background,
         }"
       />
-      <div class="db dn-l">
-        <h3 class="mb2">
-          <span class="bb b--secondary"
-            >Locations in selection
-            <span class="fw1">{{
-              filtersForSelection["locations"].length
-            }}</span></span
-          >
-        </h3>
-        <FilterList
-          :filters="filtersForSelection['locations']"
-          :activeFilters="state.activeFilters['locations']"
-          v-on:toggle-active-filter="onToggleActiveFilter('locations', $event)"
-          v-on:toggle-tail="onToggleTail"
-          activeClass="teal"
-        />
-        <h3 class="mb2">
-          <span class="bb b--secondary"
-            >Subjects in selection
-            <span class="fw1">{{
-              filtersForSelection["subjects"].length
-            }}</span></span
-          >
-        </h3>
-        <FilterList
-          :filters="filtersForSelection['subjects']"
-          :activeFilters="state.activeFilters['subjects']"
-          v-on:toggle-active-filter="onToggleActiveFilter('subjects', $event)"
-          v-on:toggle-tail="onToggleTail"
-          activeClass="teal"
-        />
-      </div>
       <v-container fluid class="pa0">
         <v-row>
-          <v-col cols="auto" class="dn db-l">
-            <div class="mw5">
-              <h3 class="mb3">
-                <span class="bb b--secondary"
-                  >Locations in selection
-                  <span class="fw1">{{
-                    filtersForSelection["locations"].length
-                  }}</span></span
-                >
-              </h3>
-              <FilterList
-                :filters="filtersForSelection['locations']"
-                :activeFilters="state.activeFilters['locations']"
-                v-on:toggle-active-filter="
-                  onToggleActiveFilter('locations', $event)
-                "
-                v-on:toggle-tail="onToggleTail"
-                activeClass="teal"
-              />
-            </div>
-          </v-col>
-          <v-col cols="auto" class="dn db-l">
-            <div class="mw5">
+          <v-col sm="12" md="6" lg="2">
+            <div>
               <h3 class="mb3">
                 <span class="bb b--secondary"
                   >Subjects in selection
@@ -131,7 +78,28 @@
               />
             </div>
           </v-col>
-          <v-col>
+          <v-col sm="12" md="6" lg="2">
+            <div>
+              <h3 class="mb3">
+                <span class="bb b--secondary"
+                  >Locations in selection
+                  <span class="fw1">{{
+                    filtersForSelection["locations"].length
+                  }}</span></span
+                >
+              </h3>
+              <FilterList
+                :filters="filtersForSelection['locations']"
+                :activeFilters="state.activeFilters['locations']"
+                v-on:toggle-active-filter="
+                  onToggleActiveFilter('locations', $event)
+                "
+                v-on:toggle-tail="onToggleTail"
+                activeClass="teal"
+              />
+            </div>
+          </v-col>
+          <v-col sm="12" md="12" lg="8">
             <div class="mb3 flex flex-wrap">
               <h3 class="dib mr3 mb3">
                 <span class="bb b--secondary mr2"
