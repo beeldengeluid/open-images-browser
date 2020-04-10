@@ -57,7 +57,7 @@
       />
       <v-container fluid class="pa0">
         <v-row>
-          <v-col sm="12" md="6" lg="2">
+          <v-col cols="12" md="6" lg="2">
             <div>
               <h3 class="mb3">
                 <span class="bb b--secondary"
@@ -78,7 +78,7 @@
               />
             </div>
           </v-col>
-          <v-col sm="12" md="6" lg="2">
+          <v-col cols="12" md="6" lg="2">
             <div>
               <h3 class="mb3">
                 <span class="bb b--secondary"
