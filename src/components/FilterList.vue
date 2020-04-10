@@ -1,7 +1,12 @@
 <template>
   <div class="filter-list">
-    <div class="db dn-l">
-      <v-chip-group class="font-mono mb3" multiple>
+    <!-- <div class="db dn-l"> -->
+    <div class="">
+      <v-chip-group
+        class="font-mono mb3"
+        multiple
+        column="this.$vuetify.breakpoint.lgAndUp"
+      >
         <v-chip
           v-for="filter in filtersToDisplay"
           :key="filter.name"
@@ -25,33 +30,6 @@
             }}
           </v-icon>
         </v-chip>
-      </v-chip-group>
-    </div>
-    <div class="dn db-l">
-      <v-chip-group class="font-mono mb3" column multiple>
-        <div v-for="filter in filtersToDisplay" :key="filter.name" class="">
-          <v-chip
-            @click="$emit('toggle-active-filter', filter.name)"
-            :value="filter.name"
-            :class="
-              activeFilters.includes(filter.name)
-                ? activeClass + ' white--text'
-                : ''
-            "
-            label
-            small
-            class="font-mono ma0"
-            :title="`${filter.name} (${filter.count})`"
-          >
-            <strong class="mr1">{{ filter.name }}</strong
-            ><span>{{ filter.count }}</span>
-            <v-icon right small
-              >{{
-                activeFilters.includes(filter.name) ? "cancel" : "filter_list"
-              }}
-            </v-icon>
-          </v-chip>
-        </div>
       </v-chip-group>
     </div>
     <div class="dn db-l">
