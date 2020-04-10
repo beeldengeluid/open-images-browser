@@ -24,21 +24,7 @@
       />
     </div>
     <v-content class="ma2 ma3-ns mt4">
-      <header>
-        <h1>Open Images Browser</h1>
-        <p>
-          <span>Below you can explore videos from the </span>
-          <v-tooltip bottom>
-            <template v-slot:activator="{ on }">
-              <a href="https://openbeelden.nl/" target="_blank" v-on="on"
-                >Open Images Collection ↗︎</a
-              >
-            </template>
-            an open media platform that offers online access to audiovisual
-            archive material to stimulate creative reuse </v-tooltip
-          >.
-        </p>
-      </header>
+      <TheHeader />
       <div class="flex flex-wrap">
         <StateStory
           :state="state"
@@ -271,6 +257,7 @@
 import "../../node_modules/tachyons/css/tachyons.min.css";
 import _ from "lodash";
 import dataItems from "@/assets/data/openbeelden-items-clean.json";
+import TheHeader from "@/components/TheHeader";
 import StateStory from "@/components/StateStory";
 import PeriodChart from "@/components/PeriodChart";
 import FilterList from "@/components/FilterList";
@@ -282,6 +269,7 @@ import BackToTop from "vue-backtotop";
 export default {
   name: "OpenBeeldenBrowser",
   components: {
+    TheHeader,
     StateStory,
     PeriodChart,
     FilterList,
