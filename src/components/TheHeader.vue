@@ -15,18 +15,5 @@
         collection items are distributed over the available filters.
       </p>
     </section>
-    <p class="mt4 f3">
-      Explore videos from the
-      <v-tooltip top>
-        <template v-slot:activator="{ on }">
-          <a href="https://openbeelden.nl/" target="_blank" v-on="on"
-            >Open Images Collection↗︎</a
-          >
-        </template>
-        an open media platform that offers online access to audiovisual archive
-        material to stimulate creative reuse
-      </v-tooltip>
-      below.
-    </p>
   </header>
 </template>

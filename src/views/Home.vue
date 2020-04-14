@@ -1,30 +1,9 @@
 <template>
   <v-app id="app">
-    <div class="fixed w-100 z-2 f6">
-      <RatioBar
-        :amount="items.length"
-        :total="items.length"
-        :label="`${items.length} videos in total`"
-        :innerLabel="true"
-        :color="$options.static.colors.inactive"
-      />
-      <RatioBar
-        :amount="decades[state.decadeIndex].count"
-        :total="items.length"
-        :label="'in decade'"
-        :labelClasses="'grey--text'"
-        :color="$options.static.colors.primary"
-      />
-      <RatioBar
-        :amount="itemsFilteredSorted.length"
-        :total="items.length"
-        :label="'in selection'"
-        :labelClasses="'grey--text'"
-        :color="$options.static.colors.secondary"
-      />
-    </div>
-    <v-content class="ma2 ma3-ns mt4">
+    <TheNavBar />
+    <v-content class="ma2 ma3-ns">
       <TheHeader />
+      <TheCTA class="f4" />
       <div class="flex flex-wrap">
         <StateStory
           :state="state"
@@ -44,7 +23,6 @@
           <v-icon left>shuffle</v-icon>Randomize Selection
         </v-btn>
       </div>
-      <TheCTA class="mt3 f4" />
       <PeriodChart
         :barSeries="decadeCounts"
         :lineSeries="decadeCountsForSelection"
@@ -56,6 +34,29 @@
           background: $options.static.colors.background,
         }"
       />
+      <div class="w-100 z-2 f6">
+        <RatioBar
+          :amount="items.length"
+          :total="items.length"
+          :label="`${items.length} videos in total`"
+          :innerLabel="true"
+          :color="$options.static.colors.inactive"
+        />
+        <RatioBar
+          :amount="decades[state.decadeIndex].count"
+          :total="items.length"
+          :label="'in decade'"
+          :labelClasses="'grey--text'"
+          :color="$options.static.colors.primary"
+        />
+        <RatioBar
+          :amount="itemsFilteredSorted.length"
+          :total="items.length"
+          :label="'in selection'"
+          :labelClasses="'grey--text'"
+          :color="$options.static.colors.secondary"
+        />
+      </div>
       <v-container fluid class="pa0">
         <v-row>
           <v-col cols="12" lg="2">
@@ -222,6 +223,7 @@
 import "../../node_modules/tachyons/css/tachyons.min.css";
 import _ from "lodash";
 import dataItems from "@/assets/data/openbeelden-items-clean.json";
+import TheNavBar from "@/components/TheNavBar";
 import TheHeader from "@/components/TheHeader";
 import TheCTA from "@/components/TheCTA";
 import StateStory from "@/components/StateStory";
@@ -235,6 +237,7 @@ import BackToTop from "vue-backtotop";
 export default {
   name: "OpenBeeldenBrowser",
   components: {
+    TheNavBar,
     TheHeader,
     TheCTA,
     StateStory,
