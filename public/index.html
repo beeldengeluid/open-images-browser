@@ -7,6 +7,21 @@
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
     <title>Open Images Browser</title>
     <link href="https://fonts.googleapis.com/css?family=Material+Icons" rel="stylesheet">
+    <%= process.env.NODE_ENV === 'production' ? `<!-- Matomo -->
+    <script type="text/javascript">
+      var _paq = window._paq || [];
+      /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+      _paq.push(['trackPageView']);
+      _paq.push(['enableLinkTracking']);
+      (function() {
+        var u="https://clariah-mediasuite.innocraft.cloud/";
+        _paq.push(['setTrackerUrl', u+'matomo.php']);
+        _paq.push(['setSiteId', '2']);
+        var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+        g.type='text/javascript'; g.async=true; g.defer=true; g.src='//cdn.innocraft.cloud/clariah-mediasuite.innocraft.cloud/matomo.js'; s.parentNode.insertBefore(g,s);
+      })();
+    </script>
+    <!-- End Matomo Code -->` : '' %>
   </head>
   <body>
     <noscript>

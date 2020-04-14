@@ -1,68 +1,40 @@
 <template>
   <div class="filter-list">
-    <div class="db dn-l">
-      <v-chip-group class="font-mono mb3" multiple>
-        <v-chip
-          v-for="filter in filtersToDisplay"
-          :key="filter.name"
-          @click="$emit('toggle-active-filter', filter.name)"
-          :value="filter.name"
-          :class="
-            activeFilters.includes(filter.name)
-              ? activeClass + ' white--text'
-              : ''
-          "
-          label
-          small
-          class="font-mono ma0"
-          :title="`${filter.name} (${filter.count})`"
-        >
-          <strong class="mr1">{{ filter.name }}</strong
-          ><span>{{ filter.count }}</span>
-          <v-icon right small
-            >{{
-              activeFilters.includes(filter.name) ? "cancel" : "filter_list"
-            }}
-          </v-icon>
-        </v-chip>
-      </v-chip-group>
-    </div>
-    <div class="dn db-l">
-      <v-chip-group class="font-mono mb3" column multiple>
-        <div
-          v-for="filter in filtersToDisplay"
-          :key="filter.name"
-          class="w-100"
-        >
-          <v-chip
-            @click="$emit('toggle-active-filter', filter.name)"
-            :value="filter.name"
-            :class="
-              activeFilters.includes(filter.name)
-                ? activeClass + ' white--text'
-                : ''
-            "
-            label
-            small
-            class="font-mono ma0"
-            :title="`${filter.name} (${filter.count})`"
-          >
-            <strong class="mr1">{{ filter.name }}</strong
-            ><span>{{ filter.count }}</span>
-            <v-icon right small
-              >{{
-                activeFilters.includes(filter.name) ? "cancel" : "filter_list"
-              }}
-            </v-icon>
-          </v-chip>
-        </div>
-      </v-chip-group>
-    </div>
-    <div class="dn db-l">
-      <div v-if="isTailHidden" class="mt2 w4-5 f6">
+    <v-chip-group
+      class="font-mono mb3"
+      multiple
+      :column="$vuetify.breakpoint.lgAndUp"
+      next-icon="keyboard_arrow_right"
+      prev-icon="keyboard_arrow_left"
+      show-arrows
+    >
+      <v-chip
+        v-for="filter in filtersToDisplay"
+        :key="filter.name"
+        @click="$emit('toggle-active-filter', filter.name)"
+        :value="filter.name"
+        :class="
+          activeFilters.includes(filter.name)
+            ? activeClass + ' white--text'
+            : ''
+        "
+        label
+        small
+        class="font-mono ma0"
+        :title="`${filter.name} (${filter.count})`"
+      >
+        <strong class="mr1">{{ filter.name }}</strong
+        ><span>{{ filter.count }}</span>
+        <v-icon right small
+          >{{ activeFilters.includes(filter.name) ? "cancel" : "filter_list" }}
+        </v-icon>
+      </v-chip>
+    </v-chip-group>
+    <div class="d-none d-lg-flex flex-column">
+      <div v-show="isTailHidden" class="w4-5 f6 mb2">
         ... long tail of {{ tail.length }} single occurrences hidden
       </div>
-      <v-btn v-if="hasLongTail" @click="toggleTail" class="mt2" outlined>
+      <v-btn v-if="hasLongTail" @click="toggleTail" outlined>
         {{ isTailHidden ? "Show all" : "Hide long tail" }}
       </v-btn>
     </div>

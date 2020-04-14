@@ -58,13 +58,7 @@
     <span class="ph1 white black--text font-mono">{{
       computed.totalLength
     }}</span>
-    videos,
-    <br />
-    sorted by <span class="ph1 indigo font-mono">{{ state.sortBy }}</span> in
-    <span class="ph1 indigo font-mono">{{
-      state.sortAscending ? "ascending" : "descending"
-    }}</span>
-    order.
+    videos.
   </div>
 </template>
 

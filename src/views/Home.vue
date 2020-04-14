@@ -1,44 +1,9 @@
 <template>
   <v-app id="app">
-    <div class="fixed w-100 z-2 f6">
-      <RatioBar
-        :amount="items.length"
-        :total="items.length"
-        :label="`${items.length} videos in total`"
-        :innerLabel="true"
-        :color="$options.static.colors.inactive"
-      />
-      <RatioBar
-        :amount="decades[state.decadeIndex].count"
-        :total="items.length"
-        :label="'in decade'"
-        :labelClasses="'grey--text'"
-        :color="$options.static.colors.primary"
-      />
-      <RatioBar
-        :amount="itemsFilteredSorted.length"
-        :total="items.length"
-        :label="'in selection'"
-        :labelClasses="'grey--text'"
-        :color="$options.static.colors.secondary"
-      />
-    </div>
-    <v-content class="ma2 ma3-ns mt4">
-      <header>
-        <h1>Open Images Browser</h1>
-        <p>
-          <span>Below you can explore videos from the </span>
-          <v-tooltip bottom>
-            <template v-slot:activator="{ on }">
-              <a href="https://openbeelden.nl/" target="_blank" v-on="on"
-                >Open Images Collection ↗︎</a
-              >
-            </template>
-            an open media platform that offers online access to audiovisual
-            archive material to stimulate creative reuse </v-tooltip
-          >.
-        </p>
-      </header>
+    <TheNavBar />
+    <v-content class="ma2 ma3-ns">
+      <TheHeader />
+      <TheCTA class="f4" />
       <div class="flex flex-wrap">
         <StateStory
           :state="state"
@@ -69,83 +34,70 @@
           background: $options.static.colors.background,
         }"
       />
-      <div class="db dn-l">
-        <h3 class="mb2">
-          <span class="bb b--secondary"
-            >Locations in selection
-            <span class="fw1">{{
-              filtersForSelection["locations"].length
-            }}</span></span
-          >
-        </h3>
-        <FilterList
-          :filters="filtersForSelection['locations']"
-          :activeFilters="state.activeFilters['locations']"
-          v-on:toggle-active-filter="onToggleActiveFilter('locations', $event)"
-          v-on:toggle-tail="onToggleTail"
-          activeClass="teal"
+      <div class="w-100 z-2 f6">
+        <RatioBar
+          :amount="items.length"
+          :total="items.length"
+          :label="`${items.length} videos in total`"
+          :innerLabel="true"
+          :color="$options.static.colors.inactive"
         />
-        <h3 class="mb2">
-          <span class="bb b--secondary"
-            >Subjects in selection
-            <span class="fw1">{{
-              filtersForSelection["subjects"].length
-            }}</span></span
-          >
-        </h3>
-        <FilterList
-          :filters="filtersForSelection['subjects']"
-          :activeFilters="state.activeFilters['subjects']"
-          v-on:toggle-active-filter="onToggleActiveFilter('subjects', $event)"
-          v-on:toggle-tail="onToggleTail"
-          activeClass="teal"
+        <RatioBar
+          :amount="decades[state.decadeIndex].count"
+          :total="items.length"
+          :label="'in decade'"
+          :labelClasses="'grey--text'"
+          :color="$options.static.colors.primary"
+        />
+        <RatioBar
+          :amount="itemsFilteredSorted.length"
+          :total="items.length"
+          :label="'in selection'"
+          :labelClasses="'grey--text'"
+          :color="$options.static.colors.secondary"
         />
       </div>
       <v-container fluid class="pa0">
         <v-row>
-          <v-col cols="auto" class="dn db-l">
-            <div class="mw5">
-              <h3 class="mb3">
-                <span class="bb b--secondary"
-                  >Locations in selection
-                  <span class="fw1">{{
-                    filtersForSelection["locations"].length
-                  }}</span></span
-                >
-              </h3>
-              <FilterList
-                :filters="filtersForSelection['locations']"
-                :activeFilters="state.activeFilters['locations']"
-                v-on:toggle-active-filter="
-                  onToggleActiveFilter('locations', $event)
-                "
-                v-on:toggle-tail="onToggleTail"
-                activeClass="teal"
-              />
-            </div>
+          <v-col cols="12" lg="2">
+            <h3 class="mb3">
+              <span class="bb b--secondary"
+                >Subjects in selection
+                <span class="fw1">{{
+                  filtersForSelection["subjects"].length
+                }}</span></span
+              >
+            </h3>
+            <FilterList
+              :filters="filtersForSelection['subjects']"
+              :activeFilters="state.activeFilters['subjects']"
+              v-on:toggle-active-filter="
+                onToggleActiveFilter('subjects', $event)
+              "
+              v-on:toggle-tail="onToggleTail"
+              activeClass="teal"
+            />
           </v-col>
-          <v-col cols="auto" class="dn db-l">
-            <div class="mw5">
-              <h3 class="mb3">
-                <span class="bb b--secondary"
-                  >Subjects in selection
-                  <span class="fw1">{{
-                    filtersForSelection["subjects"].length
-                  }}</span></span
-                >
-              </h3>
-              <FilterList
-                :filters="filtersForSelection['subjects']"
-                :activeFilters="state.activeFilters['subjects']"
-                v-on:toggle-active-filter="
-                  onToggleActiveFilter('subjects', $event)
-                "
-                v-on:toggle-tail="onToggleTail"
-                activeClass="teal"
-              />
-            </div>
+          <v-col cols="12" lg="2">
+            <h3 class="mb3">
+              <span class="bb b--secondary"
+                >Locations in selection
+                <span class="fw1">{{
+                  filtersForSelection["locations"].length
+                }}</span></span
+              >
+            </h3>
+            <FilterList
+              :filters="filtersForSelection['locations']"
+              :activeFilters="state.activeFilters['locations']"
+              v-on:toggle-active-filter="
+                onToggleActiveFilter('locations', $event)
+              "
+              v-on:toggle-tail="onToggleTail"
+              activeClass="teal"
+            />
           </v-col>
-          <v-col>
+          <v-col cols="12" lg="8">
             <div class="mb3 flex flex-wrap">
               <h3 class="dib mr3 mb3">
                 <span class="bb b--secondary mr2"
@@ -165,7 +117,7 @@
                 outlined
                 class="ml-auto"
               >
-                <v-icon left>delete_outline</v-icon>Clear Selection
+                <v-icon left>cancel</v-icon>Clear Selection
               </v-btn>
             </div>
             <div class="dflex flex-wrap mb3">
@@ -271,6 +223,9 @@
 import "../../node_modules/tachyons/css/tachyons.min.css";
 import _ from "lodash";
 import dataItems from "@/assets/data/openbeelden-items-clean.json";
+import TheNavBar from "@/components/TheNavBar";
+import TheHeader from "@/components/TheHeader";
+import TheCTA from "@/components/TheCTA";
 import StateStory from "@/components/StateStory";
 import PeriodChart from "@/components/PeriodChart";
 import FilterList from "@/components/FilterList";
@@ -282,6 +237,9 @@ import BackToTop from "vue-backtotop";
 export default {
   name: "OpenBeeldenBrowser",
   components: {
+    TheNavBar,
+    TheHeader,
+    TheCTA,
     StateStory,
     PeriodChart,
     FilterList,
@@ -402,23 +360,14 @@ export default {
         return _.countBy(names);
       };
 
-      /// more readable, less elegant?
-      // filterCounts = {}
-      // this.$options.static.filterFields.forEach(filterField => {
-      //   filterCounts[filterField] = getCounts(this.itemsFilteredSorted, fitlerField)
-      // })
-      // return filterCounts
-
-      return this.$options.static.filterFields.reduce(
-        (filterCountsAccumulator, currentFilterField) => {
-          filterCountsAccumulator[currentFilterField] = getCounts(
-            this.itemsFilteredSorted,
-            currentFilterField
-          );
-          return filterCountsAccumulator;
-        },
-        {}
-      );
+      let filterCounts = {};
+      this.$options.static.filterFields.forEach((filterField) => {
+        filterCounts[filterField] = getCounts(
+          this.itemsFilteredSorted,
+          filterField
+        );
+      });
+      return filterCounts;
     },
     filtersForSelection() {
       const getFiltersOrdered = (filterCounts) => {
