@@ -44,6 +44,7 @@
           <v-icon left>shuffle</v-icon>Randomize Selection
         </v-btn>
       </div>
+      <TheCTA class="mt3 f4" />
       <PeriodChart
         :barSeries="decadeCounts"
         :lineSeries="decadeCountsForSelection"
@@ -222,6 +223,7 @@ import "../../node_modules/tachyons/css/tachyons.min.css";
 import _ from "lodash";
 import dataItems from "@/assets/data/openbeelden-items-clean.json";
 import TheHeader from "@/components/TheHeader";
+import TheCTA from "@/components/TheCTA";
 import StateStory from "@/components/StateStory";
 import PeriodChart from "@/components/PeriodChart";
 import FilterList from "@/components/FilterList";
@@ -234,6 +236,7 @@ export default {
   name: "OpenBeeldenBrowser",
   components: {
     TheHeader,
+    TheCTA,
     StateStory,
     PeriodChart,
     FilterList,
