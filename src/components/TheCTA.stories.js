@@ -1,8 +1,8 @@
 // Utilities
-import { storyFactory } from "../util/helpers";
+import { storyFactory } from "../../.storybook/util/helpers";
 
 // Components
-import { TheCTA } from "../../src/components/TheCTA";
+import { TheCTA } from "./TheCTA";
 
 export default { title: "TheCTA" };
 
@@ -17,7 +17,7 @@ function genComponent(name) {
 }
 
 const story = storyFactory({
-  TheCTA: () => import("../../src/components/TheCTA"),
+  TheCTA: () => import("./TheCTA"),
 });
 
 export const Regular = () =>

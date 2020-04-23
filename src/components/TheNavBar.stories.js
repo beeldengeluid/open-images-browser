@@ -1,10 +1,10 @@
 // Utilities
-import { storyFactory } from "../util/helpers";
+import { storyFactory } from "../../.storybook/util/helpers";
 
 // Components
-import { TheHeader } from "../../src/components/TheHeader";
+import { TheNavBar } from "./TheNavBar";
 
-export default { title: "TheHeader" };
+export default { title: "TheNavBar" };
 
 function genComponent(name) {
   return {
@@ -17,13 +17,13 @@ function genComponent(name) {
 }
 
 const story = storyFactory({
-  TheHeader: () => import("../../src/components/TheHeader"),
+  TheNavBar: () => import("./TheNavBar"),
 });
 
 export const Regular = () =>
   story({
     props: {},
     template: `
-    <TheHeader />
+    <TheNavBar />
   `,
   });
