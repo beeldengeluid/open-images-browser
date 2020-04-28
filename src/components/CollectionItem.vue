@@ -36,7 +36,7 @@
             </div>
             <transition name="fade">
               <div v-if="hover" class="absolute right-0 bottom-0">
-                <v-icon>fullscreen</v-icon>
+                <v-icon>mdi-fullscreen</v-icon>
               </div>
             </transition>
           </div>
@@ -61,7 +61,7 @@
         </h2>
         <div v-if="subjects.length" class="mv2">
           <span class="fw6">
-            <v-icon small>room</v-icon>
+            <v-icon small>mdi-map-marker</v-icon>
             <span class="v-mid">
               {{ subjects.length }} Subject<span v-if="subjects.length > 1"
                 >s</span
@@ -84,8 +84,8 @@
               <v-icon right
                 >{{
                   activeSubjectFilters.includes(subject)
-                    ? "cancel"
-                    : "filter_list"
+                    ? "mdi-close-circle"
+                    : "mdi-filter-variant"
                 }}
               </v-icon>
             </v-chip>
@@ -93,7 +93,7 @@
         </div>
         <div v-if="locations.length" class="mv2">
           <span class="fw6">
-            <v-icon small>room</v-icon>
+            <v-icon small>mdi-map-marker</v-icon>
             <span class="v-mid">
               {{ locations.length }} Location<span v-if="locations.length > 1"
                 >s</span
@@ -118,8 +118,8 @@
               <v-icon right
                 >{{
                   activeLocationFilters.includes(location)
-                    ? "cancel"
-                    : "filter_list"
+                    ? "mdi-close-circle"
+                    : "mdi-filter-variant"
                 }}
               </v-icon>
             </v-chip>
@@ -127,7 +127,7 @@
         </div>
         <div v-if="creators.length" class="mv2">
           <span class="fw6">
-            <v-icon small>videocam</v-icon>
+            <v-icon small>mdi-video</v-icon>
             <span class="v-mid"> {{ creators.length }} Creator</span
             ><span v-if="creators.length > 1">s</span>
           </span>
@@ -141,7 +141,7 @@
         <v-icon
           @click="toggleExpanded"
           class="absolute ma3 top-0 right-0 pointer"
-          >close</v-icon
+          >mdi-close</v-icon
         >
       </div>
     </div>

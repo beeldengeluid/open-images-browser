@@ -26,7 +26,11 @@
         <strong class="mr1">{{ filter.name }}</strong
         ><span>{{ filter.count }}</span>
         <v-icon right small
-          >{{ activeFilters.includes(filter.name) ? "cancel" : "filter_list" }}
+          >{{
+            activeFilters.includes(filter.name)
+              ? "mdi-close-circle"
+              : "mdi-filter-variant"
+          }}
         </v-icon>
       </v-chip>
     </v-chip-group>

@@ -27,9 +27,9 @@
           class="ml1 teal white--text font-mono"
           @click="$emit('toggle-active-filter', 'locations', locationFilter)"
         >
-          <v-icon small left>room</v-icon>
+          <v-icon small left>mdi-map-marker</v-icon>
           <strong>{{ locationFilter }}</strong>
-          <v-icon small right>cancel</v-icon>
+          <v-icon small right>mdi-filter-variant</v-icon>
         </v-chip>
       </span>
       <span v-if="state.activeFilters['subjects'].length">
@@ -42,9 +42,9 @@
           class="ml1 teal white--text font-mono"
           @click="$emit('toggle-active-filter', 'subjects', subjectFilter)"
         >
-          <v-icon small left>local_offer</v-icon>
+          <v-icon small left>mdi-tag</v-icon>
           <strong>{{ subjectFilter }}</strong>
-          <v-icon small right>cancel</v-icon>
+          <v-icon small right>mdi-filter-variant</v-icon>
         </v-chip>
       </span>
       <span>,</span>

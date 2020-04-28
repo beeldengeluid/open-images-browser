@@ -20,7 +20,7 @@
           small
           class="ml-auto self-end mt3"
         >
-          <v-icon left>shuffle</v-icon>Randomize Selection
+          <v-icon left>mdi-shuffle</v-icon>Randomize Selection
         </v-btn>
       </div>
       <PeriodChart
@@ -117,7 +117,7 @@
                 outlined
                 class="ml-auto"
               >
-                <v-icon left>cancel</v-icon>Clear Selection
+                <v-icon left>mdi-close-circle</v-icon>Clear Selection
               </v-btn>
             </div>
             <div class="dflex flex-wrap mb3">
@@ -139,9 +139,7 @@
                 </v-chip-group>
                 <v-btn fab x-small color="indigo mr2">
                   <v-icon @click="toggleSortAscending">{{
-                    state.sortAscending
-                      ? "keyboard_arrow_up"
-                      : "keyboard_arrow_down"
+                    state.sortAscending ? "mdi-chevron-up" : "mdi-chevron-down"
                   }}</v-icon>
                 </v-btn>
               </div>
@@ -205,7 +203,7 @@
 
       <back-to-top>
         <v-btn light title="Back to top" absolute bottom right fab>
-          <v-icon>keyboard_arrow_up</v-icon>
+          <v-icon>mdi-chevron-up</v-icon>
         </v-btn>
       </back-to-top>
       <v-snackbar
