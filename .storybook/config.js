@@ -6,6 +6,7 @@ import { withTemplate } from "~storybook/addon-show-vue-markup";
 import { withVuetify } from "~storybook/addon-vuetify";
 
 import "../node_modules/tachyons/css/tachyons.min.css";
+import "../src/assets/css/main.css";
 
 addDecorator(withA11y);
 addDecorator(withKnobs);

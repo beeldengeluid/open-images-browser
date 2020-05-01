@@ -289,7 +289,7 @@ export default {
     colors: {
       primary: "#5E35B1",
       secondary: "#009688",
-      background: "#121212",
+      background: "#303030",
       inactive: "#555",
     },
   },
@@ -668,80 +668,3 @@ export default {
   },
 };
 </script>
-
-<style>
-:root {
-  --bg-color: #121212;
-  --text-color: #ededed;
-  --primary-color: #5e35b1;
-  --primary-accent-color: #7e57c2;
-  --secondary-color: #009688;
-}
-html,
-body {
-  background-color: var(--bg-color);
-  color: var(--text-color);
-}
-
-.theme--dark.v-application {
-  background: var(--bg-color);
-  color: var(--text-color);
-}
-
-@import url("https://fonts.googleapis.com/css?family=Source+Code+Pro:400,400i&display=swap");
-.font-mono {
-  font-family: "Source Code Pro", monospace;
-}
-
-#app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-a {
-  color: var(--text-color) !important;
-}
-
-.dflex {
-  display: flex;
-}
-
-.theme--dark.v-label {
-  color: #fff !important;
-  font-weight: 700;
-}
-
-/* 
-fix to be released shortly:
-https://github.com/vuetifyjs/vuetify/commit/4f151bbdf4388e76d92920ca19c6271c022e6c3f
-*/
-.v-chip.v-size--small .v-icon.v-chip__close {
-  font-size: 18px;
-}
-
-.filterGroupWidth {
-  width: calc(100% - 180px);
-}
-
-.min-w-24rem {
-  min-width: 24rem;
-}
-
-.b--primary-accent {
-  border-color: var(--primary-accent-color);
-}
-.b--secondary {
-  border-color: var(--secondary-color);
-}
-.bg-primary {
-  background-color: var(--primary-color);
-}
-.bg-primary-accent {
-  background-color: var(--primary-accent-color);
-}
-.relative-bottom {
-  top: 100%;
-  transform: translateY(-100%);
-}
-</style>

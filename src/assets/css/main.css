@@ -1,0 +1,43 @@
+:root {
+  --text-color: #fff;
+  --primary-color: #5e35b1;
+  --primary-accent-color: #7e57c2;
+  --secondary-color: #009688;
+}
+
+@import url("https://fonts.googleapis.com/css?family=Source+Code+Pro:400,400i&display=swap");
+.font-mono {
+  font-family: "Source Code Pro", monospace;
+}
+
+#app {
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  color: var(--text-color) !important;
+}
+
+.b--primary-accent {
+  border-color: var(--primary-accent-color);
+}
+.b--secondary {
+  border-color: var(--secondary-color);
+}
+.bg-primary {
+  background-color: var(--primary-color);
+}
+.bg-primary-accent {
+  background-color: var(--primary-accent-color);
+}
+
+.dflex {
+  display: flex;
+}
+
+.theme--dark.v-label {
+  color: #fff !important;
+  font-weight: 700;
+}
