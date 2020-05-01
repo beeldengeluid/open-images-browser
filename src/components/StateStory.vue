@@ -29,7 +29,7 @@
         >
           <v-icon small left>mdi-map-marker</v-icon>
           <strong>{{ locationFilter }}</strong>
-          <v-icon small right>mdi-filter-variant</v-icon>
+          <v-icon small right>mdi-close-circle</v-icon>
         </v-chip>
       </span>
       <span v-if="state.activeFilters['subjects'].length">
@@ -44,7 +44,7 @@
         >
           <v-icon small left>mdi-tag</v-icon>
           <strong>{{ subjectFilter }}</strong>
-          <v-icon small right>mdi-filter-variant</v-icon>
+          <v-icon small right>mdi-close-circle</v-icon>
         </v-chip>
       </span>
       <span>,</span>

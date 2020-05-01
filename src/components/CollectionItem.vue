@@ -61,7 +61,7 @@
         </h2>
         <div v-if="subjects.length" class="mv2">
           <span class="fw6">
-            <v-icon small>mdi-map-marker</v-icon>
+            <v-icon small>mdi-tag</v-icon>
             <span class="v-mid">
               {{ subjects.length }} Subject<span v-if="subjects.length > 1"
                 >s</span
