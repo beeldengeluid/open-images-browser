@@ -61,8 +61,8 @@
         <v-row>
           <v-col cols="12" lg="2">
             <h3 class="mb3">
-              <span class="bb b--secondary"
-                >Subjects in selection
+              <span class="bb b--secondary">
+                <v-icon>mdi-tag</v-icon> Subjects in selection
                 <span class="fw1">{{
                   filtersForSelection["subjects"].length
                 }}</span></span
@@ -80,8 +80,8 @@
           </v-col>
           <v-col cols="12" lg="2">
             <h3 class="mb3">
-              <span class="bb b--secondary"
-                >Locations in selection
+              <span class="bb b--secondary">
+                <v-icon>mdi-map-marker</v-icon> Locations in selection
                 <span class="fw1">{{
                   filtersForSelection["locations"].length
                 }}</span></span

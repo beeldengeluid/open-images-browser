@@ -18,9 +18,11 @@
       Select a <span class="bb b--primary-accent">decade</span> in the bar chart
       <v-icon>mdi-chart-bar</v-icon> below. <br />
       Then filter further by selecting a
-      <span class="bb b--secondary">Subject</span> or
-      <span class="bb b--secondary">Location</span> filter
-      <v-icon>mdi-filter-variant</v-icon>. <br />
+      <span class="bb b--secondary"><v-icon>mdi-tag</v-icon> Subject</span> or
+      <span class="bb b--secondary">
+        <v-icon>mdi-map-marker</v-icon> Location</span
+      >
+      filter <v-icon>mdi-filter-variant</v-icon>. <br />
       Or randomize<v-icon>mdi-shuffle</v-icon> the selection and be surprised.
     </p>
   </section>
