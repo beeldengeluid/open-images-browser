@@ -33,12 +33,12 @@ export default {
     series() {
       return [
         {
-          name: "Total Items",
+          name: "Total Videos",
           type: "bar",
           data: Object.values(this.barSeries),
         },
         {
-          name: "Filtered Items",
+          name: "Filtered Videos",
           type: "line",
           data: Object.values(this.lineSeries),
         },
@@ -67,10 +67,10 @@ export default {
           categories: Object.keys(this.barSeries),
         },
         yaxis: [
-          { title: { text: "Total Items" } },
+          { title: { text: "Total Videos" } },
           {
             opposite: true,
-            title: { text: "Filtered Items" },
+            title: { text: "Filtered Videos" },
           },
         ],
         grid: { show: true },
