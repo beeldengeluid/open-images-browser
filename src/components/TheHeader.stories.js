@@ -20,7 +20,7 @@ const story = storyFactory({
   TheHeader: () => import("./TheHeader"),
 });
 
-export const Regular = () =>
+export const Default = () =>
   story({
     props: {},
     template: `

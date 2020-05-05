@@ -20,7 +20,7 @@ const story = storyFactory({
   TheNavBar: () => import("./TheNavBar"),
 });
 
-export const Regular = () =>
+export const Default = () =>
   story({
     props: {},
     template: `

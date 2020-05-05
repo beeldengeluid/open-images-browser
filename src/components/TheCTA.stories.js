@@ -20,7 +20,7 @@ const story = storyFactory({
   TheCTA: () => import("./TheCTA"),
 });
 
-export const Regular = () =>
+export const Default = () =>
   story({
     props: {},
     template: `
