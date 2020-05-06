@@ -218,7 +218,6 @@
 </template>
 
 <script>
-import "../../node_modules/tachyons/css/tachyons.min.css";
 import _ from "lodash";
 import dataItems from "@/assets/data/openbeelden-items-clean.json";
 import TheNavBar from "@/components/TheNavBar";
