@@ -1,6 +1,6 @@
 <template>
   <div
-    :style="{ width: width, height: height }"
+    :style="[!isExpanded ? { width: width, height: height } : {}]"
     :class="{ 'is-expanded': isExpanded }"
     class="collection-item relative grow-nonexpanded mr1 mb1 shadow-2 overflow-hidden"
   >
