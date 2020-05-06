@@ -4,8 +4,8 @@
       class="font-mono mb3"
       multiple
       :column="$vuetify.breakpoint.lgAndUp"
-      next-icon="keyboard_arrow_right"
-      prev-icon="keyboard_arrow_left"
+      next-icon="mdi-chevron-right"
+      prev-icon="mdi-chevron-left"
       show-arrows
     >
       <v-chip
