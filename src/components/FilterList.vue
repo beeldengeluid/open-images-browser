@@ -4,8 +4,8 @@
       class="font-mono mb3"
       multiple
       :column="$vuetify.breakpoint.lgAndUp"
-      next-icon="keyboard_arrow_right"
-      prev-icon="keyboard_arrow_left"
+      next-icon="mdi-chevron-right"
+      prev-icon="mdi-chevron-left"
       show-arrows
     >
       <v-chip
@@ -26,7 +26,11 @@
         <strong class="mr1">{{ filter.name }}</strong
         ><span>{{ filter.count }}</span>
         <v-icon right small
-          >{{ activeFilters.includes(filter.name) ? "cancel" : "filter_list" }}
+          >{{
+            activeFilters.includes(filter.name)
+              ? "mdi-close-circle"
+              : "mdi-filter-variant"
+          }}
         </v-icon>
       </v-chip>
     </v-chip-group>

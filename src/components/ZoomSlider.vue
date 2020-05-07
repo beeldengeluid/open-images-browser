@@ -14,12 +14,12 @@
     >
       <template v-slot:prepend>
         <v-btn icon @click="$emit('input', value - 1)">
-          <v-icon>zoom_in</v-icon>
+          <v-icon>mdi-magnify-plus</v-icon>
         </v-btn>
       </template>
       <template v-slot:append>
         <v-btn icon @click="$emit('input', value + 1)">
-          <v-icon>zoom_out</v-icon>
+          <v-icon>mdi-magnify-minus</v-icon>
         </v-btn>
       </template>
     </v-slider>
