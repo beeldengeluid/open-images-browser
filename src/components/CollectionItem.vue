@@ -1,6 +1,6 @@
 <template>
   <div
-    :style="{ width: width, height: height }"
+    :style="[!isExpanded ? { width: width, height: height } : {}]"
     :class="{ 'is-expanded': isExpanded }"
     class="collection-item relative grow-nonexpanded mr1 mb1 shadow-2 overflow-hidden"
   >
@@ -18,15 +18,15 @@
           <div slot-scope="{ hover }">
             <img
               v-if="displayThumb"
-              :src="thumbSrc"
-              :title="title"
+              :src="item.thumbSrc"
+              :title="item.title"
               class="absolute top-0 bottom-0 m-auto"
             />
             <div
               v-if="displayTitle"
               class="absolute top-0 left-0 pa1 bg-black-50 pevents-none f6 lh-solid"
             >
-              {{ title }}
+              {{ item.title }}
             </div>
             <div
               v-if="displayYear"
@@ -36,7 +36,7 @@
             </div>
             <transition name="fade">
               <div v-if="hover" class="absolute right-0 bottom-0">
-                <v-icon>fullscreen</v-icon>
+                <v-icon>mdi-fullscreen</v-icon>
               </div>
             </transition>
           </div>
@@ -47,8 +47,8 @@
     <div v-if="isExpanded" class="flex expansion-container">
       <div class="expansion-left tc bg-black ba b--grey--darken-3">
         <video
-          :src="videoSrc"
-          :poster="thumbSrc"
+          :src="item.videoSrc"
+          :poster="item.thumbSrc"
           :style="{ 'max-width': videoMaxWidth + 'px' }"
           controls
           width="100%"
@@ -57,20 +57,21 @@
       </div>
       <div class="expansion-right pa3 pr4 relative grey darken-3">
         <h2 class="mt0 f4">
-          {{ title }} <span class="fw1">({{ year }})</span>
+          {{ item.title }} <span class="fw1">({{ year }})</span>
         </h2>
-        <div v-if="subjects.length" class="mv2">
+        <div v-if="item.subjects.length" class="mv2">
           <span class="fw6">
-            <v-icon small>room</v-icon>
+            <v-icon small>mdi-tag</v-icon>
             <span class="v-mid">
-              {{ subjects.length }} Subject<span v-if="subjects.length > 1"
+              {{ item.subjects.length }} Subject<span
+                v-if="item.subjects.length > 1"
                 >s</span
               ></span
             >
           </span>
           <v-chip-group multiple column class="font-mono">
             <v-chip
-              v-for="subject in subjects"
+              v-for="subject in item.subjects"
               :key="subject"
               :value="subject"
               @click="$emit('toggle-active-filter', 'subjects', subject)"
@@ -84,25 +85,26 @@
               <v-icon right
                 >{{
                   activeSubjectFilters.includes(subject)
-                    ? "cancel"
-                    : "filter_list"
+                    ? "mdi-close-circle"
+                    : "mdi-filter-variant"
                 }}
               </v-icon>
             </v-chip>
           </v-chip-group>
         </div>
-        <div v-if="locations.length" class="mv2">
+        <div v-if="item.locations.length" class="mv2">
           <span class="fw6">
-            <v-icon small>room</v-icon>
+            <v-icon small>mdi-map-marker</v-icon>
             <span class="v-mid">
-              {{ locations.length }} Location<span v-if="locations.length > 1"
+              {{ item.locations.length }} Location<span
+                v-if="item.locations.length > 1"
                 >s</span
               ></span
             >
           </span>
           <v-chip-group multiple column class="font-mono">
             <v-chip
-              v-for="location in locations"
+              v-for="location in item.locations"
               :key="location"
               :value="location"
               @click="$emit('toggle-active-filter', 'locations', location)"
@@ -118,30 +120,30 @@
               <v-icon right
                 >{{
                   activeLocationFilters.includes(location)
-                    ? "cancel"
-                    : "filter_list"
+                    ? "mdi-close-circle"
+                    : "mdi-filter-variant"
                 }}
               </v-icon>
             </v-chip>
           </v-chip-group>
         </div>
-        <div v-if="creators.length" class="mv2">
+        <div v-if="item.creators.length" class="mv2">
           <span class="fw6">
-            <v-icon small>videocam</v-icon>
-            <span class="v-mid"> {{ creators.length }} Creator</span
-            ><span v-if="creators.length > 1">s</span>
+            <v-icon small>mdi-video</v-icon>
+            <span class="v-mid"> {{ item.creators.length }} Creator</span
+            ><span v-if="item.creators.length > 1">s</span>
           </span>
-          <div v-for="creator in creators" :key="creator">
+          <div v-for="creator in item.creators" :key="creator">
             {{ creator }}
           </div>
         </div>
         <div class="mt3">
-          <a :href="url" target="_blank">See item on Open Images ↗︎</a>
+          <a :href="item.url" target="_blank">See item on Open Images ↗︎</a>
         </div>
         <v-icon
           @click="toggleExpanded"
           class="absolute ma3 top-0 right-0 pointer"
-          >close</v-icon
+          >mdi-close</v-icon
         >
       </div>
     </div>
@@ -160,14 +162,7 @@ export default {
   props: {
     width: String,
     height: String,
-    thumbSrc: String,
-    videoSrc: String,
-    title: String,
-    date: String,
-    url: String,
-    subjects: Array,
-    creators: Array,
-    locations: Array,
+    item: Object,
     displayTitle: {
       type: Boolean,
       default: false,
@@ -187,7 +182,7 @@ export default {
   },
   computed: {
     year: function() {
-      return this.date.slice(0, 4);
+      return this.item.date.slice(0, 4);
     },
   },
   methods: {

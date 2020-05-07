@@ -5,6 +5,9 @@ import router from "./router";
 
 Vue.config.productionTip = false;
 
+import "../node_modules/tachyons/css/tachyons.min.css";
+import "./assets/css/main.css";
+
 new Vue({
   vuetify,
   router,

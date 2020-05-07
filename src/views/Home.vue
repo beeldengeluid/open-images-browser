@@ -20,7 +20,7 @@
           small
           class="ml-auto self-end mt3"
         >
-          <v-icon left>shuffle</v-icon>Randomize Selection
+          <v-icon left>mdi-shuffle</v-icon>Randomize Selection
         </v-btn>
       </div>
       <PeriodChart
@@ -61,8 +61,8 @@
         <v-row>
           <v-col cols="12" lg="2">
             <h3 class="mb3">
-              <span class="bb b--secondary"
-                >Subjects in selection
+              <span class="bb b--secondary">
+                <v-icon>mdi-tag</v-icon> Subjects in selection
                 <span class="fw1">{{
                   filtersForSelection["subjects"].length
                 }}</span></span
@@ -80,8 +80,8 @@
           </v-col>
           <v-col cols="12" lg="2">
             <h3 class="mb3">
-              <span class="bb b--secondary"
-                >Locations in selection
+              <span class="bb b--secondary">
+                <v-icon>mdi-map-marker</v-icon> Locations in selection
                 <span class="fw1">{{
                   filtersForSelection["locations"].length
                 }}</span></span
@@ -117,7 +117,7 @@
                 outlined
                 class="ml-auto"
               >
-                <v-icon left>cancel</v-icon>Clear Selection
+                <v-icon left>mdi-close-circle</v-icon>Clear Selection
               </v-btn>
             </div>
             <div class="dflex flex-wrap mb3">
@@ -139,9 +139,7 @@
                 </v-chip-group>
                 <v-btn fab x-small color="indigo mr2">
                   <v-icon @click="toggleSortAscending">{{
-                    state.sortAscending
-                      ? "keyboard_arrow_up"
-                      : "keyboard_arrow_down"
+                    state.sortAscending ? "mdi-chevron-up" : "mdi-chevron-down"
                   }}</v-icon>
                 </v-btn>
               </div>
@@ -177,14 +175,7 @@
                 :key="item['id']"
                 :width="itemWidth + 'px'"
                 :height="itemHeight + 'px'"
-                :thumbSrc="item['thumbSrc']"
-                :videoSrc="item['videoSrc']"
-                :title="item['title']"
-                :date="item['date']"
-                :url="item['url']"
-                :subjects="item['subjects']"
-                :creators="item['creators']"
-                :locations="item['locations']"
+                :item="item"
                 :displayTitle="state.displayFieldsSelected.includes('title')"
                 :displayYear="state.displayFieldsSelected.includes('year')"
                 :displayThumb="state.displayFieldsSelected.includes('thumb')"
@@ -205,7 +196,7 @@
 
       <back-to-top>
         <v-btn light title="Back to top" absolute bottom right fab>
-          <v-icon>keyboard_arrow_up</v-icon>
+          <v-icon>mdi-chevron-up</v-icon>
         </v-btn>
       </back-to-top>
       <v-snackbar
@@ -220,7 +211,6 @@
 </template>
 
 <script>
-import "../../node_modules/tachyons/css/tachyons.min.css";
 import _ from "lodash";
 import dataItems from "@/assets/data/openbeelden-items-clean.json";
 import TheNavBar from "@/components/TheNavBar";
@@ -291,7 +281,7 @@ export default {
     colors: {
       primary: "#5E35B1",
       secondary: "#009688",
-      background: "#121212",
+      background: "#303030",
       inactive: "#555",
     },
   },
@@ -670,80 +660,3 @@ export default {
   },
 };
 </script>
-
-<style>
-:root {
-  --bg-color: #121212;
-  --text-color: #ededed;
-  --primary-color: #5e35b1;
-  --primary-accent-color: #7e57c2;
-  --secondary-color: #009688;
-}
-html,
-body {
-  background-color: var(--bg-color);
-  color: var(--text-color);
-}
-
-.theme--dark.v-application {
-  background: var(--bg-color);
-  color: var(--text-color);
-}
-
-@import url("https://fonts.googleapis.com/css?family=Source+Code+Pro:400,400i&display=swap");
-.font-mono {
-  font-family: "Source Code Pro", monospace;
-}
-
-#app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-a {
-  color: var(--text-color) !important;
-}
-
-.dflex {
-  display: flex;
-}
-
-.theme--dark.v-label {
-  color: #fff !important;
-  font-weight: 700;
-}
-
-/* 
-fix to be released shortly:
-https://github.com/vuetifyjs/vuetify/commit/4f151bbdf4388e76d92920ca19c6271c022e6c3f
-*/
-.v-chip.v-size--small .v-icon.v-chip__close {
-  font-size: 18px;
-}
-
-.filterGroupWidth {
-  width: calc(100% - 180px);
-}
-
-.min-w-24rem {
-  min-width: 24rem;
-}
-
-.b--primary-accent {
-  border-color: var(--primary-accent-color);
-}
-.b--secondary {
-  border-color: var(--secondary-color);
-}
-.bg-primary {
-  background-color: var(--primary-color);
-}
-.bg-primary-accent {
-  background-color: var(--primary-accent-color);
-}
-.relative-bottom {
-  top: 100%;
-  transform: translateY(-100%);
-}
-</style>
