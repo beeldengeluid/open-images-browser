@@ -1,12 +1,40 @@
-# Open Images Browser
+# MediaScape
 
-Initial exploration for the [MediaScape project](https://www.vogin.nl/portfolio-item/mediascape-2019/), aimed at exploring the utility of [generous interfaces](http://www.digitalhumanities.org/dhq/vol/9/1/000205/000205.html) for audio-visual archives.
+### Live demo
 
-This first prototype utilizes facet-based filtering as the main interaction model. It allows users to step-wise create combinations of filters in order to surface subsets of collection items that match their interests. It employs data visualisation and UI techniques to generously communicate the distribution of items per available filter.
+[mediascape.now.sh](https://mediascape.now.sh/)
 
-Try the latest version (work in progress): https://openimagesbrowser.now.sh
+### Component documentation
 
-## Installation
+[![Storybook](https://cdn.jsdelivr.net/gh/storybookjs/brand@master/badge/badge-storybook.svg)](https://beeldengeluid.github.io/MediaScape)
+
+### About
+
+The [MediaScape project](https://www.vogin.nl/portfolio-item/mediascape-2019/) investigates the utility of [generous interfaces](http://www.digitalhumanities.org/dhq/vol/9/1/000205/000205.html) for audio-visual collections. Or:
+
+> How to find happiness in AV collections without searching for it?
+
+Most collection interfaces employ a query-based interface model, usually in the form of search bar. This paradigm generally works great when a user:
+
+1. knows what sorts of things are present in the collection
+2. has a clear idea of what they are looking for
+3. can express that idea as a textual keyword query
+
+If one or more of these requirements doesn't hold, the search bar's convenience quickly breaks down. An alternative is to be more forthcoming about what can be found in a collection and offering readily available paths to access different parts of it. This idea of 'generous interfaces' was first formulated by [Mitchell Whitelaw in 2012](http://mtchl.net/towards-generous-interfaces-for-archival-collections/) and since applied and expanded in various directions in the Digital Cultural Heritage field.
+
+As part of our investigation in the MediaScape project, we are developing a series of generous user interface (UI) concepts for audiovisual collections.
+
+## Open Images Browser
+
+This first UI concept utilizes facet-based filtering as the main interaction model. Users combine filters in order to surface subsets of collection items that match their interests. The interface employs data visualisation and commonly used web elements to uphold the following principles ([as formulated by Ben Ennis Butler](https://mw2013.museumsandtheweb.com/paper/visual-exploration-of-australian-prints-and-printmaking/)):
+
+- **Show first, don’t ask**; not requiring the user to provide a query in order see content
+- **Provide rich overviews**; showing how items are distributed over time per decade
+- **Provide Samples**; using thumbnails to give an a visual feel for a video's content
+- **Provide Context**; showing common location and subject filters as well as distribution over time, expanding items in the context of the full filtered set
+- **Share high quality primary content**; embed the orginal video and link to the original record.
+
+## Installation & development
 
 install dependencies
 
@@ -20,9 +48,21 @@ build production version to `/dist` directory
 
     npm run build
 
-then serve `/dist`, e.g. using [`serve`](https://github.com/zeit/serve)
+to test the build locally, serve `/dist`, e.g. using [`serve`](https://github.com/zeit/serve)
 
     serve -s dist
+
+serve Storybook environment
+
+    npm run serve-storybook
+
+build Storybook as static site to `/docs` directory (auto deployed via GitHub Pages on push to `master`)
+
+    npm run build-storybook
+
+currently the project is being deployed via [Vercel](https://vercel.com/)'s git integration by running
+
+    now
 
 ## Data
 
