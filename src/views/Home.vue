@@ -281,7 +281,7 @@ export default {
     colors: {
       primary: "#5E35B1",
       secondary: "#009688",
-      background: "#303030",
+      background: "#121212",
       inactive: "#555",
     },
   },
