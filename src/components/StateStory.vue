@@ -19,31 +19,41 @@
       <span>filtered for</span>
       <span v-if="state.activeFilters['locations'].length">
         <v-chip
-          v-for="locationFilter in state.activeFilters['locations']"
-          :key="locationFilter"
-          :value="locationFilter"
+          v-for="location in state.activeFilters['locations']"
+          :key="location"
+          :value="location"
           label
           small
           class="ml1 teal white--text font-mono"
-          @click="$emit('toggle-active-filter', 'locations', locationFilter)"
+          @click="
+            $emit('toggle-active-filter', {
+              type: 'locations',
+              value: location,
+            })
+          "
         >
           <v-icon small left>mdi-map-marker</v-icon>
-          <strong>{{ locationFilter }}</strong>
+          <strong>{{ location }}</strong>
           <v-icon small right>mdi-close-circle</v-icon>
         </v-chip>
       </span>
       <span v-if="state.activeFilters['subjects'].length">
         <v-chip
-          v-for="subjectFilter in state.activeFilters['subjects']"
-          :key="subjectFilter"
-          :value="subjectFilter"
+          v-for="subject in state.activeFilters['subjects']"
+          :key="subject"
+          :value="subject"
           label
           small
           class="ml1 teal white--text font-mono"
-          @click="$emit('toggle-active-filter', 'subjects', subjectFilter)"
+          @click="
+            $emit('toggle-active-filter', {
+              type: 'subjects',
+              value: subject,
+            })
+          "
         >
           <v-icon small left>mdi-tag</v-icon>
-          <strong>{{ subjectFilter }}</strong>
+          <strong>{{ subject }}</strong>
           <v-icon small right>mdi-close-circle</v-icon>
         </v-chip>
       </span>

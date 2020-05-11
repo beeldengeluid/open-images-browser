@@ -30,7 +30,7 @@ const actionsData = {
   onToggleActiveFilter: action("onToggleActiveFilter"),
 };
 
-const itemData = {
+export const itemData = {
   id: "oai:openimages.eu:74462",
   date: "1976-01-01",
   url: "https://www.openbeelden.nl/media/74462",
@@ -67,7 +67,7 @@ const stateThumbOnlyData = {
   },
 };
 
-const filterCountsForSelectionData = {
+export const filterCountsForSelectionData = {
   locations: {
     Nederland: 28,
   },
@@ -75,6 +75,11 @@ const filterCountsForSelectionData = {
     machines: 2,
     schrijfwaren: 1,
   },
+};
+
+export const dimensionsData = {
+  width: 352,
+  height: 288,
 };
 
 const collectionItemTemplate = `
@@ -102,25 +107,8 @@ export const Default = () =>
     props: {
       item: { default: object("item", { ...itemData }) },
       state: { default: object("state", { ...stateData }) },
-      itemWidth: { default: number("itemWidth", 352) },
-      itemHeight: { default: number("itemHeight", 288) },
-      filterCountsForSelection: {
-        default: object("filterCountsForSelection", {
-          ...filterCountsForSelectionData,
-        }),
-      },
-    },
-    methods: actionsData,
-    template: collectionItemTemplate,
-  });
-
-export const ThumbOnly = () =>
-  story({
-    props: {
-      item: { default: object("item", { ...itemData }) },
-      state: { default: object("state", { ...stateThumbOnlyData }) },
-      itemWidth: { default: number("itemWidth", 352) },
-      itemHeight: { default: number("itemHeight", 288) },
+      itemWidth: { default: number("itemWidth", dimensionsData.width) },
+      itemHeight: { default: number("itemHeight", dimensionsData.height) },
       filterCountsForSelection: {
         default: object("filterCountsForSelection", {
           ...filterCountsForSelectionData,

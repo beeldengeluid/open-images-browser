@@ -72,7 +72,10 @@
               :filters="filtersForSelection['subjects']"
               :activeFilters="state.activeFilters['subjects']"
               v-on:toggle-active-filter="
-                onToggleActiveFilter('subjects', $event)
+                onToggleActiveFilter({
+                  type: 'subjects',
+                  value: $event.value,
+                })
               "
               v-on:toggle-tail="onToggleTail"
               activeClass="teal"
@@ -91,7 +94,10 @@
               :filters="filtersForSelection['locations']"
               :activeFilters="state.activeFilters['locations']"
               v-on:toggle-active-filter="
-                onToggleActiveFilter('locations', $event)
+                onToggleActiveFilter({
+                  type: 'locations',
+                  value: $event.value,
+                })
               "
               v-on:toggle-tail="onToggleTail"
               activeClass="teal"
@@ -424,11 +430,11 @@ export default {
     onResize() {
       this.clientWidth = this.getClientWidth();
     },
-    onToggleActiveFilter(filterType, filterValue) {
-      if (this.state.activeFilters[filterType].includes(filterValue)) {
-        this.removeActiveFilter(filterType, filterValue);
+    onToggleActiveFilter(event) {
+      if (this.state.activeFilters[event.type].includes(event.value)) {
+        this.removeActiveFilter(event.type, event.value);
       } else {
-        this.addActiveFilter(filterType, filterValue);
+        this.addActiveFilter(event.type, event.value);
       }
     },
     addActiveFilter(filterType, filterValue) {
