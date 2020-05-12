@@ -3,17 +3,38 @@
     <h1>Open Images Browser</h1>
     <section class="measure-wide">
       <p>
-        This is a first user interface (UI) exploration in the MediaScape
-        project, aimed at exploring the utility of generous interfaces for
-        audio-visual collections.
+        This UI concept is part of the
+        <a
+          href="https://www.vogin.nl/portfolio-item/mediascape-2019/"
+          target="_blank"
+          >MediaScape↗︎</a
+        >
+        investigation into the utility of
+        <a
+          href="http://www.digitalhumanities.org/dhq/vol/9/1/000205/000205.html"
+          target="_blank"
+          >generous interfaces↗︎</a
+        >
+        for audio-visual collections.
       </p>
       <p>
-        This UI concept utilizes facet-based filtering as the main interaction
-        model. It offers ways to step-wise create combinations of filters to
-        select subsets of collection items based on their metadata. It employs
-        data visualisation and 'off the shelf' UI components to show how
-        collection items are distributed over the available filters.
+        It utilizes facet-based filtering as the main interaction model. By
+        combining filters, users surface subsets of collection items that match
+        their interests. The interface employs data visualisation and commonly
+        used web elements to uphold the following
+        <a
+          href="https://mw2013.museumsandtheweb.com/paper/visual-exploration-of-australian-prints-and-printmaking/"
+          target="_blank"
+          >generous principles↗︎</a
+        >:
       </p>
+      <ul>
+        <li><strong>Show first, don’t ask</strong></li>
+        <li><strong>Provide rich overviews</strong></li>
+        <li><strong>Provide Samples</strong></li>
+        <li><strong>Provide Context</strong></li>
+        <li><strong>Share high quality primary content</strong></li>
+      </ul>
     </section>
   </header>
 </template>
