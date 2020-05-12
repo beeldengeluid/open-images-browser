@@ -11,7 +11,11 @@
       <v-chip
         v-for="filter in filtersToDisplay"
         :key="filter.name"
-        @click="$emit('toggle-active-filter', filter.name)"
+        @click="
+          $emit('toggle-active-filter', {
+            value: filter.name,
+          })
+        "
         :value="filter.name"
         :class="
           activeFilters.includes(filter.name)
