@@ -56,6 +56,7 @@ const videoPlaylistTemplate = `
     <VideoPlaylist
       :videos="videos"
       :autoplayEnabled="autoplayEnabled"
+      :stretchVideo="stretchVideo"
     />
   `;
 
@@ -63,7 +64,35 @@ export const Default = () =>
   story({
     props: {
       autoplayEnabled: { default: boolean("autoplayEnabled", true) },
+      stretchVideo: { default: boolean("stretchVideo", false) },
       videos: { default: object("activeLocationFilters", [...videosData]) },
+    },
+    template: videoPlaylistTemplate,
+  });
+
+export const Short = () =>
+  story({
+    props: {
+      autoplayEnabled: { default: boolean("autoplayEnabled", true) },
+      stretchVideo: { default: boolean("stretchVideo", false) },
+      videos: {
+        default: object("activeLocationFilters", [...videosData.slice(2)]),
+      },
+    },
+    template: videoPlaylistTemplate,
+  });
+
+export const Long = () =>
+  story({
+    props: {
+      autoplayEnabled: { default: boolean("autoplayEnabled", true) },
+      stretchVideo: { default: boolean("stretchVideo", false) },
+      videos: {
+        default: object("activeLocationFilters", [
+          ...videosData,
+          ...videosData,
+        ]),
+      },
     },
     template: videoPlaylistTemplate,
   });
