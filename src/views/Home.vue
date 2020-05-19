@@ -116,6 +116,7 @@
                   >(of {{ decades[state.decadeIndex].count }} in decade)</span
                 >
               </h3>
+              <span>{{loading}}</span>
               <v-btn
                 @click="resetState"
                 v-show="hasActiveFilters"
@@ -258,6 +259,7 @@ export default {
         text: "",
         timeout: 4000,
       },
+      loading: true,
     };
   },
   static: {
@@ -451,6 +453,9 @@ export default {
       );
     },
     onDecadeClick(dataPointIndex) {
+      this.loading = true;
+      /*eslint-disable*/
+      console.log("onDecadeClick()");
       // set decade
       this.state.decadeIndex = dataPointIndex;
     },
@@ -483,6 +488,8 @@ export default {
       this.$nextTick(() => {
         this.snackbar.markup = markup;
         this.snackbar.state = true;
+        console.log("showSnackbar()");
+        this.loading = false;
       });
     },
     onToggleTail(newValue) {
@@ -648,6 +655,9 @@ export default {
     );
 
     window.addEventListener("resize", _.debounce(this.onResize), 400);
+  },
+  mounted() {
+    this.loading = false;
   },
   destroyed() {
     window.removeEventListener("resize", this.onResize);
