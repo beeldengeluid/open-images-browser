@@ -45,14 +45,14 @@ export const itemData = {
   locations: ["Nederland"],
 };
 
-const stateData = {
+export const stateData = {
   decadeIndex: 7,
   sortBy: "date",
   sortAscending: true,
   displayFieldsSelected: ["thumb", "title", "year"],
   activeFilters: {
     locations: [],
-    subjects: [],
+    subjects: ["machines"],
   },
 };
 
@@ -90,14 +90,8 @@ const collectionItemTemplate = `
       :displayTitle="state.displayFieldsSelected.includes('title')"
       :displayYear="state.displayFieldsSelected.includes('year')"
       :displayThumb="state.displayFieldsSelected.includes('thumb')"
-      :activeLocationFilters="state.activeFilters['locations']"
-      :activeSubjectFilters="state.activeFilters['subjects']"
-      :locationCountsForSelection="
-        filterCountsForSelection['locations']
-      "
-      :subjectCountsForSelection="
-        filterCountsForSelection['subjects']
-      "
+      :activeFilters="state.activeFilters"
+      :filterCountsForSelection="filterCountsForSelection"
       v-on:toggle-active-filter="onToggleActiveFilter"
     />
   `;

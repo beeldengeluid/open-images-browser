@@ -30,10 +30,6 @@ const story = storyFactory({
   RatioBar: () => import("./RatioBar"),
 });
 
-const actionsData = {
-  onDecadeClick: action("onDecadeClick"),
-};
-
 const ratioBarTemplate = `
     <RatioBar
       :amount="amount"
@@ -53,7 +49,6 @@ export const PartlyRatio = () =>
       color: { default: color("color", "#5E35B1") },
       innerLabel: { default: boolean("innerLabel", false) },
     },
-    methods: actionsData,
     template: ratioBarTemplate,
   });
 
@@ -66,6 +61,5 @@ export const TotalRatio = () =>
       color: { default: color("color", "#555") },
       innerLabel: { default: boolean("innerLabel", true) },
     },
-    methods: actionsData,
     template: ratioBarTemplate,
   });

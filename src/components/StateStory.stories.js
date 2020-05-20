@@ -112,7 +112,7 @@ export const BothFilters = () =>
     template: stateStoryTemplate,
   });
 
-export const LocationFilters = () =>
+export const LocationFilter = () =>
   story({
     props: {
       state: {
@@ -126,7 +126,7 @@ export const LocationFilters = () =>
     template: stateStoryTemplate,
   });
 
-export const SubjectFilters = () =>
+export const SubjectFilter = () =>
   story({
     props: {
       state: {
