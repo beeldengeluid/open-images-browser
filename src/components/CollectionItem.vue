@@ -15,7 +15,7 @@
       :displayThumb="displayThumb"
     />
     <CollectionItemCard
-      v-if="isExpanded"
+      v-else
       v-on:toggle-expanded="toggleExpanded"
       v-on:toggle-active-filter="$emit('toggle-active-filter', $event)"
       :item="item"
