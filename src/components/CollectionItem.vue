@@ -15,16 +15,14 @@
       :displayThumb="displayThumb"
     />
     <CollectionItemCard
-      v-if="isExpanded"
+      v-else
       v-on:toggle-expanded="toggleExpanded"
       v-on:toggle-active-filter="$emit('toggle-active-filter', $event)"
       :item="item"
       :year="year"
       :videoMaxWidth="videoMaxWidth"
-      :activeLocationFilters="activeLocationFilters"
-      :activeSubjectFilters="activeSubjectFilters"
-      :locationCountsForSelection="locationCountsForSelection"
-      :subjectCountsForSelection="subjectCountsForSelection"
+      :activeFilters="activeFilters"
+      :filterCountsForSelection="filterCountsForSelection"
     />
   </div>
 </template>
@@ -60,13 +58,11 @@ export default {
       type: Boolean,
       default: true,
     },
-    activeLocationFilters: Array,
-    activeSubjectFilters: Array,
-    locationCountsForSelection: Object,
-    subjectCountsForSelection: Object,
+    activeFilters: Object,
+    filterCountsForSelection: Object,
   },
   computed: {
-    year: function() {
+    year() {
       return this.item.date.slice(0, 4);
     },
   },

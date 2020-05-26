@@ -175,27 +175,15 @@
               :tickLabels="zoomLabels"
               class="mb3 mb4-ns"
             ></ZoomSlider>
-            <div class="relative dflex flex-wrap">
-              <CollectionItem
-                v-for="item in itemsFilteredSorted"
-                :key="item['id']"
-                :width="itemWidth + 'px'"
-                :height="itemHeight + 'px'"
-                :item="item"
-                :displayTitle="state.displayFieldsSelected.includes('title')"
-                :displayYear="state.displayFieldsSelected.includes('year')"
-                :displayThumb="state.displayFieldsSelected.includes('thumb')"
-                :activeLocationFilters="state.activeFilters['locations']"
-                :activeSubjectFilters="state.activeFilters['subjects']"
-                :locationCountsForSelection="
-                  filterCountsForSelection['locations']
-                "
-                :subjectCountsForSelection="
-                  filterCountsForSelection['subjects']
-                "
-                v-on:toggle-active-filter="onToggleActiveFilter"
-              />
-            </div>
+            <CollectionItemGrid
+              :items="itemsFilteredSorted"
+              :itemWidth="itemWidth"
+              :itemHeight="itemHeight"
+              :displayFieldsSelected="state.displayFieldsSelected"
+              :activeFilters="state.activeFilters"
+              :filterCountsForSelection="filterCountsForSelection"
+              v-on:toggle-active-filter="onToggleActiveFilter"
+            />
           </v-col>
         </v-row>
       </v-container>
@@ -226,7 +214,7 @@ import StateStory from "@/components/StateStory";
 import PeriodChart from "@/components/PeriodChart";
 import FilterList from "@/components/FilterList";
 import ZoomSlider from "@/components/ZoomSlider";
-import CollectionItem from "@/components/CollectionItem";
+import CollectionItemGrid from "@/components/CollectionItemGrid";
 import RatioBar from "@/components/RatioBar";
 import BackToTop from "vue-backtotop";
 
@@ -240,7 +228,7 @@ export default {
     PeriodChart,
     FilterList,
     ZoomSlider,
-    CollectionItem,
+    CollectionItemGrid,
     RatioBar,
     BackToTop,
   },

@@ -37,14 +37,16 @@
             "
             label
             :class="
-              activeSubjectFilters.includes(subject) ? 'teal white--text' : ''
+              activeFilters['subjects'].includes(subject)
+                ? 'teal white--text'
+                : ''
             "
           >
             <strong class="mr1">{{ subject }}</strong>
-            <span>{{ subjectCountsForSelection[subject] }}</span>
+            <span>{{ filterCountsForSelection["subjects"][subject] }}</span>
             <v-icon right
               >{{
-                activeSubjectFilters.includes(subject)
+                activeFilters["subjects"].includes(subject)
                   ? "mdi-close-circle"
                   : "mdi-filter-variant"
               }}
@@ -75,14 +77,16 @@
             "
             label
             :class="
-              activeLocationFilters.includes(location) ? 'teal white--text' : ''
+              activeFilters['locations'].includes(location)
+                ? 'teal white--text'
+                : ''
             "
           >
             <strong class="mr1">{{ location }}</strong>
-            <span>{{ locationCountsForSelection[location] }}</span>
+            <span>{{ filterCountsForSelection["locations"][location] }}</span>
             <v-icon right
               >{{
-                activeLocationFilters.includes(location)
+                activeFilters["locations"].includes(location)
                   ? "mdi-close-circle"
                   : "mdi-filter-variant"
               }}
@@ -119,10 +123,8 @@ export default {
     item: Object,
     year: String,
     videoMaxWidth: Number,
-    activeLocationFilters: Array,
-    activeSubjectFilters: Array,
-    locationCountsForSelection: Object,
-    subjectCountsForSelection: Object,
+    activeFilters: Object,
+    filterCountsForSelection: Object,
   },
 };
 </script>

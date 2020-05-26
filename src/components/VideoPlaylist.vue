@@ -1,5 +1,5 @@
 <template>
-  <div class="relative" :style="{ 'max-width': videoWidth + 'px' }">
+  <div class="relative flex flex-column">
     <video
       :src="currentVideo.videoSrc"
       :poster="currentVideo.thumbSrc"
@@ -9,36 +9,39 @@
       @ended="onVideoEnded"
       muted
       controls
-      :style="{
-        width: videoWidth + 'px',
-        height: videoHeight + 'px',
-      }"
-      class="w-100"
+      :class="stretchVideo ? 'w-100' : ''"
+      class="outline-0"
     ></video>
-    <div class="flex w-100 mb2">
+    <div
+      class="absolute absolute-v-center items-center flex w-100 justify-between hover-opacity"
+    >
+      <v-btn class="mh2 pe-all" fab @click="prevVideo()">
+        <v-icon>mdi-chevron-left</v-icon>
+      </v-btn>
+      <v-btn class="mh2 pe-all" fab @click="pauseVideo()" v-show="!paused">
+        <v-icon>mdi-pause</v-icon>
+      </v-btn>
+      <v-btn class="mh2 pe-all" fab @click="playVideo()" v-show="paused">
+        <v-icon>mdi-play</v-icon>
+      </v-btn>
+      <v-btn class="mh2 pe-all" fab @click="nextVideo()">
+        <v-icon>mdi-chevron-right</v-icon>
+      </v-btn>
+    </div>
+    <div class="absolute top-0 flex w-100 pa2 hover-opacity mh-tilcontrols">
       <div
         v-for="(video, index) in videos"
         :key="index"
         @click="setCurrentVideoIndex(index)"
         :class="currentVideoIndex == index ? 'active' : ''"
-        class="videoThumb pointer border-color-hover flex items-center"
+        class="videoThumb pointer hover-border-color flex justify-center items-center bg-black mh1"
       >
-        <img :src="video.thumbSrc" :alt="`playlist video ${index}`" />
+        <img
+          :src="video.thumbSrc"
+          :alt="`playlist video ${index}`"
+          class="contain-height"
+        />
       </div>
-    </div>
-    <div class="flex w-100 justify-between">
-      <v-btn @click="prevVideo()">
-        <v-icon left>mdi-arrow-left</v-icon>Prev
-      </v-btn>
-      <v-btn @click="pauseVideo()" v-show="!paused">
-        <v-icon left>mdi-pause</v-icon>Pause
-      </v-btn>
-      <v-btn @click="playVideo()" v-show="paused">
-        <v-icon left>mdi-play</v-icon>Play
-      </v-btn>
-      <v-btn @click="nextVideo()">
-        <v-icon left>mdi-arrow-right</v-icon>Next
-      </v-btn>
     </div>
   </div>
 </template>
@@ -58,6 +61,7 @@ export default {
   props: {
     videos: Array,
     autoplayEnabled: { type: Boolean, default: true },
+    stretchVideo: { type: Boolean, default: false },
   },
   computed: {
     currentVideo() {
@@ -100,15 +104,37 @@ export default {
 </script>
 
 <style scoped>
-.border-color-hover {
+.hover-border-color {
   border: 1px solid #333;
   transition: border-color 0.15s;
 }
-.border-color-hover:hover {
-  border-color: hsla(0, 0%, 100%, 0.55);
+.hover-border-color:hover {
+  border-color: hsla(0, 0%, 100%, 0.75);
+}
+
+.hover-opacity {
+  opacity: 0;
+  transition: opacity 1s;
+}
+.hover-opacity:hover {
+  opacity: 1;
+  transition: opacity 0.15s;
+}
+
+.mh-tilcontrols {
+  max-height: calc(50% - 28px);
 }
 
 .videoThumb.active {
+  border-width: 2px;
   border-color: #fff;
+}
+.contain-height {
+  max-height: 100%;
+  object-fit: contain;
+}
+.absolute-v-center {
+  top: 50%;
+  transform: translateY(-50%);
 }
 </style>
