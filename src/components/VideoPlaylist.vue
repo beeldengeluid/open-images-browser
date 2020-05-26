@@ -12,35 +12,37 @@
       :class="stretchVideo ? 'w-100' : ''"
       class="outline-0"
     ></video>
-    <div
-      class="absolute absolute-v-center items-center flex w-100 justify-between hover-opacity"
-    >
-      <v-btn class="mh2 pe-all" fab @click="prevVideo()">
-        <v-icon>mdi-chevron-left</v-icon>
-      </v-btn>
-      <v-btn class="mh2 pe-all" fab @click="pauseVideo()" v-show="!paused">
-        <v-icon>mdi-pause</v-icon>
-      </v-btn>
-      <v-btn class="mh2 pe-all" fab @click="playVideo()" v-show="paused">
-        <v-icon>mdi-play</v-icon>
-      </v-btn>
-      <v-btn class="mh2 pe-all" fab @click="nextVideo()">
-        <v-icon>mdi-chevron-right</v-icon>
-      </v-btn>
-    </div>
-    <div class="absolute top-0 flex w-100 pa2 hover-opacity mh-tilcontrols">
+    <div class="hover-opacity">
       <div
-        v-for="(video, index) in videos"
-        :key="index"
-        @click="setCurrentVideoIndex(index)"
-        :class="currentVideoIndex == index ? 'active' : ''"
-        class="videoThumb pointer hover-border-color flex justify-center items-center bg-black mh1"
+        class="absolute absolute-v-center items-center flex w-100 justify-between"
       >
-        <img
-          :src="video.thumbSrc"
-          :alt="`playlist video ${index}`"
-          class="contain-height"
-        />
+        <v-btn class="mh2 pe-all" fab @click="prevVideo()">
+          <v-icon>mdi-chevron-left</v-icon>
+        </v-btn>
+        <v-btn class="mh2 pe-all" fab @click="pauseVideo()" v-show="!paused">
+          <v-icon>mdi-pause</v-icon>
+        </v-btn>
+        <v-btn class="mh2 pe-all" fab @click="playVideo()" v-show="paused">
+          <v-icon>mdi-play</v-icon>
+        </v-btn>
+        <v-btn class="mh2 pe-all" fab @click="nextVideo()">
+          <v-icon>mdi-chevron-right</v-icon>
+        </v-btn>
+      </div>
+      <div class="absolute top-0 flex w-100 pa2 mh-tilcontrols">
+        <div
+          v-for="(video, index) in videos"
+          :key="index"
+          @click="setCurrentVideoIndex(index)"
+          :class="currentVideoIndex == index ? 'active' : ''"
+          class="videoThumb pointer hover-border-color flex justify-center items-center bg-black mh1"
+        >
+          <img
+            :src="video.thumbSrc"
+            :alt="`playlist video ${index}`"
+            class="contain-height"
+          />
+        </div>
       </div>
     </div>
   </div>
