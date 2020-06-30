@@ -9,7 +9,7 @@
       ticks="always"
       tick-size="4"
       :tick-labels="tickLabels"
-      color="orange"
+      :color="color"
       hide-details
     >
       <template v-slot:prepend>
@@ -38,6 +38,7 @@ export default {
     max: { type: Number, default: 6 },
     step: { type: Number, default: 1 },
     tickLabels: { type: Array },
+    color: { type: String, default: "orange" },
   },
   methods: {
     increment(amount) {

@@ -126,12 +126,12 @@
                 <v-icon left>mdi-close-circle</v-icon>Clear Selection
               </v-btn>
             </div>
-            <div class="dflex flex-wrap mb3">
+            <div class="dflex flex-wrap mb3 items-center">
               <div class="dflex items-center mr3 mr4-l">
                 <span class="mr2 fw7">Sort by</span>
                 <v-chip-group
                   v-model="state.sortBy"
-                  active-class="indigo"
+                  active-class="deep-orange"
                   mandatory
                   class="fw5 font-mono"
                 >
@@ -143,17 +143,17 @@
                     {{ sortField }}
                   </v-chip>
                 </v-chip-group>
-                <v-btn fab x-small color="indigo mr2">
+                <v-btn fab x-small color="deep-orange mr2">
                   <v-icon @click="toggleSortAscending">{{
                     state.sortAscending ? "mdi-chevron-up" : "mdi-chevron-down"
                   }}</v-icon>
                 </v-btn>
               </div>
-              <div class="dflex items-center">
+              <div class="dflex items-center mr3 mr4-l">
                 <span class="pr2 fw7">Display</span>
                 <v-chip-group
                   v-model="state.displayFieldsSelected"
-                  active-class="green"
+                  active-class="deep-orange"
                   multiple
                   class="fw5 font-mono"
                 >
@@ -166,6 +166,14 @@
                   </v-chip>
                 </v-chip-group>
               </div>
+              <v-btn
+                @click="startPlaylist"
+                outlined
+                small
+                class="ml-auto"
+              >
+                <v-icon left>mdi-playlist-play</v-icon>Start Playlist
+              </v-btn>
             </div>
             <ZoomSlider
               v-model="zoom.value"
@@ -173,6 +181,7 @@
               :max="zoom.max"
               :step="zoom.step"
               :tickLabels="zoomLabels"
+              color="deep-orange"
               class="mb3 mb4-ns"
             ></ZoomSlider>
             <CollectionItemGrid
@@ -562,6 +571,10 @@ export default {
         // no filters in this decade, recursively retry
         this.randomizeSelection();
       }
+    },
+    startPlaylist() {
+      /* eslint-disable */
+      console.log("startPlaylist");
     },
   },
   watch: {
