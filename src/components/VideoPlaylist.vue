@@ -1,20 +1,23 @@
 <template>
-  <div class="relative flex flex-column">
-    <video
-      :src="currentVideo.videoSrc"
-      :poster="currentVideo.thumbSrc"
-      :autoplay="autoplayEnabled"
-      @playing="onVideoPlayChange"
-      @pause="onVideoPlayChange"
-      @ended="onVideoEnded"
-      muted
-      controls
-      :class="stretchVideo ? 'w-100' : ''"
-      class="outline-0"
-    ></video>
-    <div class="hover-opacity">
+  <div class="flex flex-column">
+    <div class="tr">
+      <v-icon @click="$emit('toggle-playlist')" class="pa2 pointer">mdi-close</v-icon>
+    </div>
+    <div class="relative tc">
+      <video
+        :src="currentVideo.videoSrc"
+        :poster="currentVideo.thumbSrc"
+        :autoplay="autoplayEnabled"
+        @playing="onVideoPlayChange"
+        @pause="onVideoPlayChange"
+        @ended="onVideoEnded"
+        muted
+        controls
+        :class="stretchVideo ? 'w-100' : ''"
+        class="outline-0 mw-100"
+      ></video>
       <div
-        class="absolute absolute-v-center items-center flex w-100 justify-between"
+        class="absolute absolute-v-center w-100 flex items-center justify-between hover-opacity"
       >
         <v-btn class="mh2 pe-all" fab @click="prevVideo()">
           <v-icon>mdi-chevron-left</v-icon>
@@ -29,20 +32,20 @@
           <v-icon>mdi-chevron-right</v-icon>
         </v-btn>
       </div>
-      <div class="absolute top-0 flex w-100 pa2 mh-tilcontrols">
-        <div
-          v-for="(video, index) in videos"
-          :key="index"
-          @click="setCurrentVideoIndex(index)"
-          :class="currentVideoIndex == index ? 'active' : ''"
-          class="videoThumb pointer hover-border-color flex justify-center items-center bg-black mh1"
-        >
-          <img
-            :src="video.thumbSrc"
-            :alt="`playlist video ${index}`"
-            class="contain-height"
-          />
-        </div>
+    </div>
+    <div class="flex w-100 pa2 mh-tilcontrols flex-grow">
+      <div
+        v-for="(video, index) in videos"
+        :key="index"
+        @click="setCurrentVideoIndex(index)"
+        :class="currentVideoIndex == index ? 'active' : ''"
+        class="videoThumb pointer hover-border-color flex justify-center items-center bg-black mh1"
+      >
+        <img
+          :src="video.thumbSrc"
+          :alt="`playlist video ${index}`"
+          class="contain-height"
+        />
       </div>
     </div>
   </div>
@@ -56,8 +59,6 @@ export default {
       videoElement: null,
       currentVideoIndex: 0,
       paused: null,
-      videoWidth: 320,
-      videoHeight: 240,
     };
   },
   props: {
@@ -75,7 +76,7 @@ export default {
       this.videoElement = event.target;
       this.paused = event.target.paused;
     },
-    onVideoEnded(event) {
+    onVideoEnded() {
       this.nextVideo();
     },
     prevVideo() {
@@ -138,5 +139,8 @@ export default {
 .absolute-v-center {
   top: 50%;
   transform: translateY(-50%);
+}
+.flex-grow {
+  flex-grow: 0;
 }
 </style>

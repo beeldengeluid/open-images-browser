@@ -167,7 +167,7 @@
                 </v-chip-group>
               </div>
               <v-btn
-                @click="startPlaylist"
+                @click="onTogglePlaylist"
                 outlined
                 small
                 class="ml-auto"
@@ -202,6 +202,7 @@
           <v-icon>mdi-chevron-up</v-icon>
         </v-btn>
       </back-to-top>
+      
       <v-snackbar
         v-model="snackbar.state"
         :timeout="snackbar.timeout"
@@ -209,7 +210,18 @@
       >
         <span v-html="snackbar.markup"></span>
       </v-snackbar>
+
+
     </v-content>
+    <div v-show="state.showPlaylist" class="fixed w-100 h-100 bg-black-90 top-0 flex items-center flex-wrap z-9999">
+      <VideoPlaylist
+        :videos="itemsFilteredSorted"
+        :autoplayEnabled="false"
+        :stretchVideo="false"
+        v-on:toggle-playlist="onTogglePlaylist"
+        class="h-100 justify-center"
+      />
+    </div>
   </v-app>
 </template>
 
@@ -225,6 +237,7 @@ import FilterList from "@/components/FilterList";
 import ZoomSlider from "@/components/ZoomSlider";
 import CollectionItemGrid from "@/components/CollectionItemGrid";
 import RatioBar from "@/components/RatioBar";
+import VideoPlaylist from "@/components/VideoPlaylist";
 import BackToTop from "vue-backtotop";
 
 export default {
@@ -239,6 +252,7 @@ export default {
     ZoomSlider,
     CollectionItemGrid,
     RatioBar,
+    VideoPlaylist,
     BackToTop,
   },
   data() {
@@ -253,6 +267,7 @@ export default {
           locations: [],
           subjects: [],
         },
+        showPlaylist: true,
       },
       zoom: {
         value: 3,
@@ -572,9 +587,10 @@ export default {
         this.randomizeSelection();
       }
     },
-    startPlaylist() {
+    onTogglePlaylist() {
       /* eslint-disable */
-      console.log("startPlaylist");
+      console.log("onTogglePlaylist");
+      this.state.showPlaylist = !this.state.showPlaylist;
     },
   },
   watch: {
