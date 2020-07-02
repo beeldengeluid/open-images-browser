@@ -23,11 +23,10 @@
         <v-btn class="mh2 pe-all" fab @click="prevVideo()">
           <v-icon>mdi-chevron-left</v-icon>
         </v-btn>
-        <v-btn class="mh2 pe-all" fab @click="pauseVideo()" v-show="!isPaused">
-          <v-icon>mdi-pause</v-icon>
-        </v-btn>
-        <v-btn class="mh2 pe-all" fab @click="playVideo()" v-show="isPaused">
-          <v-icon>mdi-play</v-icon>
+        <v-btn class="mh2 pe-all" fab @click="toggleVideoPlay()">
+          <v-icon>
+            {{isPaused? 'mdi-play' : 'mdi-pause'}}
+          </v-icon>
         </v-btn>
         <v-btn class="mh2 pe-all" fab @click="nextVideo()">
           <v-icon>mdi-chevron-right</v-icon>
@@ -80,24 +79,29 @@ export default {
       this.nextVideo();
     },
     prevVideo() {
-      let newIndex = this.currentVideoIndex - 1;
-      if (newIndex < 0) {
+      this.advanceVideo(-1);
+    },
+    nextVideo() {
+      this.advanceVideo(1);
+    },
+    advanceVideo(amount) {
+      let newIndex = this.currentVideoIndex + amount;
+      if (newIndex >= this.videos.length) {
+        newIndex = 0;
+      } 
+      else if (newIndex < 0) {
         newIndex = this.videos.length - 1;
       }
       this.currentVideoIndex = newIndex;
+      this.isPaused = true;
     },
-    nextVideo() {
-      let newIndex = this.currentVideoIndex + 1;
-      if (newIndex >= this.videos.length) {
-        newIndex = 0;
+    toggleVideoPlay() {
+      if (this.videoElement.paused) {
+        this.videoElement.play();
       }
-      this.currentVideoIndex = newIndex;
-    },
-    pauseVideo() {
-      this.videoElement.pause();
-    },
-    playVideo() {
-      this.videoElement.play();
+      else {
+        this.videoElement.pause();
+      }
     },
     setCurrentVideoIndex(index) {
       this.currentVideoIndex = index;
