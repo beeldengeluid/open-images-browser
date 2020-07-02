@@ -11,6 +11,7 @@
         @playing="onVideoPlayChange"
         @pause="onVideoPlayChange"
         @ended="onVideoEnded"
+        ref="video"
         muted
         controls
         :class="stretchVideo ? 'w-100' : ''"
@@ -22,10 +23,10 @@
         <v-btn class="mh2 pe-all" fab @click="prevVideo()">
           <v-icon>mdi-chevron-left</v-icon>
         </v-btn>
-        <v-btn class="mh2 pe-all" fab @click="pauseVideo()" v-show="!paused">
+        <v-btn class="mh2 pe-all" fab @click="pauseVideo()" v-show="!isPaused">
           <v-icon>mdi-pause</v-icon>
         </v-btn>
-        <v-btn class="mh2 pe-all" fab @click="playVideo()" v-show="paused">
+        <v-btn class="mh2 pe-all" fab @click="playVideo()" v-show="isPaused">
           <v-icon>mdi-play</v-icon>
         </v-btn>
         <v-btn class="mh2 pe-all" fab @click="nextVideo()">
@@ -58,7 +59,7 @@ export default {
     return {
       videoElement: null,
       currentVideoIndex: 0,
-      paused: null,
+      isPaused: true,
     };
   },
   props: {
@@ -73,8 +74,7 @@ export default {
   },
   methods: {
     onVideoPlayChange(event) {
-      this.videoElement = event.target;
-      this.paused = event.target.paused;
+      this.isPaused = event.target.paused;
     },
     onVideoEnded() {
       this.nextVideo();
@@ -103,6 +103,9 @@ export default {
       this.currentVideoIndex = index;
     },
   },
+  mounted() {
+    this.videoElement = this.$refs.video;
+  }
 };
 </script>
 
