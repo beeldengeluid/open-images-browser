@@ -35,10 +35,10 @@
     </div>
     <div class="flex w-100 pa2 mh-tilcontrols flex-grow">
       <div
-        v-for="(video, index) in videos"
+        v-for="(video, index) in videosWindowed"
         :key="index"
         @click="setCurrentVideoIndex(index)"
-        :class="currentVideoIndex == index ? 'active' : ''"
+        :class="currentVideoIndexWindowed == index ? 'active' : ''"
         class="videoThumb pointer hover-border-color flex justify-center items-center bg-black mh1"
       >
         <img
@@ -59,6 +59,7 @@ export default {
       videoElement: null,
       currentVideoIndex: 0,
       isPaused: true,
+      windowWidth: 7,
     };
   },
   props: {
@@ -69,6 +70,19 @@ export default {
   computed: {
     currentVideo() {
       return this.videos[this.currentVideoIndex];
+    },
+    windowOffset() {
+      return Math.floor((this.windowWidth - 1) / 2);
+    },
+    videosWindowed() {
+      // TODO: ensure correctWindowWidth when currentIndex approaches end of array
+      let start = Math.max(0, this.currentVideoIndex - this.offset);
+      let end = start + this.windowWidth;
+      return this.videos.slice(start, end);
+    },
+    currentVideoIndexWindowed() {
+      let shift = Math.min(0, this.currentVideoIndex - this.offset);
+      return this.offset + shift;
     },
   },
   methods: {
