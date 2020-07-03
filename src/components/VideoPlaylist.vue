@@ -37,7 +37,7 @@
       <div
         v-for="(video, index) in videosWindowed"
         :key="index"
-        @click="setCurrentVideoIndex(index)"
+        @click="setCurrentVideoIndex(index + listWindowStart)"
         :class="currentVideoIndexWindowed == index ? 'active' : ''"
         class="videoThumb pointer hover-border-color flex justify-center items-center bg-black mh1"
       >
@@ -59,7 +59,7 @@ export default {
       videoElement: null,
       currentVideoIndex: 0,
       isPaused: true,
-      windowWidth: 7,
+      listWindowLength: 7,
     };
   },
   props: {
@@ -72,17 +72,22 @@ export default {
       return this.videos[this.currentVideoIndex];
     },
     windowOffset() {
-      return Math.floor((this.windowWidth - 1) / 2);
+      return Math.floor((this.listWindowLength - 1) / 2);
+    },
+    listWindowStart() {
+      return Math.min(
+        Math.max(0, this.currentVideoIndex - this.windowOffset), 
+        this.videos.length - this.listWindowLength
+      );
+    },
+    listWindowEnd() {
+      return this.listWindowStart + this.listWindowLength;
     },
     videosWindowed() {
-      // TODO: ensure correctWindowWidth when currentIndex approaches end of array
-      let start = Math.max(0, this.currentVideoIndex - this.offset);
-      let end = start + this.windowWidth;
-      return this.videos.slice(start, end);
+      return this.videos.slice(this.listWindowStart, this.listWindowEnd);
     },
     currentVideoIndexWindowed() {
-      let shift = Math.min(0, this.currentVideoIndex - this.offset);
-      return this.offset + shift;
+      return this.currentVideoIndex - this.listWindowStart;
     },
   },
   methods: {
