@@ -167,7 +167,7 @@
                 </v-chip-group>
               </div>
               <v-btn
-                @click="onTogglePlaylist"
+                @click="openPlaylist"
                 outlined
                 small
                 class="ml-auto"
@@ -222,7 +222,7 @@
         :videos="itemsFilteredSorted"
         :autoplayEnabled="false"
         :stretchVideo="false"
-        v-on:toggle-playlist="onTogglePlaylist"
+        v-on:close-playlist="closePlaylist"
         class="h-100 justify-center"
       />
     </div>
@@ -271,7 +271,7 @@ export default {
           locations: [],
           subjects: [],
         },
-        showPlaylist: true,
+        showPlaylist: false,
       },
       zoom: {
         value: 3,
@@ -591,17 +591,21 @@ export default {
         this.randomizeSelection();
       }
     },
-    toggleHTMLClass(className) {
+    addHTMLClass(className) {
       const htmlEl = document.getElementsByTagName('html')[0];
-      if (htmlEl.classList.contains(className)) {
-        htmlEl.classList.remove(className);
-      } else {
-        htmlEl.classList.add(className);
-      }
+      htmlEl.classList.add(className);
     },
-    onTogglePlaylist() {
-      this.state.showPlaylist = !this.state.showPlaylist;
-      this.toggleHTMLClass('overflow-y-hidden');
+    removeHTMLClass(className) {
+      const htmlEl = document.getElementsByTagName('html')[0];
+      htmlEl.classList.remove(className);
+    },
+    openPlaylist() {
+      this.state.showPlaylist = true;
+      this.addHTMLClass('overflow-y-hidden');
+    },
+    closePlaylist() {
+      this.state.showPlaylist = false;
+      this.removeHTMLClass('overflow-y-hidden');
     },
   },
   watch: {

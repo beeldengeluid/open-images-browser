@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-column">
     <div class="absolute ma3 top-0 right-0">
-      <v-icon @click="$emit('toggle-playlist')">mdi-close</v-icon>
+      <v-icon @click="$emit('close-playlist')">mdi-close</v-icon>
     </div>
     <h2 class="f4 tc mv3">
       {{ currentVideo.title }}
@@ -150,6 +150,23 @@ export default {
   mounted() {
     this.videoElement = this.$refs.video;
   },
+  mounted() {
+    this._keyListener = function(e) {
+      if (e.key === "ArrowLeft") {
+        this.prevVideo();
+      }
+      if (e.key === "ArrowRight") {
+        this.nextVideo();
+      }
+      if (e.key === "Escape") {
+        this.$emit('close-playlist');
+      }
+    };
+    document.addEventListener('keydown', this._keyListener.bind(this));
+  },
+  beforeDestroy() {
+    document.removeEventListener('keydown', this._keyListener);
+  }
 };
 </script>
 
