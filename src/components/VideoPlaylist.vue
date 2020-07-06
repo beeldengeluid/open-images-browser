@@ -1,9 +1,7 @@
 <template>
   <div class="flex flex-column">
-    <div class="tr">
-      <v-icon @click="$emit('toggle-playlist')" class="pa2 pointer"
-        >mdi-close</v-icon
-      >
+    <div class="absolute ma3 top-0 right-0">
+      <v-icon @click="$emit('toggle-playlist')">mdi-close</v-icon>
     </div>
     <h2 class="f4 tc mb3">
       {{ currentVideo.title }}
