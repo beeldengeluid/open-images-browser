@@ -5,6 +5,10 @@
         >mdi-close</v-icon
       >
     </div>
+    <h2 class="f4 tc mb3">
+      {{ currentVideo.title }}
+      <span class="fw1">({{ this.dateToYear(currentVideo.date) }})</span>
+    </h2>
     <div class="relative tc">
       <video
         :src="currentVideo.videoSrc"
@@ -140,6 +144,9 @@ export default {
     },
     setCurrentVideoIndex(index) {
       this.currentVideoIndex = index;
+    },
+    dateToYear(date) {
+      return date.slice(0, 4);
     },
   },
   mounted() {
