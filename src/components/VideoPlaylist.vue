@@ -18,7 +18,7 @@
         class="outline-0 mw-100"
       ></video>
       <div
-        class="absolute absolute-v-center w-100 h-100 flex items-center justify-between justify-around-ns hover-opacity"
+        class="absolute absolute-v-center w-100 flex items-center justify-between justify-around-ns hover-opacity"
       >
         <v-btn class="mh2 pe-all" fab @click="prevVideo()">
           <v-icon>mdi-chevron-left</v-icon>
