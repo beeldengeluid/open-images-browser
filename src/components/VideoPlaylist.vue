@@ -149,8 +149,7 @@ export default {
   },
   mounted() {
     this.videoElement = this.$refs.video;
-  },
-  mounted() {
+    
     this._keyListener = function(e) {
       if (e.key === "ArrowLeft") {
         this.prevVideo();
