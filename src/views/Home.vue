@@ -216,7 +216,7 @@
     <div 
       v-show="state.showPlaylist" 
       class="fixed w-100 h-100 bg-black-90 top-0 flex items-center flex-wrap z-9999"
-      :class="state.showPlaylist ? 'overflow-y-scroll' : ''"
+      :class="state.showPlaylist ? 'overflow-y-auto' : ''"
     >
       <VideoPlaylist
         :videos="itemsFilteredSorted"
@@ -591,10 +591,17 @@ export default {
         this.randomizeSelection();
       }
     },
+    toggleHTMLClass(className) {
+      const htmlEl = document.getElementsByTagName('html')[0];
+      if (htmlEl.classList.contains(className)) {
+        htmlEl.classList.remove(className);
+      } else {
+        htmlEl.classList.add(className);
+      }
+    },
     onTogglePlaylist() {
-      /* eslint-disable */
-      console.log("onTogglePlaylist");
       this.state.showPlaylist = !this.state.showPlaylist;
+      this.toggleHTMLClass('overflow-y-hidden');
     },
   },
   watch: {
