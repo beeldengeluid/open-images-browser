@@ -37,24 +37,33 @@
     </div>
     <div class="flex w-100 pa2 mh-tilcontrols flex-grow">
       <div v-show="listWindowStart" class="flex">
-        <span class="self-center tc grey--text">{{ `${listWindowStart} more` }}</span>
+        <span class="self-center tc grey--text mb3">{{
+          `${listWindowStart} more`
+        }}</span>
       </div>
       <div
         v-for="(video, index) in videosWindowed"
         :key="index"
         @click="setCurrentVideoIndex(index + listWindowStart)"
-        :class="currentVideoIndexWindowed == index ? 'active' : ''"
-        class="videoThumb pointer hover-border-color flex justify-center items-center bg-black mh1"
+        class="videoThumb flex flex-column bg-black mh1"
       >
         <img
           :src="video.thumbSrc"
           :alt="video.title"
           :title="video.title"
-          class="contain-height"
+          :class="
+            currentVideoIndexWindowed == index ? 'active-border-color' : ''
+          "
+          class="contain-height pointer hover-border-color"
         />
+        <div v-show="currentVideoIndexWindowed == index" class="tc">
+          {{ `${currentVideoIndex + 1} of ${videos.length}` }}
+        </div>
       </div>
       <div v-show="listWindowEnd < videos.length - 1" class="flex">
-        <span class="self-center tc grey--text">{{ `${videos.length - listWindowEnd} more` }}</span>
+        <span class="self-center tc grey--text mb3">{{
+          `${videos.length - listWindowEnd} more`
+        }}</span>
       </div>
     </div>
   </div>
@@ -161,7 +170,7 @@ export default {
   max-height: calc(50% - 28px);
 }
 
-.videoThumb.active {
+.active-border-color {
   border-width: 2px;
   border-color: #fff;
 }
