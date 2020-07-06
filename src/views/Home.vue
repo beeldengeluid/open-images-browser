@@ -213,7 +213,11 @@
 
 
     </v-content>
-    <div v-show="state.showPlaylist" class="fixed w-100 h-100 bg-black-90 top-0 flex items-center flex-wrap z-9999">
+    <div 
+      v-show="state.showPlaylist" 
+      class="fixed w-100 h-100 bg-black-90 top-0 flex items-center flex-wrap z-9999"
+      :class="state.showPlaylist ? 'overflow-y-scroll' : ''"
+    >
       <VideoPlaylist
         :videos="itemsFilteredSorted"
         :autoplayEnabled="false"

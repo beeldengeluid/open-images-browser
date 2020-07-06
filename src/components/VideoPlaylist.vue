@@ -3,7 +3,7 @@
     <div class="absolute ma3 top-0 right-0">
       <v-icon @click="$emit('toggle-playlist')">mdi-close</v-icon>
     </div>
-    <h2 class="f4 tc mb3">
+    <h2 class="f4 tc mv3">
       {{ currentVideo.title }}
       <span class="fw1">({{ this.dateToYear(currentVideo.date) }})</span>
     </h2>
@@ -19,7 +19,7 @@
         muted
         controls
         :class="stretchVideo ? 'w-100' : ''"
-        class="outline-0 mw-100"
+        class="outline-0 mw-100 mh-50vh"
       ></video>
       <div
         class="absolute absolute-v-center w-100 flex items-center justify-between justify-around-ns hover-opacity"
@@ -56,7 +56,7 @@
           :class="
             currentVideoIndexWindowed == index ? 'active-border-color' : ''
           "
-          class="contain-height pointer hover-border-color"
+          class="contain-height pointer hover-border-color mh-30vh"
         />
         <div v-show="currentVideoIndexWindowed == index" class="tc">
           {{ `${currentVideoIndex + 1} of ${videos.length}` }}
@@ -189,5 +189,11 @@ export default {
 }
 .flex-grow {
   flex-grow: 0;
+}
+.mh-50vh {
+  max-height: 50vh;
+}
+.mh-30vh {
+  max-height: 30vh;
 }
 </style>
