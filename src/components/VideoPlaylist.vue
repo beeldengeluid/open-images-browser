@@ -1,7 +1,9 @@
 <template>
   <div class="flex flex-column">
     <div class="tr">
-      <v-icon @click="$emit('toggle-playlist')" class="pa2 pointer">mdi-close</v-icon>
+      <v-icon @click="$emit('toggle-playlist')" class="pa2 pointer"
+        >mdi-close</v-icon
+      >
     </div>
     <div class="relative tc">
       <video
@@ -25,7 +27,7 @@
         </v-btn>
         <v-btn class="mh2 pe-all" fab @click="toggleVideoPlay()">
           <v-icon>
-            {{isPaused? 'mdi-play' : 'mdi-pause'}}
+            {{ isPaused ? "mdi-play" : "mdi-pause" }}
           </v-icon>
         </v-btn>
         <v-btn class="mh2 pe-all" fab @click="nextVideo()">
@@ -34,6 +36,9 @@
       </div>
     </div>
     <div class="flex w-100 pa2 mh-tilcontrols flex-grow">
+      <div v-show="listWindowStart" class="flex">
+        <span class="self-center tc grey--text">{{ `${listWindowStart} more` }}</span>
+      </div>
       <div
         v-for="(video, index) in videosWindowed"
         :key="index"
@@ -43,9 +48,13 @@
       >
         <img
           :src="video.thumbSrc"
-          :alt="`playlist video ${index}`"
+          :alt="video.title"
+          :title="video.title"
           class="contain-height"
         />
+      </div>
+      <div v-show="listWindowEnd < videos.length - 1" class="flex">
+        <span class="self-center tc grey--text">{{ `${videos.length - listWindowEnd} more` }}</span>
       </div>
     </div>
   </div>
@@ -76,7 +85,7 @@ export default {
     },
     listWindowStart() {
       return Math.min(
-        Math.max(0, this.currentVideoIndex - this.windowOffset), 
+        Math.max(0, this.currentVideoIndex - this.windowOffset),
         this.videos.length - this.listWindowLength
       );
     },
@@ -107,8 +116,7 @@ export default {
       let newIndex = this.currentVideoIndex + amount;
       if (newIndex >= this.videos.length) {
         newIndex = 0;
-      } 
-      else if (newIndex < 0) {
+      } else if (newIndex < 0) {
         newIndex = this.videos.length - 1;
       }
       this.currentVideoIndex = newIndex;
@@ -117,8 +125,7 @@ export default {
     toggleVideoPlay() {
       if (this.videoElement.paused) {
         this.videoElement.play();
-      }
-      else {
+      } else {
         this.videoElement.pause();
       }
     },
@@ -128,7 +135,7 @@ export default {
   },
   mounted() {
     this.videoElement = this.$refs.video;
-  }
+  },
 };
 </script>
 
