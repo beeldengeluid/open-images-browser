@@ -99,7 +99,7 @@ export default {
     listWindowStart() {
       return Math.min(
         Math.max(0, this.currentVideoIndex - this.windowOffset),
-        this.videos.length - this.listWindowLength
+        Math.max(0, this.videos.length - this.listWindowLength)
       );
     },
     listWindowEnd() {
