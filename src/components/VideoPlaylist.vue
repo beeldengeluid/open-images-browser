@@ -40,10 +40,14 @@
     </div>
     <div 
       :class="isPaused ? 'opaque' : ''"
-      class="flex w-100 pa2 flex-grow-0 hover-opacity-semi"
+      class="flex w-100 pa3 flex-grow-0 hover-opacity-semi"
     >
+      <div class="absolute right-0 flex mr3">
+        <span class="mr2">autoplay</span> 
+        <v-switch v-model="autoplayEnabled" class="mt0 pt0"></v-switch>
+      </div>
       <div v-show="listWindowStart" class="flex">
-        <span class="self-center tc grey--text mb3">{{
+        <span class="self-center tc grey--text">{{
           `${listWindowStart} more`
         }}</span>
       </div>
@@ -53,7 +57,9 @@
         class="videoThumb flex flex-column bg-black mh1"
       >
         <div class="h2">
-          <span v-show="index - 1 == currentVideoIndexWindowed" class="absolute">Up next</span>
+          <span v-show="index - 1 == currentVideoIndexWindowed && currentVideoIndex < videos.length - 3" class="absolute">
+            Up next
+          </span>
         </div>
         <img
           @click="setCurrentVideoIndex(index + listWindowStart)"
@@ -65,12 +71,12 @@
           "
           class="contain-height pointer hover-border-color mh-30vh"
         />
-        <div v-show="index == currentVideoIndexWindowed" class="tc">
+        <div v-show="index == currentVideoIndexWindowed" class="tc pv2">
           {{ `${currentVideoIndex + 1} of ${videos.length}` }}
         </div>
       </div>
       <div v-show="listWindowEnd < videos.length - 1" class="flex">
-        <span class="self-center tc grey--text mb3">{{
+        <span class="self-center tc grey--text">{{
           `${videos.length - listWindowEnd} more`
         }}</span>
       </div>
@@ -87,11 +93,11 @@ export default {
       currentVideoIndex: 0,
       isPaused: true,
       listWindowLength: 7,
+      autoplayEnabled: true,
     };
   },
   props: {
     videos: Array,
-    autoplayEnabled: { type: Boolean, default: true },
     stretchVideo: { type: Boolean, default: false },
   },
   computed: {

@@ -220,7 +220,6 @@
     >
       <VideoPlaylist
         :videos="itemsFilteredSorted"
-        :autoplayEnabled="false"
         :stretchVideo="false"
         v-on:close-playlist="closePlaylist"
         class="h-100 justify-center"
