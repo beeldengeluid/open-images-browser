@@ -75,7 +75,7 @@
           {{ `${currentVideoIndex + 1} of ${videos.length}` }}
         </div>
       </div>
-      <div v-show="listWindowEnd < videos.length - 1" class="flex">
+      <div v-show="listWindowEnd < videos.length" class="flex">
         <span class="self-center tc grey--text">{{
           `${videos.length - listWindowEnd} more`
         }}</span>
