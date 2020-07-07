@@ -50,19 +50,22 @@
       <div
         v-for="(video, index) in videosWindowed"
         :key="index"
-        @click="setCurrentVideoIndex(index + listWindowStart)"
         class="videoThumb flex flex-column bg-black mh1"
       >
+        <div class="h2">
+          <span v-show="index - 1 == currentVideoIndexWindowed" class="absolute">Up next</span>
+        </div>
         <img
+          @click="setCurrentVideoIndex(index + listWindowStart)"
           :src="video.thumbSrc"
           :alt="video.title"
           :title="video.title"
           :class="
-            currentVideoIndexWindowed == index ? 'active-border-color' : ''
+            index == currentVideoIndexWindowed ? 'active-border-color' : ''
           "
           class="contain-height pointer hover-border-color mh-30vh"
         />
-        <div v-show="currentVideoIndexWindowed == index" class="tc">
+        <div v-show="index == currentVideoIndexWindowed" class="tc">
           {{ `${currentVideoIndex + 1} of ${videos.length}` }}
         </div>
       </div>
