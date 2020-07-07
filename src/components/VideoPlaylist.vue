@@ -44,7 +44,12 @@
     >
       <div class="absolute right-0 flex mr3">
         <span class="mr2">autoplay</span> 
-        <v-switch v-model="autoplayEnabled" class="mt0 pt0"></v-switch>
+        <v-switch 
+          v-model="autoplayEnabled" 
+          class="mt0 pt0"
+          :color="color"
+          hide-details
+        ></v-switch>
       </div>
       <div v-show="listWindowStart" class="flex">
         <span class="self-center tc grey--text">{{
@@ -99,6 +104,7 @@ export default {
   props: {
     videos: Array,
     stretchVideo: { type: Boolean, default: false },
+    color: { type: String, default: "orange" },
   },
   computed: {
     currentVideo() {

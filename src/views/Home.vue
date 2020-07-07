@@ -131,7 +131,7 @@
                 <span class="mr2 fw7">Sort by</span>
                 <v-chip-group
                   v-model="state.sortBy"
-                  active-class="deep-orange"
+                  active-class="orange darken-2"
                   mandatory
                   class="fw5 font-mono"
                 >
@@ -143,7 +143,7 @@
                     {{ sortField }}
                   </v-chip>
                 </v-chip-group>
-                <v-btn fab x-small color="deep-orange mr2">
+                <v-btn fab x-small color="orange darken-2">
                   <v-icon @click="toggleSortAscending">{{
                     state.sortAscending ? "mdi-chevron-up" : "mdi-chevron-down"
                   }}</v-icon>
@@ -153,7 +153,7 @@
                 <span class="pr2 fw7">Display</span>
                 <v-chip-group
                   v-model="state.displayFieldsSelected"
-                  active-class="deep-orange"
+                  active-class="orange darken-2"
                   multiple
                   class="fw5 font-mono"
                 >
@@ -168,8 +168,7 @@
               </div>
               <v-btn
                 @click="openPlaylist"
-                outlined
-                small
+                color="orange darken-2"
                 class="ml-auto"
               >
                 <v-icon left>mdi-playlist-play</v-icon>Start Playlist
@@ -181,7 +180,7 @@
               :max="zoom.max"
               :step="zoom.step"
               :tickLabels="zoomLabels"
-              color="deep-orange"
+              color="orange darken-2"
               class="mb3 mb4-ns"
             ></ZoomSlider>
             <CollectionItemGrid
@@ -222,6 +221,7 @@
         :videos="itemsFilteredSorted"
         :stretchVideo="false"
         v-on:close-playlist="closePlaylist"
+        color="orange darken-2"
         class="h-100 justify-center"
       />
     </div>
