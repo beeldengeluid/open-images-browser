@@ -22,6 +22,7 @@
         class="outline-0 mw-100 mh-50vh"
       ></video>
       <div
+        :class="isPaused ? 'opaque' : ''"
         class="absolute absolute-v-center w-100 flex items-center justify-between justify-around-ns hover-opacity"
       >
         <v-btn class="mh2 pe-all" fab @click="prevVideo()">
@@ -37,7 +38,10 @@
         </v-btn>
       </div>
     </div>
-    <div class="flex w-100 pa2 mh-tilcontrols flex-grow">
+    <div 
+      :class="isPaused ? 'opaque' : ''"
+      class="flex w-100 pa2 flex-grow-0 hover-opacity-semi"
+    >
       <div v-show="listWindowStart" class="flex">
         <span class="self-center tc grey--text mb3">{{
           `${listWindowStart} more`
@@ -171,13 +175,12 @@ export default {
 
 <style scoped>
 .hover-border-color {
-  border: 1px solid #333;
+  border: 1px solid hsla(0, 0%, 100%, 0);
   transition: border-color 0.15s;
 }
 .hover-border-color:hover {
   border-color: hsla(0, 0%, 100%, 0.75);
 }
-
 .hover-opacity {
   opacity: 0;
   transition: opacity 1s;
@@ -186,11 +189,17 @@ export default {
   opacity: 1;
   transition: opacity 0.15s;
 }
-
-.mh-tilcontrols {
-  max-height: calc(50% - 28px);
+.hover-opacity-semi {
+  opacity: 0.5;
+  transition: opacity 1s;
 }
-
+.hover-opacity-semi:hover {
+  opacity: 1;
+  transition: opacity 0.15s;
+}
+.opaque {
+  opacity: 1;
+}
 .active-border-color {
   border-width: 2px;
   border-color: #fff;
@@ -203,7 +212,7 @@ export default {
   top: 50%;
   transform: translateY(-50%);
 }
-.flex-grow {
+.flex-grow-0 {
   flex-grow: 0;
 }
 .mh-50vh {
