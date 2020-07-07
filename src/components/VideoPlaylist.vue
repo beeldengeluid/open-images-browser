@@ -184,7 +184,7 @@ export default {
 
 <style scoped>
 .hover-border-color {
-  border: 1px solid hsla(0, 0%, 100%, 0);
+  border: 4px solid hsla(0, 0%, 100%, 0);
   transition: border-color 0.15s;
 }
 .hover-border-color:hover {
@@ -210,7 +210,7 @@ export default {
   opacity: 1;
 }
 .active-border-color {
-  border-width: 2px;
+  border-width: 4px;
   border-color: #fff;
 }
 .contain-height {
