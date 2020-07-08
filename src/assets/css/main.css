@@ -41,3 +41,6 @@ a {
   color: #fff !important;
   font-weight: 700;
 }
+.theme--dark.v-chip--active::before {
+    opacity: 0;
+}
