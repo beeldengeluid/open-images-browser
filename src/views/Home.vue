@@ -218,7 +218,7 @@
       :class="state.showPlaylist ? 'overflow-y-auto' : ''"
     >
       <VideoPlaylist
-        :videos="itemsFilteredSorted"
+        :items="itemsFilteredSorted"
         :stretchVideo="false"
         v-on:close-playlist="closePlaylist"
         color="orange darken-2"

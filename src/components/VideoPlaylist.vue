@@ -16,7 +16,6 @@
         @pause="onVideoPlayChange"
         @ended="onVideoEnded"
         ref="video"
-        muted
         controls
         :class="stretchVideo ? 'w-100' : ''"
         class="outline-0 mw-100 mh-50vh"
@@ -57,32 +56,32 @@
         }}</span>
       </div>
       <div
-        v-for="(video, index) in videosWindowed"
+        v-for="(item, index) in itemsWindowed"
         :key="index"
-        class="videoThumb flex flex-column bg-black mh1"
+        class="flex flex-column bg-black mh1"
       >
         <div class="h2">
-          <span v-show="index - 1 == currentVideoIndexWindowed && currentVideoIndex < videos.length - 3" class="absolute">
+          <span v-show="index - 1 == currentVideoIndexWindowed && currentVideoIndex < items.length - 3" class="absolute">
             Up next
           </span>
         </div>
         <img
           @click="setCurrentVideoIndex(index + listWindowStart)"
-          :src="video.thumbSrc"
-          :alt="video.title"
-          :title="video.title"
+          :src="item.thumbSrc"
+          :alt="item.title"
+          :title="item.title"
           :class="
             index == currentVideoIndexWindowed ? 'active-border-color' : ''
           "
           class="contain-height pointer hover-border-color mh-30vh"
         />
         <div v-show="index == currentVideoIndexWindowed" class="tc pv2">
-          {{ `${currentVideoIndex + 1} of ${videos.length}` }}
+          {{ `${currentVideoIndex + 1} of ${items.length}` }}
         </div>
       </div>
-      <div v-show="listWindowEnd < videos.length" class="flex">
+      <div v-show="listWindowEnd < items.length" class="flex">
         <span class="self-center tc grey--text">{{
-          `${videos.length - listWindowEnd} more`
+          `${items.length - listWindowEnd} more`
         }}</span>
       </div>
     </div>
@@ -102,13 +101,13 @@ export default {
     };
   },
   props: {
-    videos: Array,
+    items: Array,
     stretchVideo: { type: Boolean, default: false },
     color: { type: String, default: "orange" },
   },
   computed: {
     currentVideo() {
-      return this.videos[this.currentVideoIndex];
+      return this.items[this.currentVideoIndex];
     },
     windowOffset() {
       return Math.floor((this.listWindowLength - 1) / 2);
@@ -116,14 +115,14 @@ export default {
     listWindowStart() {
       return Math.min(
         Math.max(0, this.currentVideoIndex - this.windowOffset),
-        Math.max(0, this.videos.length - this.listWindowLength)
+        Math.max(0, this.items.length - this.listWindowLength)
       );
     },
     listWindowEnd() {
       return this.listWindowStart + this.listWindowLength;
     },
-    videosWindowed() {
-      return this.videos.slice(this.listWindowStart, this.listWindowEnd);
+    itemsWindowed() {
+      return this.items.slice(this.listWindowStart, this.listWindowEnd);
     },
     currentVideoIndexWindowed() {
       return this.currentVideoIndex - this.listWindowStart;
@@ -144,10 +143,10 @@ export default {
     },
     advanceVideo(amount) {
       let newIndex = this.currentVideoIndex + amount;
-      if (newIndex >= this.videos.length) {
+      if (newIndex >= this.items.length) {
         newIndex = 0;
       } else if (newIndex < 0) {
-        newIndex = this.videos.length - 1;
+        newIndex = this.items.length - 1;
       }
       this.currentVideoIndex = newIndex;
       this.isPaused = true;
