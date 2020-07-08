@@ -126,12 +126,12 @@
                 <v-icon left>mdi-close-circle</v-icon>Clear Selection
               </v-btn>
             </div>
-            <div class="dflex flex-wrap mb3">
+            <div class="dflex flex-wrap mb3 items-center">
               <div class="dflex items-center mr3 mr4-l">
                 <span class="mr2 fw7">Sort by</span>
                 <v-chip-group
                   v-model="state.sortBy"
-                  active-class="indigo"
+                  active-class="orange darken-2"
                   mandatory
                   class="fw5 font-mono"
                 >
@@ -143,17 +143,17 @@
                     {{ sortField }}
                   </v-chip>
                 </v-chip-group>
-                <v-btn fab x-small color="indigo mr2">
+                <v-btn fab x-small color="orange darken-2">
                   <v-icon @click="toggleSortAscending">{{
                     state.sortAscending ? "mdi-chevron-up" : "mdi-chevron-down"
                   }}</v-icon>
                 </v-btn>
               </div>
-              <div class="dflex items-center">
+              <div class="dflex items-center mr3 mr4-l">
                 <span class="pr2 fw7">Display</span>
                 <v-chip-group
                   v-model="state.displayFieldsSelected"
-                  active-class="green"
+                  active-class="orange darken-2"
                   multiple
                   class="fw5 font-mono"
                 >
@@ -166,6 +166,13 @@
                   </v-chip>
                 </v-chip-group>
               </div>
+              <v-btn
+                @click="openPlaylist"
+                color="orange darken-2"
+                class="ml-auto"
+              >
+                <v-icon left>mdi-playlist-play</v-icon>Start Playlist
+              </v-btn>
             </div>
             <ZoomSlider
               v-model="zoom.value"
@@ -173,6 +180,7 @@
               :max="zoom.max"
               :step="zoom.step"
               :tickLabels="zoomLabels"
+              color="orange darken-2"
               class="mb3 mb4-ns"
             ></ZoomSlider>
             <CollectionItemGrid
@@ -193,6 +201,7 @@
           <v-icon>mdi-chevron-up</v-icon>
         </v-btn>
       </back-to-top>
+      
       <v-snackbar
         v-model="snackbar.state"
         :timeout="snackbar.timeout"
@@ -200,7 +209,22 @@
       >
         <span v-html="snackbar.markup"></span>
       </v-snackbar>
+
+
     </v-content>
+    <div 
+      v-if="state.showPlaylist" 
+      class="fixed w-100 h-100 bg-black-90 top-0 flex items-center flex-wrap z-9999"
+      :class="state.showPlaylist ? 'overflow-y-auto' : ''"
+    >
+      <VideoPlaylist
+        :items="itemsFilteredSorted"
+        :stretchVideo="false"
+        v-on:close-playlist="closePlaylist"
+        color="orange darken-2"
+        class="h-100 justify-center"
+      />
+    </div>
   </v-app>
 </template>
 
@@ -216,6 +240,7 @@ import FilterList from "@/components/FilterList";
 import ZoomSlider from "@/components/ZoomSlider";
 import CollectionItemGrid from "@/components/CollectionItemGrid";
 import RatioBar from "@/components/RatioBar";
+import VideoPlaylist from "@/components/VideoPlaylist";
 import BackToTop from "vue-backtotop";
 
 export default {
@@ -230,6 +255,7 @@ export default {
     ZoomSlider,
     CollectionItemGrid,
     RatioBar,
+    VideoPlaylist,
     BackToTop,
   },
   data() {
@@ -244,6 +270,7 @@ export default {
           locations: [],
           subjects: [],
         },
+        showPlaylist: false,
       },
       zoom: {
         value: 3,
@@ -562,6 +589,22 @@ export default {
         // no filters in this decade, recursively retry
         this.randomizeSelection();
       }
+    },
+    addHTMLClass(className) {
+      const htmlEl = document.getElementsByTagName('html')[0];
+      htmlEl.classList.add(className);
+    },
+    removeHTMLClass(className) {
+      const htmlEl = document.getElementsByTagName('html')[0];
+      htmlEl.classList.remove(className);
+    },
+    openPlaylist() {
+      this.state.showPlaylist = true;
+      this.addHTMLClass('overflow-y-hidden');
+    },
+    closePlaylist() {
+      this.state.showPlaylist = false;
+      this.removeHTMLClass('overflow-y-hidden');
     },
   },
   watch: {

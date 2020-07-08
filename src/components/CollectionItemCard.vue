@@ -1,6 +1,6 @@
 <template>
   <div class="flex expansion-container">
-    <div class="expansion-left tc bg-black ba b--grey--darken-3">
+    <div class="expansion-left tc bg-black ba b--grey--darken-3 br3 br--left">
       <video
         :src="item.videoSrc"
         :poster="item.thumbSrc"
@@ -10,7 +10,7 @@
         class="outline-0 bg-black"
       ></video>
     </div>
-    <div class="expansion-right pa3 pr4 relative grey darken-3">
+    <div class="expansion-right pa3 pr4 relative grey darken-3 br3 br--right">
       <h2 class="mt0 f4">
         {{ item.title }} <span class="fw1">({{ year }})</span>
       </h2>
