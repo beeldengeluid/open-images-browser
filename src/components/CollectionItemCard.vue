@@ -1,6 +1,6 @@
 <template>
   <div class="flex expansion-container">
-    <div class="expansion-left tc bg-black ba b--grey--darken-3 br3 br--left">
+    <div class="expansion-left tc bg-black ba b--grey--darken-3">
       <video
         :src="item.videoSrc"
         :poster="item.thumbSrc"
@@ -10,7 +10,7 @@
         class="outline-0 bg-black"
       ></video>
     </div>
-    <div class="expansion-right pa3 pr4 relative grey darken-3 br3 br--right">
+    <div class="expansion-right pa3 pr4 relative grey darken-3">
       <h2 class="mt0 f4">
         {{ item.title }} <span class="fw1">({{ year }})</span>
       </h2>
@@ -135,9 +135,13 @@ export default {
 }
 .expansion-container .expansion-left {
   width: 100%;
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
 }
 .expansion-container .expansion-right {
   width: 100%;
+  border-bottom-left-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
 }
 
 @media screen and (min-width: 1140px) {
@@ -151,10 +155,16 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    border-top-right-radius: 0;
+    border-top-left-radius: 0.5rem;
+    border-bottom-left-radius: 0.5rem;
   }
   .expansion-container .expansion-right {
     flex-grow: 1;
     max-width: 64rem;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
   }
 }
 .b--grey--darken-3 {
