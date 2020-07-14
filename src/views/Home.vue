@@ -201,7 +201,7 @@
           <v-icon>mdi-chevron-up</v-icon>
         </v-btn>
       </back-to-top>
-      
+
       <v-snackbar
         v-model="snackbar.state"
         :timeout="snackbar.timeout"
@@ -209,11 +209,9 @@
       >
         <span v-html="snackbar.markup"></span>
       </v-snackbar>
-
-
     </v-content>
-    <div 
-      v-if="state.showPlaylist" 
+    <div
+      v-if="state.showPlaylist"
       class="fixed w-100 h-100 bg-black-90 top-0 flex items-center flex-wrap z-9999"
       :class="state.showPlaylist ? 'overflow-y-auto' : ''"
     >
@@ -567,30 +565,33 @@ export default {
       }
     },
     addHTMLClass(className) {
-      const htmlEl = document.getElementsByTagName('html')[0];
+      const htmlEl = document.getElementsByTagName("html")[0];
       htmlEl.classList.add(className);
     },
     removeHTMLClass(className) {
-      const htmlEl = document.getElementsByTagName('html')[0];
+      const htmlEl = document.getElementsByTagName("html")[0];
       htmlEl.classList.remove(className);
     },
     openPlaylist() {
       this.state.showPlaylist = true;
-      this.addHTMLClass('overflow-y-hidden');
+      this.addHTMLClass("overflow-y-hidden");
     },
     closePlaylist() {
       this.state.showPlaylist = false;
-      this.removeHTMLClass('overflow-y-hidden');
+      this.removeHTMLClass("overflow-y-hidden");
     },
     handleFilterUpdate(newValue, oldValue, filterType) {
       let added = _.difference(newValue, oldValue);
       if (added.length) {
-        this.showSnackbar(`👓 Added ${filterType} filter <strong>${added[0]}</strong>`);
-      } 
-      else {
+        this.showSnackbar(
+          `👓 Added ${filterType} filter <strong>${added[0]}</strong>`
+        );
+      } else {
         let removed = _.difference(oldValue, newValue);
         if (removed.length) {
-          this.showSnackbar(`❌ Removed ${filterType} filter <strong>${removed[0]}</strong>`);
+          this.showSnackbar(
+            `❌ Removed ${filterType} filter <strong>${removed[0]}</strong>`
+          );
         }
       }
 
@@ -598,11 +599,10 @@ export default {
         query: Object.assign({}, this.$route.query, {
           activeFilters: {
             ...this.state.activeFilters,
-            [filterType]: newValue
+            [filterType]: newValue,
           },
         }),
       });
-      
     },
   },
   watch: {
@@ -637,10 +637,10 @@ export default {
       });
     },
     "state.activeFilters.locations": function(newValue, oldValue) {
-      this.handleFilterUpdate(newValue, oldValue, 'locations')
+      this.handleFilterUpdate(newValue, oldValue, "locations");
     },
     "state.activeFilters.subjects": function(newValue, oldValue) {
-      this.handleFilterUpdate(newValue, oldValue, 'subjects')
+      this.handleFilterUpdate(newValue, oldValue, "subjects");
     },
     "state.displayFieldsSelected": function(newValue, oldValue) {
       let added = _.difference(newValue, oldValue);
