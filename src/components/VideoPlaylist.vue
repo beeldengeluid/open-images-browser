@@ -20,9 +20,11 @@
         :class="stretchVideo ? 'w-100' : ''"
         class="outline-0 mw-100 mh-50vh"
       ></video>
+
+      <!-- playback controls -->
       <div
         :class="isPaused ? 'opaque' : ''"
-        class="absolute absolute-v-center w-100 flex items-center justify-between justify-around-ns hover-opacity"
+        class="absolute absolute-v-center w-100 flex items-center justify-between justify-around-ns hover-opacity z-999"
       >
         <v-btn class="mh2 pe-all" fab @click="prevVideo()">
           <v-icon>mdi-chevron-left</v-icon>
@@ -37,14 +39,16 @@
         </v-btn>
       </div>
     </div>
-    <div 
+
+    <!-- video Thumbnails -->
+    <div
       :class="isPaused ? 'opaque' : ''"
-      class="flex w-100 pa3 flex-grow-0 hover-opacity-semi"
+      class="flex w-100 pa3 flex-grow-0 hover-opacity-semi bg-black"
     >
       <div class="absolute right-0 flex mr3">
-        <span class="mr2">autoplay</span> 
-        <v-switch 
-          v-model="autoplayEnabled" 
+        <span class="mr2">autoplay</span>
+        <v-switch
+          v-model="autoplayEnabled"
           class="mt0 pt0"
           :color="color"
           hide-details
@@ -58,10 +62,16 @@
       <div
         v-for="(item, index) in itemsWindowed"
         :key="index"
-        class="flex flex-column bg-black mh1"
+        class="flex flex-column mh1"
       >
         <div class="h2">
-          <span v-show="index - 1 == currentVideoIndexWindowed && currentVideoIndex < items.length - 3" class="absolute">
+          <span
+            v-show="
+              index - 1 == currentVideoIndexWindowed &&
+                currentVideoIndex < items.length - 3
+            "
+            class="absolute"
+          >
             Up next
           </span>
         </div>
@@ -85,12 +95,54 @@
         }}</span>
       </div>
     </div>
+
+    <!-- related playlists -->
+    <VideoPlaylistPreview 
+      :thumbItem="items[0]"
+      v-on:load-related-playlist="$emit('load-related-playlist', {
+        type: 'locations',
+        value: 'Amsterdam',
+      })"
+      :title="`More Amsterdam`" 
+      class="absolute left-0 top-0 ma3 w-20 mw5"
+    >
+      <h4 class="mb2 grey--text">
+        More
+        <v-chip label small class="ml1 teal white--text font-mono">
+          <v-icon small left>mdi-map-marker</v-icon>
+          <strong>Amsterdam</strong>
+        </v-chip>
+      </h4>
+    </VideoPlaylistPreview>
+
+    <VideoPlaylistPreview 
+      :thumbItem="items[1]"
+      v-on:load-related-playlist="$emit('load-related-playlist', {
+        type: 'subjects',
+        value: 'straatshots',
+      })"
+      :title="`More straatshots`" 
+      class="absolute right-0 top-0 ma3 w-20 mw5"
+    >
+      <h4 class="mb2 grey--text">
+        More
+        <v-chip label small class="ml1 teal white--text font-mono">
+          <v-icon small left>mdi-tag</v-icon>
+          <strong>straatshots</strong>
+        </v-chip>
+      </h4>
+    </VideoPlaylistPreview>
+
   </div>
 </template>
 
 <script>
+import VideoPlaylistPreview from "./VideoPlaylistPreview";
 export default {
   name: "VideoPlaylist",
+  components: {
+    VideoPlaylistPreview,
+  },
   data: function() {
     return {
       videoElement: null,
@@ -167,7 +219,7 @@ export default {
   },
   mounted() {
     this.videoElement = this.$refs.video;
-    
+
     this._keyListener = function(e) {
       if (e.key === "ArrowLeft") {
         this.prevVideo();
@@ -176,44 +228,18 @@ export default {
         this.nextVideo();
       }
       if (e.key === "Escape") {
-        this.$emit('close-playlist');
+        this.$emit("close-playlist");
       }
     };
-    document.addEventListener('keydown', this._keyListener.bind(this));
+    document.addEventListener("keydown", this._keyListener.bind(this));
   },
   beforeDestroy() {
-    document.removeEventListener('keydown', this._keyListener);
-  }
+    document.removeEventListener("keydown", this._keyListener);
+  },
 };
 </script>
 
 <style scoped>
-.hover-border-color {
-  border: 4px solid hsla(0, 0%, 100%, 0);
-  transition: border-color 0.15s;
-}
-.hover-border-color:hover {
-  border-color: hsla(0, 0%, 100%, 0.75);
-}
-.hover-opacity {
-  opacity: 0;
-  transition: opacity 1s;
-}
-.hover-opacity:hover {
-  opacity: 1;
-  transition: opacity 0.15s;
-}
-.hover-opacity-semi {
-  opacity: 0.5;
-  transition: opacity 1s;
-}
-.hover-opacity-semi:hover {
-  opacity: 1;
-  transition: opacity 0.15s;
-}
-.opaque {
-  opacity: 1;
-}
 .active-border-color {
   border-width: 4px;
   border-color: #fff;
