@@ -1,16 +1,16 @@
 <template>
-  <div class="flex flex-column">
-    <div class="absolute ma3 top-0 right-0">
+  <div class="flex flex-column justify-between">
+    <div class="absolute ma3 top-0 right-0 z-1">
       <v-icon @click="$emit('close-playlist')">mdi-close</v-icon>
     </div>
     <h2 class="f4 tc mv3">
-      {{ currentVideo.title }}
-      <span class="fw1">({{ this.dateToYear(currentVideo.date) }})</span>
+      {{ currentItem.title }}
+      <span class="fw1">({{ this.dateToYear(currentItem.date) }})</span>
     </h2>
     <div class="relative tc">
       <video
-        :src="currentVideo.videoSrc"
-        :poster="currentVideo.thumbSrc"
+        :src="currentItem.videoSrc"
+        :poster="currentItem.thumbSrc"
         :autoplay="autoplayEnabled"
         @playing="onVideoPlayChange"
         @pause="onVideoPlayChange"
@@ -67,8 +67,8 @@
         <div class="h2">
           <span
             v-show="
-              index - 1 == currentVideoIndexWindowed &&
-                currentVideoIndex < items.length - 3
+              index - 1 == currentItemIndexWindowed &&
+                currentItemIndex < items.length - 3
             "
             class="absolute"
           >
@@ -76,17 +76,17 @@
           </span>
         </div>
         <img
-          @click="setCurrentVideoIndex(index + listWindowStart)"
+          @click="setCurrentItemIndex(index + listWindowStart)"
           :src="item.thumbSrc"
           :alt="item.title"
           :title="item.title"
           :class="
-            index == currentVideoIndexWindowed ? 'active-border-color' : ''
+            index == currentItemIndexWindowed ? 'active-border-color' : ''
           "
           class="contain-height pointer hover-border-color mh-30vh"
         />
-        <div v-show="index == currentVideoIndexWindowed" class="tc pv2">
-          {{ `${currentVideoIndex + 1} of ${items.length}` }}
+        <div v-show="index == currentItemIndexWindowed" class="tc pv2">
+          {{ `${currentItemIndex + 1} of ${items.length}` }}
         </div>
       </div>
       <div v-show="listWindowEnd < items.length" class="flex">
@@ -98,37 +98,40 @@
 
     <!-- related playlists -->
     <VideoPlaylistPreview 
-      :thumbItem="items[0]"
+      v-if="currentItem.locations.length"
+      :thumbItem="currentItem"
       v-on:load-related-playlist="$emit('load-related-playlist', {
         type: 'locations',
-        value: 'Amsterdam',
+        value: currentItem.locations[0],
       })"
-      :title="`More Amsterdam`" 
-      class="absolute left-0 top-0 ma3 w-20 mw5"
+      :title="`More ${currentItem.locations[0]}`" 
+      :class="isPaused ? 'opaque' : ''"
+      class="absolute left-0 top-0 ma3 mt6 w-20 mw5 hover-opacity-semi"
     >
       <h4 class="mb2 grey--text">
         More
         <v-chip label small class="ml1 teal white--text font-mono">
           <v-icon small left>mdi-map-marker</v-icon>
-          <strong>Amsterdam</strong>
+          <strong>{{currentItem.locations[0]}}</strong>
         </v-chip>
       </h4>
     </VideoPlaylistPreview>
 
     <VideoPlaylistPreview 
-      :thumbItem="items[1]"
+      v-if="currentItem.subjects.length"
+      :thumbItem="currentItem"
       v-on:load-related-playlist="$emit('load-related-playlist', {
         type: 'subjects',
-        value: 'straatshots',
+        value: currentItem.subjects[0],
       })"
-      :title="`More straatshots`" 
-      class="absolute right-0 top-0 ma3 w-20 mw5"
+      :title="`More ${currentItem.subjects[0]}`" 
+      class="absolute right-0 top-0 ma3 mt6 w-20 mw5"
     >
       <h4 class="mb2 grey--text">
         More
         <v-chip label small class="ml1 teal white--text font-mono">
           <v-icon small left>mdi-tag</v-icon>
-          <strong>straatshots</strong>
+          <strong>{{currentItem.subjects[0]}}</strong>
         </v-chip>
       </h4>
     </VideoPlaylistPreview>
@@ -146,10 +149,10 @@ export default {
   data: function() {
     return {
       videoElement: null,
-      currentVideoIndex: 0,
+      currentItemIndex: 0,
       isPaused: true,
       listWindowLength: 7,
-      autoplayEnabled: true,
+      autoplayEnabled: false,
     };
   },
   props: {
@@ -158,15 +161,15 @@ export default {
     color: { type: String, default: "orange" },
   },
   computed: {
-    currentVideo() {
-      return this.items[this.currentVideoIndex];
+    currentItem() {
+      return this.items[this.currentItemIndex];
     },
     windowOffset() {
       return Math.floor((this.listWindowLength - 1) / 2);
     },
     listWindowStart() {
       return Math.min(
-        Math.max(0, this.currentVideoIndex - this.windowOffset),
+        Math.max(0, this.currentItemIndex - this.windowOffset),
         Math.max(0, this.items.length - this.listWindowLength)
       );
     },
@@ -176,8 +179,8 @@ export default {
     itemsWindowed() {
       return this.items.slice(this.listWindowStart, this.listWindowEnd);
     },
-    currentVideoIndexWindowed() {
-      return this.currentVideoIndex - this.listWindowStart;
+    currentItemIndexWindowed() {
+      return this.currentItemIndex - this.listWindowStart;
     },
   },
   methods: {
@@ -194,13 +197,13 @@ export default {
       this.advanceVideo(1);
     },
     advanceVideo(amount) {
-      let newIndex = this.currentVideoIndex + amount;
+      let newIndex = this.currentItemIndex + amount;
       if (newIndex >= this.items.length) {
         newIndex = 0;
       } else if (newIndex < 0) {
         newIndex = this.items.length - 1;
       }
-      this.currentVideoIndex = newIndex;
+      this.currentItemIndex = newIndex;
       this.isPaused = true;
     },
     toggleVideoPlay() {
@@ -210,8 +213,8 @@ export default {
         this.videoElement.pause();
       }
     },
-    setCurrentVideoIndex(index) {
-      this.currentVideoIndex = index;
+    setCurrentItemIndex(index) {
+      this.currentItemIndex = index;
     },
     dateToYear(date) {
       return date.slice(0, 4);
