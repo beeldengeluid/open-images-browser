@@ -101,7 +101,7 @@
     <div class="dn db-ns mw5 mt4">
       <!-- related playlists -->
       <VideoPlaylistPreview
-        v-if="currentItem.locations.length"
+        v-if="currentItem.locations.length && filterCountsForSelection.locations[currentItem.locations[0]] > 1"
         :thumbItem="currentItem"
         v-on:preview-click="
           onPreviewClick({
@@ -123,7 +123,7 @@
       </VideoPlaylistPreview>
 
       <VideoPlaylistPreview
-        v-if="currentItem.subjects.length"
+        v-if="currentItem.subjects.length && filterCountsForSelection.subjects[currentItem.subjects[0]] > 1"
         :thumbItem="currentItem"
         v-on:preview-click="
           onPreviewClick({
@@ -165,6 +165,7 @@ export default {
   },
   props: {
     items: Array,
+    filterCountsForSelection: Object,
     stretchVideo: { type: Boolean, default: false },
     color: { type: String, default: "orange" },
   },

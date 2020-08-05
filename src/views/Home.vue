@@ -218,6 +218,7 @@
       <VideoPlaylist
         :items="itemsFilteredSorted"
         :stretchVideo="false"
+        :filterCountsForSelection="filterCountsForSelection"
         v-on:close-playlist="closePlaylist"
         v-on:preview-click="loadPlaylist"
         color="orange darken-2"
