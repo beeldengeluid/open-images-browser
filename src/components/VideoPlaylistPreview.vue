@@ -2,7 +2,7 @@
   <div>
     <slot></slot>
     <div
-      @click="$emit('load-related-playlist')"
+      @click="$emit('preview-click')"
       class="pointer hover-border-color"
     >
       <div class="relative mr4 mb4">

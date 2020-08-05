@@ -103,8 +103,8 @@
       <VideoPlaylistPreview
         v-if="currentItem.locations.length"
         :thumbItem="currentItem"
-        v-on:load-related-playlist="
-          $emit('load-related-playlist', {
+        v-on:preview-click="
+          onPreviewClick({
             type: 'locations',
             value: currentItem.locations[0],
           })
@@ -125,8 +125,8 @@
       <VideoPlaylistPreview
         v-if="currentItem.subjects.length"
         :thumbItem="currentItem"
-        v-on:load-related-playlist="
-          $emit('load-related-playlist', {
+        v-on:preview-click="
+          onPreviewClick({
             type: 'subjects',
             value: currentItem.subjects[0],
           })
@@ -226,6 +226,13 @@ export default {
     },
     dateToYear(date) {
       return date.slice(0, 4);
+    },
+    onPreviewClick({ type, value }) {
+      this.currentItemIndex = 0;
+      this.$emit("preview-click", {
+        type: type,
+        value: value,
+      });
     },
   },
   mounted() {

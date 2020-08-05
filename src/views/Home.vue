@@ -219,6 +219,7 @@
         :items="itemsFilteredSorted"
         :stretchVideo="false"
         v-on:close-playlist="closePlaylist"
+        v-on:preview-click="loadPlaylist"
         color="orange darken-2"
         class="h-100 justify-center"
       />
@@ -579,6 +580,13 @@ export default {
     closePlaylist() {
       this.state.showPlaylist = false;
       this.removeHTMLClass("overflow-y-hidden");
+    },
+    loadPlaylist({type, value}) {
+      this.state.activeFilters = Object.assign(
+        {},
+        this.$options.static.defaultState.activeFilters,
+        {[type]: [value]}
+      );
     },
     handleFilterUpdate(newValue, oldValue, filterType) {
       let added = _.difference(newValue, oldValue);
