@@ -1,141 +1,149 @@
 <template>
-  <div class="flex flex-column justify-between">
+  <div class="flex">
     <div class="absolute ma3 top-0 right-0 z-1">
       <v-icon @click="$emit('close-playlist')">mdi-close</v-icon>
     </div>
-    <h2 class="f4 tc mv3">
-      {{ currentItem.title }}
-      <span class="fw1">({{ this.dateToYear(currentItem.date) }})</span>
-    </h2>
-    <div class="relative tc">
-      <video
-        :src="currentItem.videoSrc"
-        :poster="currentItem.thumbSrc"
-        :autoplay="autoplayEnabled"
-        @playing="onVideoPlayChange"
-        @pause="onVideoPlayChange"
-        @ended="onVideoEnded"
-        ref="video"
-        controls
-        :class="stretchVideo ? 'w-100' : ''"
-        class="outline-0 mw-100 mh-50vh"
-      ></video>
+    <div class="flex flex-1-1-80 flex-column justify-between">
+      <h2 class="f4 tc mv3">
+        {{ currentItem.title }}
+        <span class="fw1">({{ this.dateToYear(currentItem.date) }})</span>
+      </h2>
+      <div class="relative tc">
+        <video
+          :src="currentItem.videoSrc"
+          :poster="currentItem.thumbSrc"
+          :autoplay="autoplayEnabled"
+          @playing="onVideoPlayChange"
+          @pause="onVideoPlayChange"
+          @ended="onVideoEnded"
+          ref="video"
+          controls
+          :class="stretchVideo ? 'w-100' : ''"
+          class="outline-0 mw-100 mh-50vh db mh-auto"
+        ></video>
 
-      <!-- playback controls -->
+        <!-- playback controls -->
+        <div
+          :class="isPaused ? 'opaque' : ''"
+          class="absolute absolute-v-center w-100 flex items-center justify-between justify-around-ns hover-opacity z-999"
+        >
+          <v-btn class="mh2 pe-all" fab @click="prevVideo()">
+            <v-icon>mdi-chevron-left</v-icon>
+          </v-btn>
+          <v-btn class="mh2 pe-all" fab @click="toggleVideoPlay()">
+            <v-icon>
+              {{ isPaused ? "mdi-play" : "mdi-pause" }}
+            </v-icon>
+          </v-btn>
+          <v-btn class="mh2 pe-all" fab @click="nextVideo()">
+            <v-icon>mdi-chevron-right</v-icon>
+          </v-btn>
+        </div>
+      </div>
+
+      <!-- video Thumbnails -->
       <div
         :class="isPaused ? 'opaque' : ''"
-        class="absolute absolute-v-center w-100 flex items-center justify-between justify-around-ns hover-opacity z-999"
+        class="flex w-100 pa3 flex-grow-0 hover-opacity-semi bg-black relative"
       >
-        <v-btn class="mh2 pe-all" fab @click="prevVideo()">
-          <v-icon>mdi-chevron-left</v-icon>
-        </v-btn>
-        <v-btn class="mh2 pe-all" fab @click="toggleVideoPlay()">
-          <v-icon>
-            {{ isPaused ? "mdi-play" : "mdi-pause" }}
-          </v-icon>
-        </v-btn>
-        <v-btn class="mh2 pe-all" fab @click="nextVideo()">
-          <v-icon>mdi-chevron-right</v-icon>
-        </v-btn>
-      </div>
-    </div>
-
-    <!-- video Thumbnails -->
-    <div
-      :class="isPaused ? 'opaque' : ''"
-      class="flex w-100 pa3 flex-grow-0 hover-opacity-semi bg-black"
-    >
-      <div class="absolute right-0 flex mr3">
-        <span class="mr2">autoplay</span>
-        <v-switch
-          v-model="autoplayEnabled"
-          class="mt0 pt0"
-          :color="color"
-          hide-details
-        ></v-switch>
-      </div>
-      <div v-show="listWindowStart" class="flex">
-        <span class="self-center tc grey--text">{{
-          `${listWindowStart} more`
-        }}</span>
-      </div>
-      <div
-        v-for="(item, index) in itemsWindowed"
-        :key="index"
-        class="flex flex-column mh1"
-      >
-        <div class="h2">
-          <span
-            v-show="
-              index - 1 == currentItemIndexWindowed &&
-                currentItemIndex < items.length - 3
+        <div class="absolute right-0 flex mr3">
+          <span class="mr2">autoplay</span>
+          <v-switch
+            v-model="autoplayEnabled"
+            class="mt0 pt0"
+            :color="color"
+            hide-details
+          ></v-switch>
+        </div>
+        <div v-show="listWindowStart" class="flex">
+          <span class="self-center tc grey--text">{{
+            `${listWindowStart} more`
+          }}</span>
+        </div>
+        <div
+          v-for="(item, index) in itemsWindowed"
+          :key="index"
+          class="flex flex-column mh1"
+        >
+          <div class="h2">
+            <span
+              v-show="
+                index - 1 == currentItemIndexWindowed &&
+                  currentItemIndex < items.length - 3
+              "
+              class="absolute"
+            >
+              Up next
+            </span>
+          </div>
+          <img
+            @click="setCurrentItemIndex(index + listWindowStart)"
+            :src="item.thumbSrc"
+            :alt="item.title"
+            :title="item.title"
+            :class="
+              index == currentItemIndexWindowed ? 'active-border-color' : ''
             "
-            class="absolute"
-          >
-            Up next
-          </span>
+            class="contain-height pointer hover-border-color mh-30vh"
+          />
+          <div v-show="index == currentItemIndexWindowed" class="tc pv2">
+            {{ `${currentItemIndex + 1} of ${items.length}` }}
+          </div>
         </div>
-        <img
-          @click="setCurrentItemIndex(index + listWindowStart)"
-          :src="item.thumbSrc"
-          :alt="item.title"
-          :title="item.title"
-          :class="
-            index == currentItemIndexWindowed ? 'active-border-color' : ''
-          "
-          class="contain-height pointer hover-border-color mh-30vh"
-        />
-        <div v-show="index == currentItemIndexWindowed" class="tc pv2">
-          {{ `${currentItemIndex + 1} of ${items.length}` }}
+        <div v-show="listWindowEnd < items.length" class="flex">
+          <span class="self-center tc grey--text">{{
+            `${items.length - listWindowEnd} more`
+          }}</span>
         </div>
-      </div>
-      <div v-show="listWindowEnd < items.length" class="flex">
-        <span class="self-center tc grey--text">{{
-          `${items.length - listWindowEnd} more`
-        }}</span>
       </div>
     </div>
 
-    <!-- related playlists -->
-    <VideoPlaylistPreview 
-      v-if="currentItem.locations.length"
-      :thumbItem="currentItem"
-      v-on:load-related-playlist="$emit('load-related-playlist', {
-        type: 'locations',
-        value: currentItem.locations[0],
-      })"
-      :title="`More ${currentItem.locations[0]}`" 
-      :class="isPaused ? 'opaque' : ''"
-      class="absolute left-0 top-0 ma3 mt6 w-20 mw5 hover-opacity-semi"
-    >
-      <h4 class="mb2 grey--text">
-        More
-        <v-chip label small class="ml1 teal white--text font-mono">
-          <v-icon small left>mdi-map-marker</v-icon>
-          <strong>{{currentItem.locations[0]}}</strong>
-        </v-chip>
-      </h4>
-    </VideoPlaylistPreview>
+    <div class="dn db-ns mw5 mt4">
+      <!-- related playlists -->
+      <VideoPlaylistPreview
+        v-if="currentItem.locations.length"
+        :thumbItem="currentItem"
+        v-on:load-related-playlist="
+          $emit('load-related-playlist', {
+            type: 'locations',
+            value: currentItem.locations[0],
+          })
+        "
+        :title="`More ${currentItem.locations[0]}`"
+        :class="isPaused ? 'opaque' : ''"
+        class="ma3 hover-opacity-semi"
+      >
+        <h4 class="mb2 grey--text">
+          More
+          <v-chip label small class="ml1 teal white--text font-mono">
+            <v-icon small left>mdi-map-marker</v-icon>
+            <strong>{{ currentItem.locations[0] }}</strong>
+          </v-chip>
+        </h4>
+      </VideoPlaylistPreview>
 
-    <VideoPlaylistPreview 
-      v-if="currentItem.subjects.length"
-      :thumbItem="currentItem"
-      v-on:load-related-playlist="$emit('load-related-playlist', {
-        type: 'subjects',
-        value: currentItem.subjects[0],
-      })"
-      :title="`More ${currentItem.subjects[0]}`" 
-      class="absolute right-0 top-0 ma3 mt6 w-20 mw5"
-    >
-      <h4 class="mb2 grey--text">
-        More
-        <v-chip label small class="ml1 teal white--text font-mono">
-          <v-icon small left>mdi-tag</v-icon>
-          <strong>{{currentItem.subjects[0]}}</strong>
-        </v-chip>
-      </h4>
-    </VideoPlaylistPreview>
-
+      <VideoPlaylistPreview
+        v-if="currentItem.subjects.length"
+        :thumbItem="currentItem"
+        v-on:load-related-playlist="
+          $emit('load-related-playlist', {
+            type: 'subjects',
+            value: currentItem.subjects[0],
+          })
+        "
+        :title="`More ${currentItem.subjects[0]}`"
+        :class="isPaused ? 'opaque' : ''"
+        class="ma3 hover-opacity-semi"
+      >
+        <h4 class="mb2 grey--text">
+          More
+          <v-chip label small class="ml1 teal white--text font-mono">
+            <v-icon small left>mdi-tag</v-icon>
+            <strong>{{ currentItem.subjects[0] }}</strong>
+          </v-chip>
+        </h4>
+      </VideoPlaylistPreview>
+    </div>
   </div>
 </template>
 
@@ -263,5 +271,12 @@ export default {
 }
 .mh-30vh {
   max-height: 30vh;
+}
+.mh-auto {
+  margin-left: auto;
+  margin-right: auto;
+}
+.flex-1-1-80 {
+  flex: 1 1 80%;
 }
 </style>
