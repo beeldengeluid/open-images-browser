@@ -219,6 +219,7 @@
         :items="itemsFilteredSorted"
         :stretchVideo="false"
         :filterCountsForSelection="filterCountsForSelection"
+        :activeFilters="state.activeFilters"
         v-on:close-playlist="closePlaylist"
         v-on:preview-click="loadPlaylist"
         color="orange darken-2"

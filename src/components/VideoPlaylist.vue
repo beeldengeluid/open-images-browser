@@ -101,7 +101,7 @@
     <div class="dn db-ns mw5 mt4">
       <!-- related playlists -->
       <VideoPlaylistPreview
-        v-if="currentItem.locations.length && filterCountsForSelection.locations[currentItem.locations[0]] > 1"
+        v-if="canCurrentItemLinkToMore('locations')"
         :thumbItem="currentItem"
         v-on:preview-click="
           onPreviewClick({
@@ -123,7 +123,7 @@
       </VideoPlaylistPreview>
 
       <VideoPlaylistPreview
-        v-if="currentItem.subjects.length && filterCountsForSelection.subjects[currentItem.subjects[0]] > 1"
+        v-if="canCurrentItemLinkToMore('subjects')"
         :thumbItem="currentItem"
         v-on:preview-click="
           onPreviewClick({
@@ -166,6 +166,7 @@ export default {
   props: {
     items: Array,
     filterCountsForSelection: Object,
+    activeFilters: Object,
     stretchVideo: { type: Boolean, default: false },
     color: { type: String, default: "orange" },
   },
@@ -234,6 +235,13 @@ export default {
         type: type,
         value: value,
       });
+    },
+    canCurrentItemLinkToMore(type) {
+      return (
+        this.currentItem[type].length &&
+        this.filterCountsForSelection[type][this.currentItem[type][0]] > 1 &&
+        this.activeFilters[type][0] != this.currentItem[type][0]
+      );
     },
   },
   mounted() {
