@@ -5,13 +5,14 @@ import { withKnobs, object, boolean } from "@storybook/addon-knobs";
 
 // Components
 import { VideoPlaylist } from "./VideoPlaylist";
-import { stateData, filterCountsForSelectionData } from "./CollectionItem.stories";
+import {
+  stateData,
+  filterCountsForSelectionData,
+} from "./CollectionItem.stories";
 
 export default {
   title: "VideoPlaylist",
-  decorators: [
-    withKnobs({escapeHTML: false})
-  ],
+  decorators: [withKnobs({ escapeHTML: false })],
   // Our exports that end in "Data" are not stories.
   excludeStories: /.*Data$/,
 };
@@ -33,7 +34,6 @@ const actionsData = {
   onClosePlaylist: action("onClosePlaylist"),
   onLoadPlaylist: action("onLoadPlaylist"),
 };
-
 const itemsData = [
   {
     "id": "oai:openimages.eu:84919",
@@ -55,8 +55,8 @@ const videoPlaylistTemplate = `
     :stretchVideo="stretchVideo"
     :filterCountsForSelection="filterCountsForSelection"
     :activeFilters="activeFilters"
-    v-on:close-playlist="onclosePlaylist"
-    v-on:preview-click="onloadPlaylist"
+    v-on:close-playlist="onClosePlaylist"
+    v-on:preview-click="onLoadPlaylist"
     color="orange darken-2"
     class="vh-100 justify-center"
   />
@@ -76,6 +76,7 @@ export const Default = () =>
         default: object("activeFilters", stateData.activeFilters),
       },
     },
+    methods: actionsData,
     template: videoPlaylistTemplate,
   });
 
@@ -93,5 +94,6 @@ export const Short = () =>
         default: object("activeFilters", stateData.activeFilters),
       },
     },
+    methods: actionsData,
     template: videoPlaylistTemplate,
   });
