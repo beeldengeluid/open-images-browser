@@ -5,6 +5,7 @@ import { withKnobs, object, boolean } from "@storybook/addon-knobs";
 
 // Components
 import { VideoPlaylist } from "./VideoPlaylist";
+import { stateData, filterCountsForSelectionData } from "./CollectionItem.stories";
 
 export default {
   title: "VideoPlaylist",
@@ -30,6 +31,7 @@ const story = storyFactory({
 
 const actionsData = {
   onClosePlaylist: action("onClosePlaylist"),
+  onLoadPlaylist: action("onLoadPlaylist"),
 };
 
 const itemsData = [
@@ -50,10 +52,13 @@ const itemsData = [
 const videoPlaylistTemplate = `
   <VideoPlaylist
     :items="items"
-    :stretchVideo="false"
-    v-on:close-playlist="onClosePlaylist"
+    :stretchVideo="stretchVideo"
+    :filterCountsForSelection="filterCountsForSelection"
+    :activeFilters="activeFilters"
+    v-on:close-playlist="onclosePlaylist"
+    v-on:preview-click="onloadPlaylist"
     color="orange darken-2"
-    class="vh-100"
+    class="vh-100 justify-center"
   />
 `;
 
@@ -61,7 +66,15 @@ export const Default = () =>
   story({
     props: {
       stretchVideo: { default: boolean("stretchVideo", false) },
-      items: { default: object("activeLocationFilters", [...itemsData]) },
+      items: { default: object("items", [...itemsData]) },
+      filterCountsForSelection: {
+        default: object("filterCountsForSelection", {
+          ...filterCountsForSelectionData,
+        }),
+      },
+      activeFilters: {
+        default: object("activeFilters", stateData.activeFilters),
+      },
     },
     template: videoPlaylistTemplate,
   });
@@ -70,8 +83,14 @@ export const Short = () =>
   story({
     props: {
       stretchVideo: { default: boolean("stretchVideo", false) },
-      items: {
-        default: object("activeLocationFilters", [...itemsData.slice(0,4)]),
+      items: { default: object("items", [...itemsData.slice(0, 4)]) },
+      filterCountsForSelection: {
+        default: object("filterCountsForSelection", {
+          ...filterCountsForSelectionData,
+        }),
+      },
+      activeFilters: {
+        default: object("activeFilters", stateData.activeFilters),
       },
     },
     template: videoPlaylistTemplate,
