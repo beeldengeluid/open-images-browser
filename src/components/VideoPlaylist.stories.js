@@ -53,7 +53,7 @@ const videoPlaylistTemplate = `
     :stretchVideo="false"
     v-on:close-playlist="onClosePlaylist"
     color="orange darken-2"
-    class="h-100 justify-center"
+    class="vh-100"
   />
 `;
 

@@ -29,12 +29,7 @@
             v-for="subject in item.subjects"
             :key="subject"
             :value="subject"
-            @click="
-              $emit('toggle-active-filter', {
-                type: 'subjects',
-                value: subject,
-              })
-            "
+            @click=" $emit('toggle-active-filter', { type: 'subjects', value: subject, }) "
             label
             :class="
               activeFilters['subjects'].includes(subject)
@@ -166,8 +161,5 @@ export default {
     border-top-right-radius: 0.5rem;
     border-bottom-right-radius: 0.5rem;
   }
-}
-.b--grey--darken-3 {
-  border-color: #424242;
 }
 </style>

@@ -45,3 +45,32 @@ a {
 .theme--dark.v-chip--active::before {
   opacity: 0;
 }
+.b--grey--darken-3 {
+  border-color: #424242;
+}
+.hover-border-color {
+  border: 4px solid hsla(0, 0%, 100%, 0);
+  transition: border-color 0.15s;
+}
+.hover-border-color:hover {
+  border-color: hsla(0, 0%, 100%, 0.75);
+}
+.hover-opacity {
+  opacity: 0;
+  transition: opacity 1s;
+}
+.hover-opacity:hover {
+  opacity: 1;
+  transition: opacity 0.15s;
+}
+.hover-opacity-semi {
+  opacity: 0.5;
+  transition: opacity 1s;
+}
+.hover-opacity-semi:hover {
+  opacity: 1;
+  transition: opacity 0.15s;
+}
+.opaque {
+  opacity: 1;
+}

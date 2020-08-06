@@ -1,120 +1,185 @@
 <template>
-  <div class="flex flex-column">
-    <div class="absolute ma3 top-0 right-0">
+  <div class="flex">
+    <div class="absolute ma3 top-0 right-0 z-1">
       <v-icon @click="$emit('close-playlist')">mdi-close</v-icon>
     </div>
-    <h2 class="f4 tc mv3">
-      {{ currentVideo.title }}
-      <span class="fw1">({{ this.dateToYear(currentVideo.date) }})</span>
-    </h2>
-    <div class="relative tc">
-      <video
-        :src="currentVideo.videoSrc"
-        :poster="currentVideo.thumbSrc"
-        :autoplay="autoplayEnabled"
-        @playing="onVideoPlayChange"
-        @pause="onVideoPlayChange"
-        @ended="onVideoEnded"
-        ref="video"
-        controls
-        :class="stretchVideo ? 'w-100' : ''"
-        class="outline-0 mw-100 mh-50vh"
-      ></video>
+    <div class="flex flex-1-1-80 flex-column justify-between ma3">
+      <h2 class="f4 tc mv3">
+        {{ currentItem.title }}
+        <span class="fw1">({{ this.dateToYear(currentItem.date) }})</span>
+      </h2>
+      <div class="relative tc">
+        <video
+          :src="currentItem.videoSrc"
+          :poster="currentItem.thumbSrc"
+          :autoplay="autoplayEnabled"
+          @playing="onVideoPlayChange"
+          @pause="onVideoPlayChange"
+          @ended="onVideoEnded"
+          ref="video"
+          controls
+          :class="stretchVideo ? 'w-100' : ''"
+          class="outline-0 mh-50vh db mh-auto w-100"
+        ></video>
+
+        <!-- playback controls -->
+        <div
+          :class="isPaused ? 'opaque' : ''"
+          class="absolute absolute-v-center w-100 flex items-center justify-between justify-around-ns hover-opacity z-999"
+        >
+          <v-btn class="mh2 pe-all" fab @click="prevVideo()">
+            <v-icon>mdi-chevron-left</v-icon>
+          </v-btn>
+          <v-btn class="mh2 pe-all" fab @click="toggleVideoPlay()">
+            <v-icon>
+              {{ isPaused ? "mdi-play" : "mdi-pause" }}
+            </v-icon>
+          </v-btn>
+          <v-btn class="mh2 pe-all" fab @click="nextVideo()">
+            <v-icon>mdi-chevron-right</v-icon>
+          </v-btn>
+        </div>
+      </div>
+
+      <!-- video Thumbnails -->
       <div
         :class="isPaused ? 'opaque' : ''"
-        class="absolute absolute-v-center w-100 flex items-center justify-between justify-around-ns hover-opacity"
+        class="flex w-100 flex-grow-0 hover-opacity-semi bg-black relative"
       >
-        <v-btn class="mh2 pe-all" fab @click="prevVideo()">
-          <v-icon>mdi-chevron-left</v-icon>
-        </v-btn>
-        <v-btn class="mh2 pe-all" fab @click="toggleVideoPlay()">
-          <v-icon>
-            {{ isPaused ? "mdi-play" : "mdi-pause" }}
-          </v-icon>
-        </v-btn>
-        <v-btn class="mh2 pe-all" fab @click="nextVideo()">
-          <v-icon>mdi-chevron-right</v-icon>
-        </v-btn>
+        <div class="absolute right-0 flex mr3">
+          <span class="mr2">autoplay</span>
+          <v-switch
+            v-model="autoplayEnabled"
+            class="mt0 pt0"
+            :color="color"
+            hide-details
+          ></v-switch>
+        </div>
+        <div v-show="listWindowStart" class="flex">
+          <span class="self-center tc grey--text">{{
+            `${listWindowStart} more`
+          }}</span>
+        </div>
+        <div
+          v-for="(item, index) in itemsWindowed"
+          :key="index"
+          class="flex flex-column mh1"
+        >
+          <div class="h2">
+            <span
+              v-show="
+                index - 1 == currentItemIndexWindowed &&
+                  currentItemIndex < items.length - 3
+              "
+              class="absolute"
+            >
+              Up next
+            </span>
+          </div>
+          <img
+            @click="setCurrentItemIndex(index + listWindowStart)"
+            :src="item.thumbSrc"
+            :alt="item.title"
+            :title="item.title"
+            :class="
+              index == currentItemIndexWindowed ? 'active-border-color' : ''
+            "
+            class="contain-height pointer hover-border-color mh-30vh"
+          />
+          <div v-show="index == currentItemIndexWindowed" class="tc pv2">
+            {{ `${currentItemIndex + 1} of ${items.length}` }}
+          </div>
+        </div>
+        <div v-show="listWindowEnd < items.length" class="flex">
+          <span class="self-center tc grey--text">{{
+            `${items.length - listWindowEnd} more`
+          }}</span>
+        </div>
       </div>
     </div>
-    <div 
-      :class="isPaused ? 'opaque' : ''"
-      class="flex w-100 pa3 flex-grow-0 hover-opacity-semi"
-    >
-      <div class="absolute right-0 flex mr3">
-        <span class="mr2">autoplay</span> 
-        <v-switch 
-          v-model="autoplayEnabled" 
-          class="mt0 pt0"
-          :color="color"
-          hide-details
-        ></v-switch>
-      </div>
-      <div v-show="listWindowStart" class="flex">
-        <span class="self-center tc grey--text">{{
-          `${listWindowStart} more`
-        }}</span>
-      </div>
-      <div
-        v-for="(item, index) in itemsWindowed"
-        :key="index"
-        class="flex flex-column bg-black mh1"
+
+    <div class="dn db-ns mw5 mt5 flex-1-1-20 ma3 ml0">
+      <!-- related playlists -->
+      <VideoPlaylistPreview
+        v-if="canCurrentItemLinkToMore('locations')"
+        :thumbItem="currentItem"
+        v-on:preview-click="
+          onPreviewClick({
+            type: 'locations',
+            value: currentItem.locations[0],
+          })
+        "
+        :title="`More ${currentItem.locations[0]}`"
+        :class="isPaused ? 'opaque' : ''"
+        class="hover-opacity-semi"
       >
-        <div class="h2">
-          <span v-show="index - 1 == currentVideoIndexWindowed && currentVideoIndex < items.length - 3" class="absolute">
-            Up next
-          </span>
-        </div>
-        <img
-          @click="setCurrentVideoIndex(index + listWindowStart)"
-          :src="item.thumbSrc"
-          :alt="item.title"
-          :title="item.title"
-          :class="
-            index == currentVideoIndexWindowed ? 'active-border-color' : ''
-          "
-          class="contain-height pointer hover-border-color mh-30vh"
-        />
-        <div v-show="index == currentVideoIndexWindowed" class="tc pv2">
-          {{ `${currentVideoIndex + 1} of ${items.length}` }}
-        </div>
-      </div>
-      <div v-show="listWindowEnd < items.length" class="flex">
-        <span class="self-center tc grey--text">{{
-          `${items.length - listWindowEnd} more`
-        }}</span>
-      </div>
+        <h4 class="mb2 grey--text">
+          More
+          <v-chip label small class="ml1 teal white--text font-mono">
+            <v-icon small left>mdi-map-marker</v-icon>
+            <strong>{{ currentItem.locations[0] }}</strong>
+          </v-chip>
+        </h4>
+      </VideoPlaylistPreview>
+
+      <VideoPlaylistPreview
+        v-if="canCurrentItemLinkToMore('subjects')"
+        :thumbItem="currentItem"
+        v-on:preview-click="
+          onPreviewClick({
+            type: 'subjects',
+            value: currentItem.subjects[0],
+          })
+        "
+        :title="`More ${currentItem.subjects[0]}`"
+        :class="isPaused ? 'opaque' : ''"
+        class="ma3 hover-opacity-semi"
+      >
+        <h4 class="mb2 grey--text">
+          More
+          <v-chip label small class="ml1 teal white--text font-mono">
+            <v-icon small left>mdi-tag</v-icon>
+            <strong>{{ currentItem.subjects[0] }}</strong>
+          </v-chip>
+        </h4>
+      </VideoPlaylistPreview>
     </div>
   </div>
 </template>
 
 <script>
+import VideoPlaylistPreview from "./VideoPlaylistPreview";
 export default {
   name: "VideoPlaylist",
+  components: {
+    VideoPlaylistPreview,
+  },
   data: function() {
     return {
       videoElement: null,
-      currentVideoIndex: 0,
+      currentItemIndex: 0,
       isPaused: true,
       listWindowLength: 7,
-      autoplayEnabled: true,
+      autoplayEnabled: false,
     };
   },
   props: {
     items: Array,
+    filterCountsForSelection: Object,
+    activeFilters: Object,
     stretchVideo: { type: Boolean, default: false },
     color: { type: String, default: "orange" },
   },
   computed: {
-    currentVideo() {
-      return this.items[this.currentVideoIndex];
+    currentItem() {
+      return this.items[this.currentItemIndex];
     },
     windowOffset() {
       return Math.floor((this.listWindowLength - 1) / 2);
     },
     listWindowStart() {
       return Math.min(
-        Math.max(0, this.currentVideoIndex - this.windowOffset),
+        Math.max(0, this.currentItemIndex - this.windowOffset),
         Math.max(0, this.items.length - this.listWindowLength)
       );
     },
@@ -124,8 +189,8 @@ export default {
     itemsWindowed() {
       return this.items.slice(this.listWindowStart, this.listWindowEnd);
     },
-    currentVideoIndexWindowed() {
-      return this.currentVideoIndex - this.listWindowStart;
+    currentItemIndexWindowed() {
+      return this.currentItemIndex - this.listWindowStart;
     },
   },
   methods: {
@@ -142,13 +207,13 @@ export default {
       this.advanceVideo(1);
     },
     advanceVideo(amount) {
-      let newIndex = this.currentVideoIndex + amount;
+      let newIndex = this.currentItemIndex + amount;
       if (newIndex >= this.items.length) {
         newIndex = 0;
       } else if (newIndex < 0) {
         newIndex = this.items.length - 1;
       }
-      this.currentVideoIndex = newIndex;
+      this.currentItemIndex = newIndex;
       this.isPaused = true;
     },
     toggleVideoPlay() {
@@ -158,16 +223,30 @@ export default {
         this.videoElement.pause();
       }
     },
-    setCurrentVideoIndex(index) {
-      this.currentVideoIndex = index;
+    setCurrentItemIndex(index) {
+      this.currentItemIndex = index;
     },
     dateToYear(date) {
       return date.slice(0, 4);
     },
+    onPreviewClick({ type, value }) {
+      this.currentItemIndex = 0;
+      this.$emit("preview-click", {
+        type: type,
+        value: value,
+      });
+    },
+    canCurrentItemLinkToMore(type) {
+      return (
+        this.currentItem[type].length &&
+        this.filterCountsForSelection[type][this.currentItem[type][0]] > 1 &&
+        this.activeFilters[type][0] != this.currentItem[type][0]
+      );
+    },
   },
   mounted() {
     this.videoElement = this.$refs.video;
-    
+
     this._keyListener = function(e) {
       if (e.key === "ArrowLeft") {
         this.prevVideo();
@@ -176,44 +255,18 @@ export default {
         this.nextVideo();
       }
       if (e.key === "Escape") {
-        this.$emit('close-playlist');
+        this.$emit("close-playlist");
       }
     };
-    document.addEventListener('keydown', this._keyListener.bind(this));
+    document.addEventListener("keydown", this._keyListener.bind(this));
   },
   beforeDestroy() {
-    document.removeEventListener('keydown', this._keyListener);
-  }
+    document.removeEventListener("keydown", this._keyListener);
+  },
 };
 </script>
 
 <style scoped>
-.hover-border-color {
-  border: 4px solid hsla(0, 0%, 100%, 0);
-  transition: border-color 0.15s;
-}
-.hover-border-color:hover {
-  border-color: hsla(0, 0%, 100%, 0.75);
-}
-.hover-opacity {
-  opacity: 0;
-  transition: opacity 1s;
-}
-.hover-opacity:hover {
-  opacity: 1;
-  transition: opacity 0.15s;
-}
-.hover-opacity-semi {
-  opacity: 0.5;
-  transition: opacity 1s;
-}
-.hover-opacity-semi:hover {
-  opacity: 1;
-  transition: opacity 0.15s;
-}
-.opaque {
-  opacity: 1;
-}
 .active-border-color {
   border-width: 4px;
   border-color: #fff;
@@ -234,5 +287,15 @@ export default {
 }
 .mh-30vh {
   max-height: 30vh;
+}
+.mh-auto {
+  margin-left: auto;
+  margin-right: auto;
+}
+.flex-1-1-80 {
+  flex: 1 1 80%;
+}
+.flex-1-1-20 {
+  flex: 1 1 20%;
 }
 </style>
