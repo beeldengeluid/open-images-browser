@@ -46,34 +46,40 @@ export const itemData = {
 };
 
 export const stateData = {
-  decadeIndex: 7,
+  decadeIndex: 6,
   sortBy: "date",
   sortAscending: true,
   displayFieldsSelected: ["thumb", "title", "year"],
   activeFilters: {
-    locations: [],
+    locations: ["Arnhem"],
     subjects: ["machines"],
   },
 };
 
 const stateThumbOnlyData = {
-  decadeIndex: 7,
+  decadeIndex: 6,
   sortBy: "date",
   sortAscending: true,
   displayFieldsSelected: ["thumb"],
   activeFilters: {
-    locations: [],
+    locations: ["Arnhem"],
     subjects: [],
   },
 };
 
 export const filterCountsForSelectionData = {
   locations: {
-    Nederland: 28,
+    "Nederland": 28,
+    "Arnhem": 9,
+    "Westervoort": 5,
+    "Amsterdam": 3,
   },
   subjects: {
-    machines: 2,
-    schrijfwaren: 1,
+    "Dolle Mina": 5,
+    "cameralieden": 3,
+    "conferenties": 3,
+    "machines": 2,
+    "schrijfwaren": 1,
   },
 };
 
