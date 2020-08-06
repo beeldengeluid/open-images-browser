@@ -3,7 +3,7 @@
     <div class="absolute ma3 top-0 right-0 z-1">
       <v-icon @click="$emit('close-playlist')">mdi-close</v-icon>
     </div>
-    <div class="flex flex-1-1-80 flex-column justify-between">
+    <div class="flex flex-1-1-80 flex-column justify-between ma3">
       <h2 class="f4 tc mv3">
         {{ currentItem.title }}
         <span class="fw1">({{ this.dateToYear(currentItem.date) }})</span>
@@ -19,7 +19,7 @@
           ref="video"
           controls
           :class="stretchVideo ? 'w-100' : ''"
-          class="outline-0 mw-100 mh-50vh db mh-auto"
+          class="outline-0 mh-50vh db mh-auto w-100"
         ></video>
 
         <!-- playback controls -->
@@ -44,7 +44,7 @@
       <!-- video Thumbnails -->
       <div
         :class="isPaused ? 'opaque' : ''"
-        class="flex w-100 pa3 flex-grow-0 hover-opacity-semi bg-black relative"
+        class="flex w-100 flex-grow-0 hover-opacity-semi bg-black relative"
       >
         <div class="absolute right-0 flex mr3">
           <span class="mr2">autoplay</span>
@@ -98,7 +98,7 @@
       </div>
     </div>
 
-    <div class="dn db-ns mw5 mt4">
+    <div class="dn db-ns mw5 mt5 flex-1-1-20 ma3 ml0">
       <!-- related playlists -->
       <VideoPlaylistPreview
         v-if="canCurrentItemLinkToMore('locations')"
@@ -111,7 +111,7 @@
         "
         :title="`More ${currentItem.locations[0]}`"
         :class="isPaused ? 'opaque' : ''"
-        class="ma3 hover-opacity-semi"
+        class="hover-opacity-semi"
       >
         <h4 class="mb2 grey--text">
           More
@@ -294,5 +294,8 @@ export default {
 }
 .flex-1-1-80 {
   flex: 1 1 80%;
+}
+.flex-1-1-20 {
+  flex: 1 1 20%;
 }
 </style>
