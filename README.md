@@ -10,7 +10,7 @@
 
 ### About
 
-The [MediaScape project](https://www.vogin.nl/portfolio-item/mediascape-2019/) investigates the utility of [generous interfaces](http://www.digitalhumanities.org/dhq/vol/9/1/000205/000205.html) for audio-visual collections. Or:
+The [MediaScape project](https://www.beeldengeluid.nl/en/knowledge/projects/mediascape) investigates how innovative interfaces can provide generous access to audiovisual collections in order to make connections between the interests of individuals and heritage objects. Or:
 
 > How to find happiness in AV collections without searching for it?
 
@@ -26,7 +26,9 @@ As part of our investigation in the MediaScape project, we are developing a seri
 
 ## Open Images Browser
 
-This first UI concept utilizes facet-based filtering as the main interaction model. Users combine filters in order to surface subsets of collection items that match their interests. The interface employs data visualisation and commonly used web elements to uphold the following principles ([as formulated by Ben Ennis Butler](https://mw2013.museumsandtheweb.com/paper/visual-exploration-of-australian-prints-and-printmaking/)):
+The Open Images Browser provides access to the Open Images collection, some 3.5 thousand videos with an open Creative Commons license. Instead of the usual search bar, this interface generously displays how these images are distributed across time, location and subject matter. This shows at a glance the scale and diversity of the collection and allows the user to step-by-step zoom in on interesting parts and easily watch them as a playlist.
+
+The interface employs data visualisation and commonly used web elements to uphold the following principles ([as formulated by Ben Ennis Butler](https://mw2013.museumsandtheweb.com/paper/visual-exploration-of-australian-prints-and-printmaking/)):
 
 - **Show first, don’t ask**; not requiring the user to provide a query in order see content
 - **Provide rich overviews**; showing how items are distributed over time per decade
