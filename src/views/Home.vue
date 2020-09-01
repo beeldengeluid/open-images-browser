@@ -682,6 +682,11 @@ export default {
       queryParams.activeFilters
     );
 
+    /*eslint-disable*/
+    fetch('/api/hello?name=Philo')
+      .then(response => response.json())
+      .then(data => console.log(data));
+
     window.addEventListener("resize", _.debounce(this.onResize), 400);
   },
   destroyed() {
