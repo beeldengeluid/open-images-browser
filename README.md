@@ -62,11 +62,17 @@ build Storybook as static site to `/docs` directory (auto deployed via GitHub Pa
 
     npm run build-storybook
 
-currently the project is being deployed via [Vercel](https://vercel.com/)'s git integration by running
+## Deployment
 
-    now
+The project is being deployed via the [Vercel for GitHub integration](https://vercel.com/docs/git-integrations/vercel-for-github), by pushing changes to any branch. Pushes to the main branch trigger a production deploy.
 
 ## Data
+
+### Via API
+
+To load Open Beelden data via the NISV Search API, contact us to acquire secret API credentials and fill them into an `.env.local` file (see `.env.local.example`).
+
+### Via static data exports
 
 The `src/assets/data/` directory contains sample data from the public [Open Beelden](https://openbeelden.nl/) collection, acquired from the ElasticSearch API via the (internal) [labs notebooks](https://github.com/beeldengeluid/labs-notebooks):
 
