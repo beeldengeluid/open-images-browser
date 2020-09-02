@@ -683,7 +683,7 @@ export default {
     );
 
     /*eslint-disable*/
-    fetch('/api/hello?name=Philo')
+    fetch('/api/open-beelden-beeldengeluid')
       .then(response => response.json())
       .then(data => console.log(data));
 
