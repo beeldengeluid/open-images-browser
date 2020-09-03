@@ -686,12 +686,12 @@ export default {
     /*eslint-disable*/
     let axiosConfig = {
       url: "/api/open-beelden-beeldengeluid",
-      method: "get",
+      method: "post",
       data: {
         query: {
           match_all: {},
         },
-        size: 10,
+        size: 77,
       },
     };
 
