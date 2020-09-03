@@ -230,6 +230,7 @@
 </template>
 
 <script>
+import axios from "axios";
 import _ from "lodash";
 import dataItems from "@/assets/data/openbeelden-items-clean.json";
 import TheNavBar from "@/components/TheNavBar";
@@ -683,9 +684,26 @@ export default {
     );
 
     /*eslint-disable*/
-    fetch('/api/open-beelden-beeldengeluid')
-      .then(response => response.json())
-      .then(data => console.log(data));
+    let axiosConfig = {
+      url: "/api/open-beelden-beeldengeluid",
+      method: "get",
+      data: {
+        query: {
+          match_all: {},
+        },
+        size: 10,
+      },
+    };
+
+    axios(axiosConfig)
+      .then((response) => {
+        // JSON responses are automatically parsed.
+        console.log(response.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+
 
     window.addEventListener("resize", _.debounce(this.onResize), 400);
   },
