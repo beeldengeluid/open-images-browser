@@ -107,6 +107,14 @@
           mdi-close
         </v-icon>
       </div>
+      <v-btn
+        @click=" $emit('open-playlist') "
+        small
+        color="orange darken-2"
+        class="absolute ma3 bottom-0 right-0"
+      >
+        <v-icon left>mdi-playlist-play</v-icon>Start Playlist
+      </v-btn>
     </div>
   </div>
 </template>

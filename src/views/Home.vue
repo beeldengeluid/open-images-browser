@@ -191,6 +191,7 @@
               :activeFilters="state.activeFilters"
               :filterCountsForSelection="filterCountsForSelection"
               v-on:toggle-active-filter="onToggleActiveFilter"
+              v-on:open-playlist-at="openPlaylist"
             />
           </v-col>
         </v-row>
@@ -217,6 +218,7 @@
     >
       <VideoPlaylist
         :items="itemsFilteredSorted"
+        :currentItemIndex="state.playlistIndex"
         :stretchVideo="false"
         :filterCountsForSelection="filterCountsForSelection"
         :activeFilters="state.activeFilters"
@@ -272,6 +274,7 @@ export default {
           subjects: [],
         },
         showPlaylist: false,
+        playlistIndex: 0,
       },
       zoom: {
         value: 3,
@@ -575,7 +578,13 @@ export default {
       const htmlEl = document.getElementsByTagName("html")[0];
       htmlEl.classList.remove(className);
     },
-    openPlaylist() {
+    openPlaylist(event) {
+      let playlistIndex = 0;
+      if (typeof event === "number") {
+        playlistIndex = event;
+      }
+      this.state.playlistIndex = playlistIndex;
+
       this.state.showPlaylist = true;
       this.addHTMLClass("overflow-y-hidden");
     },
@@ -583,11 +592,11 @@ export default {
       this.state.showPlaylist = false;
       this.removeHTMLClass("overflow-y-hidden");
     },
-    loadPlaylist({type, value}) {
+    loadPlaylist({ type, value }) {
       this.state.activeFilters = Object.assign(
         {},
         this.$options.static.defaultState.activeFilters,
-        {[type]: [value]}
+        { [type]: [value] }
       );
     },
     handleFilterUpdate(newValue, oldValue, filterType) {
