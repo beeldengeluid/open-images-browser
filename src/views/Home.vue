@@ -1,7 +1,7 @@
 <template>
   <v-app id="app">
     <TheNavBar />
-    <v-content class="ma2 ma3-ns">
+    <v-main class="ma2 ma3-ns">
       <TheHeader />
       <TheCTA class="f4" />
       <div class="flex flex-wrap">
@@ -210,7 +210,7 @@
       >
         <span v-html="snackbar.markup"></span>
       </v-snackbar>
-    </v-content>
+    </v-main>
     <div
       v-if="state.showPlaylist"
       class="fixed w-100 h-100 bg-black-90 top-0 flex items-center flex-wrap z-9999"
