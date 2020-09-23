@@ -1,6 +1,10 @@
 <template>
-  <v-app id="app" oncontextmenu="return false;">
     <TheNavBar />
+  <v-app 
+    id="app" 
+    :oncontextmenu="isInTouchMode ? 'return false;' : 'return true;'" 
+    :class="{ 'user-select-none': isInTouchMode }"
+  >
     <v-main class="ma2 ma3-ns">
       <TheHeader />
       <TheCTA class="f4" />
@@ -263,6 +267,7 @@ export default {
   },
   data() {
     return {
+      isInTouchMode: true,
       items: dataItems,
       state: {
         decadeIndex: 7,
@@ -706,7 +711,7 @@ export default {
 };
 </script>
 <style>
-body {
+.user-select-none {
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
