@@ -49,6 +49,7 @@ export default {
         chart: {
           id: "decade-bar-chart",
           toolbar: { show: false },
+          zoom: { enabled: false },
           type: "line",
           background: this.colors.background,
           events: {
