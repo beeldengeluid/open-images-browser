@@ -1,5 +1,5 @@
 <template>
-  <v-app id="app">
+  <v-app id="app" oncontextmenu="return false;">
     <TheNavBar />
     <v-content class="ma2 ma3-ns">
       <TheHeader />
@@ -698,3 +698,12 @@ export default {
   },
 };
 </script>
+<style>
+body {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+}
+</style>
