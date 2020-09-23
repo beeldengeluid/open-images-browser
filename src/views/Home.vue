@@ -1,7 +1,7 @@
 <template>
   <v-app id="app">
     <TheNavBar />
-    <v-content class="ma2 ma3-ns">
+    <v-main class="ma2 ma3-ns">
       <TheHeader />
       <TheCTA class="f4" />
       <div class="flex flex-wrap">
@@ -191,6 +191,7 @@
               :activeFilters="state.activeFilters"
               :filterCountsForSelection="filterCountsForSelection"
               v-on:toggle-active-filter="onToggleActiveFilter"
+              v-on:open-playlist-at="openPlaylist"
             />
           </v-col>
         </v-row>
@@ -209,9 +210,9 @@
       >
         <span v-html="snackbar.markup"></span>
       </v-snackbar>
-    </v-content>
+    </v-main>
     <div
-      v-if="state.showPlaylist"
+      v-show="state.showPlaylist"
       class="fixed w-100 h-100 bg-black-90 top-0 flex items-center flex-wrap z-9999"
       :class="state.showPlaylist ? 'overflow-y-auto' : ''"
     >
@@ -224,6 +225,7 @@
         v-on:preview-click="loadPlaylist"
         color="orange darken-2"
         class="h-100 justify-center"
+        ref="videoPlaylist"
       />
     </div>
   </v-app>
@@ -272,6 +274,7 @@ export default {
           subjects: [],
         },
         showPlaylist: false,
+        playlistIndex: 0,
       },
       zoom: {
         value: 3,
@@ -575,7 +578,10 @@ export default {
       const htmlEl = document.getElementsByTagName("html")[0];
       htmlEl.classList.remove(className);
     },
-    openPlaylist() {
+    openPlaylist(event) {
+      if (typeof event === "number") {
+        this.$refs.videoPlaylist.setCurrentItemIndex(event);
+      }
       this.state.showPlaylist = true;
       this.addHTMLClass("overflow-y-hidden");
     },
@@ -583,11 +589,11 @@ export default {
       this.state.showPlaylist = false;
       this.removeHTMLClass("overflow-y-hidden");
     },
-    loadPlaylist({type, value}) {
+    loadPlaylist({ type, value }) {
       this.state.activeFilters = Object.assign(
         {},
         this.$options.static.defaultState.activeFilters,
-        {[type]: [value]}
+        { [type]: [value] }
       );
     },
     handleFilterUpdate(newValue, oldValue, filterType) {
@@ -612,6 +618,15 @@ export default {
             [filterType]: newValue,
           },
         }),
+      }).catch(err => {
+        // Ignore the vuex err regarding  navigating to the page they are already on.
+        if (
+          err.name !== 'NavigationDuplicated' &&
+          !err.message.includes('Avoided redundant navigation to current location')
+        ) {
+          // But print any other errors to the console
+          logError(err);
+        }
       });
     },
   },

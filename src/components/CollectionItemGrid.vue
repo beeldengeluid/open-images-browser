@@ -1,7 +1,7 @@
 <template>
   <div class="relative dflex flex-wrap">
     <CollectionItem
-      v-for="item in items"
+      v-for="(item, index) in items"
       :key="item['id']"
       :width="itemWidth + 'px'"
       :height="itemHeight + 'px'"
@@ -12,6 +12,7 @@
       :activeFilters="activeFilters"
       :filterCountsForSelection="filterCountsForSelection"
       v-on:toggle-active-filter="$emit('toggle-active-filter', $event)"
+      v-on:open-playlist="$emit('open-playlist-at', index)"
     />
   </div>
 </template>

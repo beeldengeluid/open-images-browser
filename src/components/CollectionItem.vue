@@ -18,6 +18,7 @@
       v-else
       v-on:toggle-expanded="toggleExpanded"
       v-on:toggle-active-filter="$emit('toggle-active-filter', $event)"
+      v-on:open-playlist="$emit('open-playlist')"
       :item="item"
       :year="year"
       :videoMaxWidth="videoMaxWidth"
