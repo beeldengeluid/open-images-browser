@@ -212,13 +212,12 @@
       </v-snackbar>
     </v-main>
     <div
-      v-if="state.showPlaylist"
+      v-show="state.showPlaylist"
       class="fixed w-100 h-100 bg-black-90 top-0 flex items-center flex-wrap z-9999"
       :class="state.showPlaylist ? 'overflow-y-auto' : ''"
     >
       <VideoPlaylist
         :items="itemsFilteredSorted"
-        :currentItemIndex="state.playlistIndex"
         :stretchVideo="false"
         :filterCountsForSelection="filterCountsForSelection"
         :activeFilters="state.activeFilters"
@@ -226,6 +225,7 @@
         v-on:preview-click="loadPlaylist"
         color="orange darken-2"
         class="h-100 justify-center"
+        ref="videoPlaylist"
       />
     </div>
   </v-app>
@@ -579,12 +579,9 @@ export default {
       htmlEl.classList.remove(className);
     },
     openPlaylist(event) {
-      let playlistIndex = 0;
       if (typeof event === "number") {
-        playlistIndex = event;
+        this.$refs.videoPlaylist.setCurrentItemIndex(event);
       }
-      this.state.playlistIndex = playlistIndex;
-
       this.state.showPlaylist = true;
       this.addHTMLClass("overflow-y-hidden");
     },
