@@ -1,7 +1,7 @@
 <template>
   <v-app id="app" oncontextmenu="return false;">
     <TheNavBar />
-    <v-content class="ma2 ma3-ns">
+    <v-main class="ma2 ma3-ns">
       <TheHeader />
       <TheCTA class="f4" />
       <div class="flex flex-wrap">
@@ -210,15 +210,14 @@
       >
         <span v-html="snackbar.markup"></span>
       </v-snackbar>
-    </v-content>
+    </v-main>
     <div
-      v-if="state.showPlaylist"
+      v-show="state.showPlaylist"
       class="fixed w-100 h-100 bg-black-90 top-0 flex items-center flex-wrap z-9999"
       :class="state.showPlaylist ? 'overflow-y-auto' : ''"
     >
       <VideoPlaylist
         :items="itemsFilteredSorted"
-        :currentItemIndex="state.playlistIndex"
         :stretchVideo="false"
         :filterCountsForSelection="filterCountsForSelection"
         :activeFilters="state.activeFilters"
@@ -226,6 +225,7 @@
         v-on:preview-click="loadPlaylist"
         color="orange darken-2"
         class="h-100 justify-center"
+        ref="videoPlaylist"
       />
     </div>
   </v-app>
@@ -579,12 +579,9 @@ export default {
       htmlEl.classList.remove(className);
     },
     openPlaylist(event) {
-      let playlistIndex = 0;
       if (typeof event === "number") {
-        playlistIndex = event;
+        this.$refs.videoPlaylist.setCurrentItemIndex(event);
       }
-      this.state.playlistIndex = playlistIndex;
-
       this.state.showPlaylist = true;
       this.addHTMLClass("overflow-y-hidden");
     },
@@ -621,6 +618,15 @@ export default {
             [filterType]: newValue,
           },
         }),
+      }).catch(err => {
+        // Ignore the vuex err regarding  navigating to the page they are already on.
+        if (
+          err.name !== 'NavigationDuplicated' &&
+          !err.message.includes('Avoided redundant navigation to current location')
+        ) {
+          // But print any other errors to the console
+          logError(err);
+        }
       });
     },
   },

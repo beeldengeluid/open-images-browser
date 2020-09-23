@@ -157,6 +157,7 @@ export default {
   data: function() {
     return {
       videoElement: null,
+      currentItemIndex: 0,
       isPaused: true,
       listWindowLength: 7,
       autoplayEnabled: false,
@@ -164,7 +165,6 @@ export default {
   },
   props: {
     items: Array,
-    currentItemIndex: { type: Number, default: 0 },
     filterCountsForSelection: Object,
     activeFilters: Object,
     stretchVideo: { type: Boolean, default: false },
