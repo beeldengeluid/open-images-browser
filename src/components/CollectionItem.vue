@@ -24,6 +24,7 @@
       :videoMaxWidth="videoMaxWidth"
       :activeFilters="activeFilters"
       :filterCountsForSelection="filterCountsForSelection"
+      :isInTouchMode="isInTouchMode"
     />
   </div>
 </template>
@@ -61,6 +62,10 @@ export default {
     },
     activeFilters: Object,
     filterCountsForSelection: Object,
+    isInTouchMode: {
+      type: Boolean,
+      default: false,
+    },
   },
   computed: {
     year() {

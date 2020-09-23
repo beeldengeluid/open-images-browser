@@ -1,6 +1,5 @@
 <template>
   <header>
-    <h1>Open Images Browser</h1>
     <section class="measure-wide">
       <p>
         This UI concept is part of the

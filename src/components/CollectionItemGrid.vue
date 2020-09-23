@@ -11,6 +11,7 @@
       :displayThumb="displayThumb"
       :activeFilters="activeFilters"
       :filterCountsForSelection="filterCountsForSelection"
+      :isInTouchMode="isInTouchMode"
       v-on:toggle-active-filter="$emit('toggle-active-filter', $event)"
       v-on:open-playlist="$emit('open-playlist-at', index)"
     />
@@ -32,6 +33,10 @@ export default {
     displayFieldsSelected: Array,
     activeFilters: Object,
     filterCountsForSelection: Object,
+    isInTouchMode: {
+      type: Boolean,
+      default: false,
+    },
   },
   computed: {
     displayTitle() {

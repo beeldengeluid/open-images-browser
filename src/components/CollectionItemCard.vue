@@ -89,32 +89,37 @@
           </v-chip>
         </v-chip-group>
       </div>
-      <div v-if="item.creators.length" class="mv2">
-        <span class="fw6">
-          <v-icon small>mdi-video</v-icon>
-          <span class="v-mid"> {{ item.creators.length }} Creator</span
-          ><span v-if="item.creators.length > 1">s</span>
-        </span>
-        <div v-for="creator in item.creators" :key="creator">
-          {{ creator }}
+      <div class="flex justify-between">
+        <div class="flex-grow-1">
+          <div v-if="item.creators.length" class="mv2">
+            <span class="fw6">
+              <v-icon small>mdi-video</v-icon>
+              <span class="v-mid"> {{ item.creators.length }} Creator</span
+              ><span v-if="item.creators.length > 1">s</span>
+            </span>
+            <div v-for="creator in item.creators" :key="creator">
+              {{ creator }}
+            </div>
+          </div>
+          <div v-if="!isInTouchMode" class="mt3">
+            <a :href="item.url" target="_blank">See item on Open Images ↗︎</a>
+          </div>
+        </div>
+        <div class="flex justify-end items-end flex-grow-0">
+          <v-btn
+            @click=" $emit('open-playlist') "
+            color="orange darken-2"
+          >
+            <v-icon left>mdi-playlist-play</v-icon>Start Playlist
+          </v-btn>
         </div>
       </div>
-      <div class="mt3">
-        <a :href="item.url" target="_blank">See item on Open Images ↗︎</a>
-      </div>
+      
       <div class="absolute ma3 top-0 right-0">
         <v-icon @click="$emit('toggle-expanded')">
           mdi-close
         </v-icon>
       </div>
-      <v-btn
-        @click=" $emit('open-playlist') "
-        small
-        color="orange darken-2"
-        class="absolute ma3 bottom-0 right-0"
-      >
-        <v-icon left>mdi-playlist-play</v-icon>Start Playlist
-      </v-btn>
     </div>
   </div>
 </template>
@@ -128,6 +133,10 @@ export default {
     videoMaxWidth: Number,
     activeFilters: Object,
     filterCountsForSelection: Object,
+    isInTouchMode: {
+      type: Boolean,
+      default: false,
+    },
   },
 };
 </script>
@@ -168,6 +177,12 @@ export default {
     border-bottom-left-radius: 0;
     border-top-right-radius: 0.5rem;
     border-bottom-right-radius: 0.5rem;
+  }
+  .flex-grow-0 {
+    flex-grow: 0;
+  }
+  .flex-grow-1 {
+    flex-grow: 1;
   }
 }
 </style>

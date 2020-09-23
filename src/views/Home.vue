@@ -1,13 +1,14 @@
 <template>
-    <TheNavBar />
   <v-app 
     id="app" 
     :oncontextmenu="isInTouchMode ? 'return false;' : 'return true;'" 
     :class="{ 'user-select-none': isInTouchMode }"
   >
+    <TheNavBar v-if="!isInTouchMode" />
     <v-main class="ma2 ma3-ns">
-      <TheHeader />
-      <TheCTA class="f4" />
+      <h1>Open Images Browser</h1>
+      <TheHeader v-if="!isInTouchMode"/>
+      <TheCTA class="f4" :isInTouchMode="isInTouchMode"/>
       <div class="flex flex-wrap">
         <StateStory
           :state="state"
@@ -194,6 +195,7 @@
               :displayFieldsSelected="state.displayFieldsSelected"
               :activeFilters="state.activeFilters"
               :filterCountsForSelection="filterCountsForSelection"
+              :isInTouchMode="isInTouchMode"
               v-on:toggle-active-filter="onToggleActiveFilter"
               v-on:open-playlist-at="openPlaylist"
             />
