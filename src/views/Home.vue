@@ -625,7 +625,8 @@ export default {
           !err.message.includes('Avoided redundant navigation to current location')
         ) {
           // But print any other errors to the console
-          logError(err);
+          // eslint-disable-next-line
+          console.error(err);
         }
       });
     },
