@@ -4,6 +4,18 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+    <!--  Essential META Tags -->
+    <meta property="og:title" content="Open Images Browser" />
+    <meta property="og:description" content="A generous interface to explore the Open Images collection">
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://openimagesbrowser.now.sh/" />
+    <meta property="og:image" content="https://openimagesbrowser.now.sh/og-image.png" />
+    <meta name="twitter:card" content="summary_large_image">
+    <!--  Non-Essential, But Recommended -->
+    <meta property="og:site_name" content="Open Images Browser">
+    <meta name="twitter:image:alt" content="Open Images Browser: A generous interface to explore the Open Images collection">
+
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
     <title>Open Images Browser</title>
     <%= process.env.NODE_ENV === 'production' ? `<!-- Matomo -->
