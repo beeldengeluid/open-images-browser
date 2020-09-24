@@ -6,7 +6,10 @@
         :poster="item.thumbSrc"
         :style="{ 'max-width': videoMaxWidth + 'px' }"
         controls
+        @playing="onVideoPlayChange"
+        @pause="onVideoPlayChange"
         width="100%"
+        ref="gridVideo"
         class="outline-0 bg-black"
       ></video>
     </div>
@@ -107,7 +110,7 @@
         </div>
         <div class="flex justify-end items-end flex-grow-0">
           <v-btn
-            @click=" $emit('open-playlist') "
+            @click=" onPlaylistClick "
             color="orange darken-2"
           >
             <v-icon left>mdi-playlist-play</v-icon>Start Playlist
@@ -127,6 +130,12 @@
 <script>
 export default {
   name: "CollectionItemCard",
+  data: function () {
+    return {
+      isPlaying: false,
+      videoElement: null,
+    }
+  },
   props: {
     item: Object,
     year: String,
@@ -137,6 +146,20 @@ export default {
       type: Boolean,
       default: false,
     },
+  },
+  methods: {
+    onVideoPlayChange(event) {
+      this.isPlaying = !event.target.paused;
+    },
+    onPlaylistClick () {
+      this.$emit('open-playlist');
+      if (this.isPlaying) {
+        this.videoElement.pause();
+      } 
+    },
+  },
+  mounted() {
+    this.videoElement = this.$refs.gridVideo;
   },
 };
 </script>

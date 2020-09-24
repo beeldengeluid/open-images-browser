@@ -16,7 +16,7 @@
           @playing="onVideoPlayChange"
           @pause="onVideoPlayChange"
           @ended="onVideoEnded"
-          ref="video"
+          ref="playlistVideo"
           controls
           :class="stretchVideo ? 'w-100' : ''"
           class="outline-0 mh-50vh db mh-auto w-100"
@@ -245,7 +245,7 @@ export default {
     },
   },
   mounted() {
-    this.videoElement = this.$refs.video;
+    this.videoElement = this.$refs.playlistVideo;
 
     this._keyListener = function(e) {
       if (e.key === "ArrowLeft") {
