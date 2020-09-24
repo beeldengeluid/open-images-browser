@@ -6,8 +6,7 @@
   >
     <TheNavBar v-if="!isInTouchMode" />
     <v-main class="ma2 ma3-ns">
-      <h1>Open Images Browser</h1>
-      <TheHeader v-if="!isInTouchMode"/>
+      <TheHeader/>
       <TheCTA class="f4" :isInTouchMode="isInTouchMode"/>
       <div class="flex flex-wrap">
         <StateStory
