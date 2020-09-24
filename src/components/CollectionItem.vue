@@ -1,8 +1,8 @@
 <template>
   <div
-    :style="[!isExpanded ? { width: width, height: height } : {}]"
+    :style="[!isExpanded ? { width: width } : {}]"
     :class="{ 'is-expanded': isExpanded }"
-    class="collection-item relative mr1 mb1 shadow-2 overflow-hidden"
+    class="collection-item relative pa1 shadow-2 overflow-hidden"
   >
     <CollectionItemThumbnail
       v-if="!isExpanded"
@@ -46,7 +46,6 @@ export default {
   },
   props: {
     width: String,
-    height: String,
     item: Object,
     displayTitle: {
       type: Boolean,
