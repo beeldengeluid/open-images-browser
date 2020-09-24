@@ -3,8 +3,7 @@
     <CollectionItem
       v-for="(item, index) in items"
       :key="item['id']"
-      :width="itemWidth + 'px'"
-      :height="itemHeight + 'px'"
+      :width="100/noThumbsPerRow + '%'"
       :item="item"
       :displayTitle="displayTitle"
       :displayYear="displayYear"
@@ -25,10 +24,8 @@ export default {
     CollectionItem,
   },
   props: {
-    width: String,
     items: Array,
-    itemWidth: Number,
-    itemHeight: Number,
+    noThumbsPerRow: Number,
     displayFieldsSelected: Array,
     activeFilters: Object,
     filterCountsForSelection: Object,

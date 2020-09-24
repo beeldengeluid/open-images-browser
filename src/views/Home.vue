@@ -185,8 +185,7 @@
             ></ZoomSlider>
             <CollectionItemGrid
               :items="itemsFilteredSorted"
-              :itemWidth="itemWidth"
-              :itemHeight="itemHeight"
+              :noThumbsPerRow="noThumbsPerRow"
               :displayFieldsSelected="state.displayFieldsSelected"
               :activeFilters="state.activeFilters"
               :filterCountsForSelection="filterCountsForSelection"
@@ -313,16 +312,6 @@ export default {
   computed: {
     itemsPerDecade() {
       return _.groupBy(this.items, (i) => this.dateToDecade(i["date"]));
-    },
-    itemWidth() {
-      let horizontalMarkupMargin = 32;
-      return (
-        (this.clientWidth - horizontalMarkupMargin) / this.noThumbsPerRow -
-        this.$options.static.itemMargin
-      );
-    },
-    itemHeight() {
-      return this.itemWidth / this.$options.static.itemAspectRatio;
     },
     noThumbsPerRow() {
       return Math.pow(2, this.zoom.value);

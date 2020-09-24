@@ -1,9 +1,8 @@
 <template>
-  <div @click="$emit('toggle-expanded')" class="h-100 bg-black pointer">
+  <div @click="$emit('toggle-expanded')" class="bg-black pointer relative overflow-hidden">
     <v-lazy
       :options="{ threshold: 0.1 }"
       transition="fade-transition"
-      class="h-100"
     >
       <v-hover>
         <div slot-scope="{ hover }">
@@ -11,7 +10,7 @@
             v-if="displayThumb"
             :src="thumbSrc"
             :title="title"
-            class="absolute top-0 bottom-0 m-auto grow"
+            class="grow w-100 db"
           />
           <div
             v-if="displayTitle"
@@ -26,7 +25,7 @@
             {{ year }}
           </div>
           <transition name="fade">
-            <div v-if="hover" class="absolute right-0 bottom-0">
+            <div v-if="hover" class="absolute right-0 bottom-0 pevents-none">
               <v-icon>mdi-fullscreen</v-icon>
             </div>
           </transition>
@@ -62,9 +61,5 @@ export default {
 
 .pevents-none {
   pointer-events: none;
-}
-
-.m-auto {
-  margin: auto;
 }
 </style>
