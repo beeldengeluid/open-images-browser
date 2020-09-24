@@ -1,7 +1,7 @@
 <template>
   <div class="flex">
     <div class="absolute ma3 top-0 right-0 z-1">
-      <v-icon @click="$emit('close-playlist')">mdi-close</v-icon>
+      <v-icon @click="onPlaylistCloseRequested">mdi-close</v-icon>
     </div>
     <div class="flex flex-1-1-80 flex-column justify-between ma3">
       <h2 class="f4 tc mv3">
@@ -243,6 +243,12 @@ export default {
         this.activeFilters[type][0] != this.currentItem[type][0]
       );
     },
+    onPlaylistCloseRequested() {
+      if (!this.isPaused) {
+        this.videoElement.pause();
+      }
+      this.$emit('close-playlist');
+    },
   },
   mounted() {
     this.videoElement = this.$refs.playlistVideo;
@@ -255,7 +261,7 @@ export default {
         this.nextVideo();
       }
       if (e.key === "Escape") {
-        this.$emit("close-playlist");
+        this.onPlaylistCloseRequested();
       }
     };
     document.addEventListener("keydown", this._keyListener.bind(this));
