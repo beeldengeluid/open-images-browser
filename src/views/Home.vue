@@ -38,7 +38,7 @@
           background: $options.static.colors.background,
         }"
       />
-      <div class="w-100 z-2 f6">
+      <div v-if="!isInTouchMode" class="w-100 z-2 f6">
         <RatioBar
           :amount="items.length"
           :total="items.length"
