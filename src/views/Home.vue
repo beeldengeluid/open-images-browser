@@ -706,6 +706,11 @@ export default {
 
     window.addEventListener("resize", _.debounce(this.onResize), 400);
   },
+  mounted() {
+    if (this.isInTouchMode) {
+      document.querySelector("meta[name='viewport']").setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no')
+    }
+  },
   destroyed() {
     window.removeEventListener("resize", this.onResize);
   },
