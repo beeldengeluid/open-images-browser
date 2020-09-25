@@ -270,7 +270,7 @@ export default {
       isInTouchMode: true,
       items: dataItems,
       state: {
-        decadeIndex: 7,
+        decadeIndex: 6,
         sortBy: "date",
         sortAscending: true,
         displayFieldsSelected: ["thumb", "title", "year"],
