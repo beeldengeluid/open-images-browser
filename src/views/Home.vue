@@ -3,17 +3,20 @@
     <TheNavBar />
     <v-main class="ma2 ma3-ns">
       <TheHeader />
-      <TheCTA class="f4" />
-      <div class="flex flex-wrap">
+      <div class="flex flex-wrap justify-between items-end">
+        <TheCTA class="f3" />
         <StateStory
           :state="state"
           :computed="{
-            selectedYearRange: selectedYearRange,
+            selectedDecade: selectedDecade,
             activeLength: itemsFilteredSorted.length,
             totalLength: items.length,
           }"
           v-on:toggle-active-filter="onToggleActiveFilter"
+          class="f3"
         />
+      </div>
+      <div class="tr">
         <v-btn
           @click="randomizeSelection"
           outlined
@@ -185,8 +188,7 @@
             ></ZoomSlider>
             <CollectionItemGrid
               :items="itemsFilteredSorted"
-              :itemWidth="itemWidth"
-              :itemHeight="itemHeight"
+              :noThumbsPerRow="noThumbsPerRow"
               :displayFieldsSelected="state.displayFieldsSelected"
               :activeFilters="state.activeFilters"
               :filterCountsForSelection="filterCountsForSelection"
@@ -314,16 +316,6 @@ export default {
     itemsPerDecade() {
       return _.groupBy(this.items, (i) => this.dateToDecade(i["date"]));
     },
-    itemWidth() {
-      let horizontalMarkupMargin = 32;
-      return (
-        (this.clientWidth - horizontalMarkupMargin) / this.noThumbsPerRow -
-        this.$options.static.itemMargin
-      );
-    },
-    itemHeight() {
-      return this.itemWidth / this.$options.static.itemAspectRatio;
-    },
     noThumbsPerRow() {
       return Math.pow(2, this.zoom.value);
     },
@@ -356,6 +348,9 @@ export default {
       );
       let decadeYearMax = decadeYearMin + 9;
       return [decadeYearMin, decadeYearMax];
+    },
+    selectedDecade() {
+      return this.decades[this.state.decadeIndex].name;
     },
     yearMin() {
       return Math.min(...this.items.map((i) => i["date"].slice(0, 4)));

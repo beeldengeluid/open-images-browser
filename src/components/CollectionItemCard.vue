@@ -6,7 +6,10 @@
         :poster="item.thumbSrc"
         :style="{ 'max-width': videoMaxWidth + 'px' }"
         controls
+        @playing="onVideoPlayChange"
+        @pause="onVideoPlayChange"
         width="100%"
+        ref="gridVideo"
         class="outline-0 bg-black"
       ></video>
     </div>
@@ -89,32 +92,36 @@
           </v-chip>
         </v-chip-group>
       </div>
-      <div v-if="item.creators.length" class="mv2">
-        <span class="fw6">
-          <v-icon small>mdi-video</v-icon>
-          <span class="v-mid"> {{ item.creators.length }} Creator</span
-          ><span v-if="item.creators.length > 1">s</span>
-        </span>
-        <div v-for="creator in item.creators" :key="creator">
-          {{ creator }}
+      <div class="flex justify-between">
+        <div class="flex-grow-1">
+          <div v-if="item.creators.length" class="mt2">
+            <span class="fw6">
+              <v-icon small>mdi-video</v-icon>
+              <span class="v-mid"> {{ item.creators.length }} Creator</span
+              ><span v-if="item.creators.length > 1">s</span>
+            </span>
+            <div v-for="creator in item.creators" :key="creator">
+              {{ creator }}
+            </div>
+          </div>
+          <div class="mt3">
+            <a :href="item.url" target="_blank">See item on Open Images ↗︎</a>
+          </div>
         </div>
-      </div>
-      <div class="mt3">
-        <a :href="item.url" target="_blank">See item on Open Images ↗︎</a>
+        <div class="flex justify-end items-end flex-grow-0">
+          <v-btn
+            @click=" onPlaylistClick "
+            color="orange darken-2"
+          >
+            <v-icon left>mdi-playlist-play</v-icon>Start Playlist
+          </v-btn>
+        </div>
       </div>
       <div class="absolute ma3 top-0 right-0">
         <v-icon @click="$emit('toggle-expanded')">
           mdi-close
         </v-icon>
       </div>
-      <v-btn
-        @click=" $emit('open-playlist') "
-        small
-        color="orange darken-2"
-        class="absolute ma3 bottom-0 right-0"
-      >
-        <v-icon left>mdi-playlist-play</v-icon>Start Playlist
-      </v-btn>
     </div>
   </div>
 </template>
@@ -122,12 +129,32 @@
 <script>
 export default {
   name: "CollectionItemCard",
+  data: function () {
+    return {
+      isPlaying: false,
+      videoElement: null,
+    }
+  },
   props: {
     item: Object,
     year: String,
     videoMaxWidth: Number,
     activeFilters: Object,
     filterCountsForSelection: Object,
+  },
+  methods: {
+    onVideoPlayChange(event) {
+      this.isPlaying = !event.target.paused;
+    },
+    onPlaylistClick () {
+      this.$emit('open-playlist');
+      if (this.isPlaying) {
+        this.videoElement.pause();
+      } 
+    },
+  },
+  mounted() {
+    this.videoElement = this.$refs.gridVideo;
   },
 };
 </script>

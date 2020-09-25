@@ -1,6 +1,7 @@
 <template>
   <div class="zoom-slider">
     <v-slider
+      label="Items per row"
       :value="value"
       @input="$emit('input', $event)"
       :min="min"
@@ -14,12 +15,12 @@
     >
       <template v-slot:prepend>
         <v-btn icon @click="$emit('input', value - 1)">
-          <v-icon>mdi-magnify-plus</v-icon>
+          <v-icon>mdi-grid-large</v-icon>
         </v-btn>
       </template>
       <template v-slot:append>
         <v-btn icon @click="$emit('input', value + 1)">
-          <v-icon>mdi-magnify-minus</v-icon>
+          <v-icon>mdi-grid</v-icon>
         </v-btn>
       </template>
     </v-slider>

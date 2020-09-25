@@ -1,6 +1,9 @@
 <template>
   <header>
-    <h1>Open Images Browser</h1>
+    <div class="flex items-center mv3">
+      <img src="/logo-open-images-browser.png" alt="Logo Open Images Browser" class="h3 mr3">
+      <h1 class="mv0 f1">Open Images Browser</h1>
+    </div>
     <section class="measure-wide">
       <p>
         This UI concept is part of the

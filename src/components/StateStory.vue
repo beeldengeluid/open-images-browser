@@ -1,14 +1,7 @@
 <template>
-  <div>
-    The current selection, ranging from
-    <span class="ph1 bg-primary-accent white--text font-mono">{{
-      computed.selectedYearRange[0]
-    }}</span>
-    to
-    <span class="ph1 bg-primary-accent white--text font-mono">{{
-      computed.selectedYearRange[1]
-    }}</span
-    >,
+  <p>
+    The current selection, spanning the
+    <span class="ph1 bg-primary-accent white--text font-mono">{{computed.selectedDecade}}</span>,
     <span
       v-if="
         state.activeFilters['locations'].length ||
@@ -23,7 +16,6 @@
           :key="location"
           :value="location"
           label
-          small
           class="ml1 teal white--text font-mono"
           @click="
             $emit('toggle-active-filter', {
@@ -43,7 +35,6 @@
           :key="subject"
           :value="subject"
           label
-          small
           class="ml1 teal white--text font-mono"
           @click="
             $emit('toggle-active-filter', {
@@ -69,7 +60,7 @@
       computed.totalLength
     }}</span>
     videos.
-  </div>
+  </p>
 </template>
 
 <script>
