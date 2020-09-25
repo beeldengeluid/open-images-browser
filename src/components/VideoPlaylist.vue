@@ -19,6 +19,8 @@
           ref="playlistVideo"
           controls
           :class="stretchVideo ? 'w-100' : ''"
+          controlsList="nodownload nofullscreen noremoteplayback"
+          disablePictureInPicture
           class="outline-0 mh-50vh db mh-auto w-100"
         ></video>
 

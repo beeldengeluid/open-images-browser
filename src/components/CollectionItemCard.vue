@@ -11,6 +11,7 @@
         width="100%"
         ref="gridVideo"
         controlsList="nodownload nofullscreen noremoteplayback"
+        disablePictureInPicture
         class="outline-0 bg-black"
       ></video>
     </div>
