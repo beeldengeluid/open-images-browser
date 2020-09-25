@@ -24,7 +24,6 @@
         <v-btn
           @click="randomizeSelection"
           outlined
-          small
           class="ml-auto self-end mt3"
         >
           <v-icon left>mdi-shuffle</v-icon>Randomize Selection
@@ -126,7 +125,6 @@
               <v-btn
                 @click="resetState"
                 v-show="hasActiveFilters"
-                small
                 outlined
                 class="ml-auto"
               >
