@@ -94,7 +94,7 @@
       </div>
       <div class="flex justify-between">
         <div class="flex-grow-1">
-          <div v-if="item.creators.length" class="mv2">
+          <div v-if="item.creators.length" class="mt2">
             <span class="fw6">
               <v-icon small>mdi-video</v-icon>
               <span class="v-mid"> {{ item.creators.length }} Creator</span
