@@ -6,9 +6,9 @@
   >
     <TheNavBar v-if="!isInTouchMode" />
     <v-main class="ma2 ma3-ns">
-      <TheHeader/>
-      <TheCTA class="f4" :isInTouchMode="isInTouchMode"/>
-      <div class="flex flex-wrap">
+      <TheHeader />
+      <div class="flex flex-wrap justify-between items-end">
+        <TheCTA class="f3" :isInTouchMode="isInTouchMode"/>
         <StateStory
           :state="state"
           :computed="{
@@ -17,7 +17,10 @@
             totalLength: items.length,
           }"
           v-on:toggle-active-filter="onToggleActiveFilter"
+          class="f3"
         />
+      </div>
+      <div class="tr">
         <v-btn
           @click="randomizeSelection"
           outlined
