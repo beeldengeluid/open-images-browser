@@ -714,4 +714,7 @@ export default {
   -o-user-select: none;
   user-select: none;
 }
+.bb {
+  border-bottom-width: 3px !important;
+}
 </style>
