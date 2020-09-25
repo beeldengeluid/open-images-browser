@@ -1,14 +1,7 @@
 <template>
   <p>
-    The current selection, ranging from
-    <span class="ph1 bg-primary-accent white--text font-mono">{{
-      computed.selectedYearRange[0]
-    }}</span>
-    to
-    <span class="ph1 bg-primary-accent white--text font-mono">{{
-      computed.selectedYearRange[1]
-    }}</span
-    >,
+    The current selection, spanning the
+    <span class="ph1 bg-primary-accent white--text font-mono">{{computed.selectedDecade}}</span>,
     <span
       v-if="
         state.activeFilters['locations'].length ||

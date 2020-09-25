@@ -12,7 +12,7 @@
         <StateStory
           :state="state"
           :computed="{
-            selectedYearRange: selectedYearRange,
+            selectedDecade: selectedDecade,
             activeLength: itemsFilteredSorted.length,
             totalLength: items.length,
           }"
@@ -352,6 +352,9 @@ export default {
       );
       let decadeYearMax = decadeYearMin + 9;
       return [decadeYearMin, decadeYearMax];
+    },
+    selectedDecade() {
+      return this.decades[this.state.decadeIndex].name;
     },
     yearMin() {
       return Math.min(...this.items.map((i) => i["date"].slice(0, 4)));
