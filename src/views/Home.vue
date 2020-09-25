@@ -3,8 +3,8 @@
     <TheNavBar />
     <v-main class="ma2 ma3-ns">
       <TheHeader />
-      <TheCTA class="f4" />
-      <div class="flex flex-wrap">
+      <div class="flex flex-wrap justify-between items-end">
+        <TheCTA class="f3" />
         <StateStory
           :state="state"
           :computed="{
@@ -13,7 +13,10 @@
             totalLength: items.length,
           }"
           v-on:toggle-active-filter="onToggleActiveFilter"
+          class="f3"
         />
+      </div>
+      <div class="tr">
         <v-btn
           @click="randomizeSelection"
           outlined

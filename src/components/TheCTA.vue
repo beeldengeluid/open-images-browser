@@ -1,6 +1,6 @@
 <template>
   <section>
-    <p class="mt4 f3">
+    <p class="f2">
       Explore videos from the
       <v-tooltip top>
         <template v-slot:activator="{ on }">

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <p>
     The current selection, ranging from
     <span class="ph1 bg-primary-accent white--text font-mono">{{
       computed.selectedYearRange[0]
@@ -23,7 +23,6 @@
           :key="location"
           :value="location"
           label
-          small
           class="ml1 teal white--text font-mono"
           @click="
             $emit('toggle-active-filter', {
@@ -43,7 +42,6 @@
           :key="subject"
           :value="subject"
           label
-          small
           class="ml1 teal white--text font-mono"
           @click="
             $emit('toggle-active-filter', {
@@ -69,7 +67,7 @@
       computed.totalLength
     }}</span>
     videos.
-  </div>
+  </p>
 </template>
 
 <script>
