@@ -12,7 +12,7 @@
         <video
           :src="currentItem.videoSrc"
           :poster="currentItem.thumbSrc"
-          :autoplay="autoplayEnabled"
+          :autoplay="autoplayEnabled && isShown"
           @playing="onVideoPlayChange"
           @pause="onVideoPlayChange"
           @ended="onVideoEnded"
@@ -170,6 +170,7 @@ export default {
     filterCountsForSelection: Object,
     activeFilters: Object,
     stretchVideo: { type: Boolean, default: false },
+    isShown: { type: Boolean, default: false },
     color: { type: String, default: "orange" },
   },
   computed: {
