@@ -7,7 +7,7 @@
     <TheNavBar v-if="!state.touchMode" />
     <v-main class="ma2 ma3-ns">
       <TheHeader class="mb4" :class="{ mt5: state.touchMode }" />
-      <TheIntro class="mb5" v-if="!state.touchMode" />
+      <TheIntro class="mb5" v-if="!state.touchMode && !state.surveyMode" />
       <div class="flex flex-wrap justify-between items-end">
         <TheCTA class="f3" :touchMode="state.touchMode" />
         <StateStory
@@ -260,6 +260,7 @@ export default {
         showPlaylist: false,
         playlistIndex: 0,
         touchMode: false,
+        surveyMode: false,
       },
       zoom: {
         value: 3,
