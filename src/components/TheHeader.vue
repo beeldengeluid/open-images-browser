@@ -4,7 +4,7 @@
       <img src="/logo-open-images-browser.png" alt="Logo Open Images Browser" class="h3 mr3">
       <h1 class="mv0 f1">Open Images Browser</h1>
     </div>
-    <!-- <section class="measure-wide mv4">
+    <section v-if="!isInTouchMode" class="measure-wide mv4">
       <p>
         This UI concept is part of the
         <a
@@ -38,6 +38,13 @@
         <li><strong>Provide Context</strong></li>
         <li><strong>Share high quality primary content</strong></li>
       </ul>
-    </section> -->
+    </section>
   </header>
 </template>
+<script>
+export default {
+  props: {
+    isInTouchMode: { type: Boolean, default: false },
+  },
+};
+</script>

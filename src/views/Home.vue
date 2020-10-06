@@ -6,9 +6,9 @@
   >
     <TheNavBar v-if="!isInTouchMode" />
     <v-main class="ma2 ma3-ns">
-      <TheHeader class="mv5" />
+      <TheHeader class="mv5" :isInTouchMode="isInTouchMode"  />
       <div class="flex flex-wrap justify-between items-end">
-        <TheCTA class="f3" :isInTouchMode="isInTouchMode"/>
+        <TheCTA class="f3" :isInTouchMode="isInTouchMode" />
         <StateStory
           :state="state"
           :computed="{

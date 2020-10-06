@@ -31,7 +31,7 @@
 <script>
 export default {
   props: {
-    isInTouchMode: Boolean,
+    isInTouchMode: { type: Boolean, default: false },
   },
 };
 </script>
