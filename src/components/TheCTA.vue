@@ -4,7 +4,7 @@
       Explore videos from the
       <v-tooltip top>
         <template v-slot:activator="{ on }">
-          <span v-if="isInTouchMode">Open Images Collection</span>
+          <span v-if="touchMode">Open Images Collection</span>
           <a v-else href="https://openbeelden.nl/" target="_blank" v-on="on"
             >Open Images Collection↗︎</a
           >
@@ -31,7 +31,7 @@
 <script>
 export default {
   props: {
-    isInTouchMode: { type: Boolean, default: false },
+    touchMode: { type: Boolean, default: false },
   },
 };
 </script>

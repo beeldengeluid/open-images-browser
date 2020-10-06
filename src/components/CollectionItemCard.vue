@@ -106,7 +106,7 @@
               {{ creator }}
             </div>
           </div>
-          <div v-if="!isInTouchMode" class="mt3">
+          <div v-if="!touchMode" class="mt3">
             <a :href="item.url" target="_blank">See item on Open Images ↗︎</a>
           </div>
         </div>
@@ -144,7 +144,7 @@ export default {
     videoMaxWidth: Number,
     activeFilters: Object,
     filterCountsForSelection: Object,
-    isInTouchMode: {
+    touchMode: {
       type: Boolean,
       default: false,
     },

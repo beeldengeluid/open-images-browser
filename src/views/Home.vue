@@ -1,14 +1,14 @@
 <template>
   <v-app 
     id="app" 
-    :oncontextmenu="state.isInTouchMode ? 'return false;' : 'return true;'" 
-    :class="{ 'user-select-none': state.isInTouchMode }"
+    :oncontextmenu="state.touchMode ? 'return false;' : 'return true;'" 
+    :class="{ 'user-select-none': state.touchMode }"
   >
-    <TheNavBar v-if="!state.isInTouchMode" />
+    <TheNavBar v-if="!state.touchMode" />
     <v-main class="ma2 ma3-ns">
-      <TheHeader class="mv5" :isInTouchMode="state.isInTouchMode"  />
+      <TheHeader class="mv5" :touchMode="state.touchMode"  />
       <div class="flex flex-wrap justify-between items-end">
-        <TheCTA class="f3" :isInTouchMode="state.isInTouchMode" />
+        <TheCTA class="f3" :touchMode="state.touchMode" />
         <StateStory
           :state="state"
           :computed="{
@@ -40,7 +40,7 @@
           background: $options.static.colors.background,
         }"
       />
-      <div v-if="!state.isInTouchMode" class="w-100 z-2 f6">
+      <div v-if="!state.touchMode" class="w-100 z-2 f6">
         <RatioBar
           :amount="items.length"
           :total="items.length"
@@ -194,7 +194,7 @@
               :displayFieldsSelected="state.displayFieldsSelected"
               :activeFilters="state.activeFilters"
               :filterCountsForSelection="filterCountsForSelection"
-              :isInTouchMode="state.isInTouchMode"
+              :touchMode="state.touchMode"
               v-on:toggle-active-filter="onToggleActiveFilter"
               v-on:open-playlist-at="openPlaylist"
             />
@@ -281,7 +281,7 @@ export default {
         },
         showPlaylist: false,
         playlistIndex: 0,
-        isInTouchMode: false,
+        touchMode: false,
       },
       zoom: {
         value: 3,
@@ -705,7 +705,7 @@ export default {
     window.addEventListener("resize", _.debounce(this.onResize), 400);
   },
   mounted() {
-    if (this.isInTouchMode) {
+    if (this.touchMode) {
       document.querySelector("meta[name='viewport']").setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no')
     }
   },
