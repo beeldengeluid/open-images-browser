@@ -2,7 +2,7 @@
   <header>
     <div class="flex items-center">
       <img
-        src="/logo-open-images-browser.png"
+        src="../assets/logo-open-images-browser.png"
         alt="Logo Open Images Browser"
         class="h3 mr3"
       />
