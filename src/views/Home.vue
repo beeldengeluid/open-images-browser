@@ -1,14 +1,14 @@
 <template>
   <v-app 
     id="app" 
-    :oncontextmenu="isInTouchMode ? 'return false;' : 'return true;'" 
-    :class="{ 'user-select-none': isInTouchMode }"
+    :oncontextmenu="state.isInTouchMode ? 'return false;' : 'return true;'" 
+    :class="{ 'user-select-none': state.isInTouchMode }"
   >
-    <TheNavBar v-if="!isInTouchMode" />
+    <TheNavBar v-if="!state.isInTouchMode" />
     <v-main class="ma2 ma3-ns">
-      <TheHeader class="mv5" :isInTouchMode="isInTouchMode"  />
+      <TheHeader class="mv5" :isInTouchMode="state.isInTouchMode"  />
       <div class="flex flex-wrap justify-between items-end">
-        <TheCTA class="f3" :isInTouchMode="isInTouchMode" />
+        <TheCTA class="f3" :isInTouchMode="state.isInTouchMode" />
         <StateStory
           :state="state"
           :computed="{
@@ -40,7 +40,7 @@
           background: $options.static.colors.background,
         }"
       />
-      <div v-if="!isInTouchMode" class="w-100 z-2 f6">
+      <div v-if="!state.isInTouchMode" class="w-100 z-2 f6">
         <RatioBar
           :amount="items.length"
           :total="items.length"
@@ -194,7 +194,7 @@
               :displayFieldsSelected="state.displayFieldsSelected"
               :activeFilters="state.activeFilters"
               :filterCountsForSelection="filterCountsForSelection"
-              :isInTouchMode="isInTouchMode"
+              :isInTouchMode="state.isInTouchMode"
               v-on:toggle-active-filter="onToggleActiveFilter"
               v-on:open-playlist-at="openPlaylist"
             />
@@ -269,7 +269,6 @@ export default {
   },
   data() {
     return {
-      isInTouchMode: true,
       items: dataItems,
       state: {
         decadeIndex: 6,
@@ -282,6 +281,7 @@ export default {
         },
         showPlaylist: false,
         playlistIndex: 0,
+        isInTouchMode: false,
       },
       zoom: {
         value: 3,
@@ -528,7 +528,11 @@ export default {
       }
     },
     qsCustomizer(objValue, srcValue) {
-      return typeof objValue === "number" ? parseInt(srcValue, 10) : srcValue;
+      return typeof objValue === "number" 
+        ? parseInt(srcValue, 10) 
+        : typeof objValue === "boolean"
+        ? srcValue == "1"
+        : srcValue
     },
     resetState() {
       this.state.activeFilters = Object.assign(
