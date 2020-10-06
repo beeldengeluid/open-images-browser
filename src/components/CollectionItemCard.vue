@@ -34,7 +34,12 @@
             v-for="subject in item.subjects"
             :key="subject"
             :value="subject"
-            @click=" $emit('toggle-active-filter', { type: 'subjects', value: subject, }) "
+            @click="
+              $emit('toggle-active-filter', {
+                type: 'subjects',
+                value: subject,
+              })
+            "
             label
             :class="
               activeFilters['subjects'].includes(subject)
@@ -111,15 +116,12 @@
           </div>
         </div>
         <div class="flex justify-end items-end flex-grow-0">
-          <v-btn
-            @click=" onPlaylistClick "
-            color="orange darken-2"
-          >
+          <v-btn @click="onPlaylistClick" color="orange darken-2">
             <v-icon left>mdi-playlist-play</v-icon>Start Playlist
           </v-btn>
         </div>
       </div>
-      
+
       <div class="absolute ma3 top-0 right-0">
         <v-icon @click="$emit('toggle-expanded')">
           mdi-close
@@ -132,11 +134,11 @@
 <script>
 export default {
   name: "CollectionItemCard",
-  data: function () {
+  data: function() {
     return {
       isPlaying: false,
       videoElement: null,
-    }
+    };
   },
   props: {
     item: Object,
@@ -153,11 +155,11 @@ export default {
     onVideoPlayChange(event) {
       this.isPlaying = !event.target.paused;
     },
-    onPlaylistClick () {
-      this.$emit('open-playlist');
+    onPlaylistClick() {
+      this.$emit("open-playlist");
       if (this.isPlaying) {
         this.videoElement.pause();
-      } 
+      }
     },
   },
   mounted() {

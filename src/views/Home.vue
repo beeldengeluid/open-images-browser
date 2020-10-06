@@ -1,12 +1,12 @@
 <template>
-  <v-app 
-    id="app" 
-    :oncontextmenu="state.touchMode ? 'return false;' : 'return true;'" 
+  <v-app
+    id="app"
+    :oncontextmenu="state.touchMode ? 'return false;' : 'return true;'"
     :class="{ 'user-select-none': state.touchMode }"
   >
     <TheNavBar v-if="!state.touchMode" />
     <v-main class="ma2 ma3-ns">
-      <TheHeader class="mv5" :touchMode="state.touchMode"  />
+      <TheHeader class="mv5" :touchMode="state.touchMode" />
       <div class="flex flex-wrap justify-between items-end">
         <TheCTA class="f3" :touchMode="state.touchMode" />
         <StateStory
@@ -528,11 +528,11 @@ export default {
       }
     },
     qsCustomizer(objValue, srcValue) {
-      return typeof objValue === "number" 
-        ? parseInt(srcValue, 10) 
+      return typeof objValue === "number"
+        ? parseInt(srcValue, 10)
         : typeof objValue === "boolean"
         ? srcValue == "1"
-        : srcValue
+        : srcValue;
     },
     resetState() {
       this.state.activeFilters = Object.assign(
@@ -615,24 +615,28 @@ export default {
         }
       }
 
-      this.$router.push({
-        query: Object.assign({}, this.$route.query, {
-          activeFilters: {
-            ...this.state.activeFilters,
-            [filterType]: newValue,
-          },
-        }),
-      }).catch(err => {
-        // Ignore the vuex err regarding  navigating to the page they are already on.
-        if (
-          err.name !== 'NavigationDuplicated' &&
-          !err.message.includes('Avoided redundant navigation to current location')
-        ) {
-          // But print any other errors to the console
-          // eslint-disable-next-line
-          console.error(err);
-        }
-      });
+      this.$router
+        .push({
+          query: Object.assign({}, this.$route.query, {
+            activeFilters: {
+              ...this.state.activeFilters,
+              [filterType]: newValue,
+            },
+          }),
+        })
+        .catch((err) => {
+          // Ignore the vuex err regarding  navigating to the page they are already on.
+          if (
+            err.name !== "NavigationDuplicated" &&
+            !err.message.includes(
+              "Avoided redundant navigation to current location"
+            )
+          ) {
+            // But print any other errors to the console
+            // eslint-disable-next-line
+            console.error(err);
+          }
+        });
     },
   },
   watch: {
@@ -706,7 +710,12 @@ export default {
   },
   mounted() {
     if (this.touchMode) {
-      document.querySelector("meta[name='viewport']").setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no')
+      document
+        .querySelector("meta[name='viewport']")
+        .setAttribute(
+          "content",
+          "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+        );
     }
   },
   destroyed() {

@@ -3,7 +3,7 @@
     <CollectionItem
       v-for="(item, index) in items"
       :key="item['id']"
-      :width="100/noThumbsPerRow + '%'"
+      :width="100 / noThumbsPerRow + '%'"
       :item="item"
       :displayTitle="displayTitle"
       :displayYear="displayYear"
