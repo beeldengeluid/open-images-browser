@@ -6,7 +6,8 @@
   >
     <TheNavBar v-if="!state.touchMode" />
     <v-main class="ma2 ma3-ns">
-      <TheHeader class="mv5" :touchMode="state.touchMode" />
+      <TheHeader class="mb4" :class="{ mt5: state.touchMode }" />
+      <TheIntro class="mb5" v-if="!state.touchMode" />
       <div class="flex flex-wrap justify-between items-end">
         <TheCTA class="f3" :touchMode="state.touchMode" />
         <StateStory
@@ -242,6 +243,7 @@ import _ from "lodash";
 import dataItems from "@/assets/data/openbeelden-items-clean.json";
 import TheNavBar from "@/components/TheNavBar";
 import TheHeader from "@/components/TheHeader";
+import TheIntro from "@/components/TheIntro";
 import TheCTA from "@/components/TheCTA";
 import StateStory from "@/components/StateStory";
 import PeriodChart from "@/components/PeriodChart";
@@ -257,6 +259,7 @@ export default {
   components: {
     TheNavBar,
     TheHeader,
+    TheIntro,
     TheCTA,
     StateStory,
     PeriodChart,
