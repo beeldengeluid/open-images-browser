@@ -71,7 +71,7 @@ export const stateEmptyData = {
 };
 
 export const computedData = {
-  selectedYearRange: [1980, 1989],
+  selectedDecade: "1980s",
   activeLength: 10,
   totalLength: 1000,
 };

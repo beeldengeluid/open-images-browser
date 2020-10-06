@@ -24,6 +24,7 @@
       :videoMaxWidth="videoMaxWidth"
       :activeFilters="activeFilters"
       :filterCountsForSelection="filterCountsForSelection"
+      :touchMode="touchMode"
     />
   </div>
 </template>
@@ -60,6 +61,10 @@ export default {
     },
     activeFilters: Object,
     filterCountsForSelection: Object,
+    touchMode: {
+      type: Boolean,
+      default: false,
+    },
   },
   computed: {
     year() {

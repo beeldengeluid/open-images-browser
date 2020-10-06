@@ -1,5 +1,5 @@
 <template>
-  <div id="nav" class="flex justify-end ma2 ma3-ns">
+  <nav id="nav" class="flex justify-end ma2 ma3-ns">
     <!-- <router-link class="mh3" to="/">Home</router-link> -->
     <!-- <router-link class="mh3" to="/about">About</router-link> -->
     <a
@@ -14,5 +14,5 @@
       target="_blank"
       >GitHub</a
     >
-  </div>
+  </nav>
 </template>

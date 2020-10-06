@@ -10,6 +10,8 @@
         @pause="onVideoPlayChange"
         width="100%"
         ref="gridVideo"
+        controlsList="nodownload nofullscreen noremoteplayback"
+        disablePictureInPicture
         class="outline-0 bg-black"
       ></video>
     </div>
@@ -32,7 +34,12 @@
             v-for="subject in item.subjects"
             :key="subject"
             :value="subject"
-            @click=" $emit('toggle-active-filter', { type: 'subjects', value: subject, }) "
+            @click="
+              $emit('toggle-active-filter', {
+                type: 'subjects',
+                value: subject,
+              })
+            "
             label
             :class="
               activeFilters['subjects'].includes(subject)
@@ -104,19 +111,17 @@
               {{ creator }}
             </div>
           </div>
-          <div class="mt3">
+          <div v-if="!touchMode" class="mt3">
             <a :href="item.url" target="_blank">See item on Open Images ↗︎</a>
           </div>
         </div>
         <div class="flex justify-end items-end flex-grow-0">
-          <v-btn
-            @click=" onPlaylistClick "
-            color="orange darken-2"
-          >
+          <v-btn @click="onPlaylistClick" color="orange darken-2">
             <v-icon left>mdi-playlist-play</v-icon>Start Playlist
           </v-btn>
         </div>
       </div>
+
       <div class="absolute ma3 top-0 right-0">
         <v-icon @click="$emit('toggle-expanded')">
           mdi-close
@@ -129,11 +134,11 @@
 <script>
 export default {
   name: "CollectionItemCard",
-  data: function () {
+  data: function() {
     return {
       isPlaying: false,
       videoElement: null,
-    }
+    };
   },
   props: {
     item: Object,
@@ -141,16 +146,20 @@ export default {
     videoMaxWidth: Number,
     activeFilters: Object,
     filterCountsForSelection: Object,
+    touchMode: {
+      type: Boolean,
+      default: false,
+    },
   },
   methods: {
     onVideoPlayChange(event) {
       this.isPlaying = !event.target.paused;
     },
-    onPlaylistClick () {
-      this.$emit('open-playlist');
+    onPlaylistClick() {
+      this.$emit("open-playlist");
       if (this.isPlaying) {
         this.videoElement.pause();
-      } 
+      }
     },
   },
   mounted() {
@@ -195,6 +204,12 @@ export default {
     border-bottom-left-radius: 0;
     border-top-right-radius: 0.5rem;
     border-bottom-right-radius: 0.5rem;
+  }
+  .flex-grow-0 {
+    flex-grow: 0;
+  }
+  .flex-grow-1 {
+    flex-grow: 1;
   }
 }
 </style>

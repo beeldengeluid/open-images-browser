@@ -52,7 +52,7 @@
     </span>
     <br />
     contains
-    <span class="ph1 white black--text f3 fw5 font-mono">{{
+    <span class="ph1 white black--text font-mono">{{
       computed.activeLength
     }}</span>
     out of

@@ -49,12 +49,20 @@ export default {
         chart: {
           id: "decade-bar-chart",
           toolbar: { show: false },
+          zoom: { enabled: false },
           type: "line",
           background: this.colors.background,
           events: {
             dataPointSelection: (event, chartContext, config) => {
               if (config.dataPointIndex >= 0) {
-                this.$emit("decade-click", config.dataPointIndex);
+                if (config.dataPointIndex !== this.decadeIndex) {
+                  this.$emit("decade-click", config.dataPointIndex);
+                }
+                else { 
+                  // prevent deselecting selected bar for more consistent UX
+                  let bars = document.querySelectorAll('.apexcharts-series path')[config.dataPointIndex];
+                  bars.setAttribute('selected', true)
+                }
               }
             },
           },

@@ -3,13 +3,14 @@
     <CollectionItem
       v-for="(item, index) in items"
       :key="item['id']"
-      :width="100/noThumbsPerRow + '%'"
+      :width="100 / noThumbsPerRow + '%'"
       :item="item"
       :displayTitle="displayTitle"
       :displayYear="displayYear"
       :displayThumb="displayThumb"
       :activeFilters="activeFilters"
       :filterCountsForSelection="filterCountsForSelection"
+      :touchMode="touchMode"
       v-on:toggle-active-filter="$emit('toggle-active-filter', $event)"
       v-on:open-playlist="$emit('open-playlist-at', index)"
     />
@@ -29,6 +30,10 @@ export default {
     displayFieldsSelected: Array,
     activeFilters: Object,
     filterCountsForSelection: Object,
+    touchMode: {
+      type: Boolean,
+      default: false,
+    },
   },
   computed: {
     displayTitle() {

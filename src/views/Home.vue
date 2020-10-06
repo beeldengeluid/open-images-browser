@@ -1,10 +1,15 @@
 <template>
-  <v-app id="app">
-    <TheNavBar />
+  <v-app
+    id="app"
+    :oncontextmenu="state.touchMode ? 'return false;' : 'return true;'"
+    :class="{ 'user-select-none': state.touchMode }"
+  >
+    <TheNavBar v-if="!state.touchMode" />
     <v-main class="ma2 ma3-ns">
-      <TheHeader />
+      <TheHeader class="mb4" :class="{ mt5: state.touchMode }" />
+      <TheIntro class="mb5" v-if="!state.touchMode && !state.surveyMode" />
       <div class="flex flex-wrap justify-between items-end">
-        <TheCTA class="f3" />
+        <TheCTA class="f3" :touchMode="state.touchMode" />
         <StateStory
           :state="state"
           :computed="{
@@ -20,7 +25,6 @@
         <v-btn
           @click="randomizeSelection"
           outlined
-          small
           class="ml-auto self-end mt3"
         >
           <v-icon left>mdi-shuffle</v-icon>Randomize Selection
@@ -37,29 +41,6 @@
           background: $options.static.colors.background,
         }"
       />
-      <div class="w-100 z-2 f6">
-        <RatioBar
-          :amount="items.length"
-          :total="items.length"
-          :label="`${items.length} videos in total`"
-          :innerLabel="true"
-          :color="$options.static.colors.inactive"
-        />
-        <RatioBar
-          :amount="decades[state.decadeIndex].count"
-          :total="items.length"
-          :label="'in decade'"
-          :labelClasses="'grey--text'"
-          :color="$options.static.colors.primary"
-        />
-        <RatioBar
-          :amount="itemsFilteredSorted.length"
-          :total="items.length"
-          :label="'in selection'"
-          :labelClasses="'grey--text'"
-          :color="$options.static.colors.secondary"
-        />
-      </div>
       <v-container fluid class="pa0">
         <v-row>
           <v-col cols="12" lg="2">
@@ -122,7 +103,6 @@
               <v-btn
                 @click="resetState"
                 v-show="hasActiveFilters"
-                small
                 outlined
                 class="ml-auto"
               >
@@ -192,6 +172,7 @@
               :displayFieldsSelected="state.displayFieldsSelected"
               :activeFilters="state.activeFilters"
               :filterCountsForSelection="filterCountsForSelection"
+              :touchMode="state.touchMode"
               v-on:toggle-active-filter="onToggleActiveFilter"
               v-on:open-playlist-at="openPlaylist"
             />
@@ -239,13 +220,13 @@ import _ from "lodash";
 import dataItems from "@/assets/data/openbeelden-items-clean.json";
 import TheNavBar from "@/components/TheNavBar";
 import TheHeader from "@/components/TheHeader";
+import TheIntro from "@/components/TheIntro";
 import TheCTA from "@/components/TheCTA";
 import StateStory from "@/components/StateStory";
 import PeriodChart from "@/components/PeriodChart";
 import FilterList from "@/components/FilterList";
 import ZoomSlider from "@/components/ZoomSlider";
 import CollectionItemGrid from "@/components/CollectionItemGrid";
-import RatioBar from "@/components/RatioBar";
 import VideoPlaylist from "@/components/VideoPlaylist";
 import BackToTop from "vue-backtotop";
 
@@ -254,13 +235,13 @@ export default {
   components: {
     TheNavBar,
     TheHeader,
+    TheIntro,
     TheCTA,
     StateStory,
     PeriodChart,
     FilterList,
     ZoomSlider,
     CollectionItemGrid,
-    RatioBar,
     VideoPlaylist,
     BackToTop,
   },
@@ -268,7 +249,7 @@ export default {
     return {
       items: dataItems,
       state: {
-        decadeIndex: 7,
+        decadeIndex: 6,
         sortBy: "date",
         sortAscending: true,
         displayFieldsSelected: ["thumb", "title", "year"],
@@ -278,6 +259,8 @@ export default {
         },
         showPlaylist: false,
         playlistIndex: 0,
+        touchMode: false,
+        surveyMode: false,
       },
       zoom: {
         value: 3,
@@ -524,7 +507,11 @@ export default {
       }
     },
     qsCustomizer(objValue, srcValue) {
-      return typeof objValue === "number" ? parseInt(srcValue, 10) : srcValue;
+      return typeof objValue === "number"
+        ? parseInt(srcValue, 10)
+        : typeof objValue === "boolean"
+        ? srcValue == "1"
+        : srcValue;
     },
     resetState() {
       this.state.activeFilters = Object.assign(
@@ -607,24 +594,28 @@ export default {
         }
       }
 
-      this.$router.push({
-        query: Object.assign({}, this.$route.query, {
-          activeFilters: {
-            ...this.state.activeFilters,
-            [filterType]: newValue,
-          },
-        }),
-      }).catch(err => {
-        // Ignore the vuex err regarding  navigating to the page they are already on.
-        if (
-          err.name !== 'NavigationDuplicated' &&
-          !err.message.includes('Avoided redundant navigation to current location')
-        ) {
-          // But print any other errors to the console
-          // eslint-disable-next-line
-          console.error(err);
-        }
-      });
+      this.$router
+        .push({
+          query: Object.assign({}, this.$route.query, {
+            activeFilters: {
+              ...this.state.activeFilters,
+              [filterType]: newValue,
+            },
+          }),
+        })
+        .catch((err) => {
+          // Ignore the vuex err regarding  navigating to the page they are already on.
+          if (
+            err.name !== "NavigationDuplicated" &&
+            !err.message.includes(
+              "Avoided redundant navigation to current location"
+            )
+          ) {
+            // But print any other errors to the console
+            // eslint-disable-next-line
+            console.error(err);
+          }
+        });
     },
   },
   watch: {
@@ -696,8 +687,30 @@ export default {
 
     window.addEventListener("resize", _.debounce(this.onResize), 400);
   },
+  mounted() {
+    if (this.touchMode) {
+      document
+        .querySelector("meta[name='viewport']")
+        .setAttribute(
+          "content",
+          "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+        );
+    }
+  },
   destroyed() {
     window.removeEventListener("resize", this.onResize);
   },
 };
 </script>
+<style>
+.user-select-none {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+}
+.bb {
+  border-bottom-width: 3px !important;
+}
+</style>
