@@ -41,29 +41,31 @@
           background: $options.static.colors.background,
         }"
       />
-      <div v-if="!state.touchMode" class="w-100 z-2 f6">
-        <RatioBar
-          :amount="items.length"
-          :total="items.length"
-          :label="`${items.length} videos in total`"
-          :innerLabel="true"
-          :color="$options.static.colors.inactive"
-        />
-        <RatioBar
-          :amount="decades[state.decadeIndex].count"
-          :total="items.length"
-          :label="'in decade'"
-          :labelClasses="'grey--text'"
-          :color="$options.static.colors.primary"
-        />
-        <RatioBar
-          :amount="itemsFilteredSorted.length"
-          :total="items.length"
-          :label="'in selection'"
-          :labelClasses="'grey--text'"
-          :color="$options.static.colors.secondary"
-        />
-      </div>
+      <RatioBars v-if="!state.touchMode" class="w-100 z-2 f6"
+        :bars="[
+          {
+            amount: items.length,
+            total: items.length,
+            label: `${items.length} videos in total`,
+            innerLabel: true,
+            color: $options.static.colors.inactive,
+          },
+          {
+            amount:decades[state.decadeIndex].count,
+            total:items.length,
+            label:'in decade',
+            labelClasses:'grey--text',
+            color:$options.static.colors.primary,
+          },
+          {
+            amount:itemsFilteredSorted.length,
+            total:items.length,
+            label:'in selection',
+            labelClasses:'grey--text',
+            color:$options.static.colors.secondary,
+          }
+        ]"
+      />
       <v-container fluid class="pa0">
         <v-row>
           <v-col cols="12" lg="2">
@@ -250,7 +252,7 @@ import PeriodChart from "@/components/PeriodChart";
 import FilterList from "@/components/FilterList";
 import ZoomSlider from "@/components/ZoomSlider";
 import CollectionItemGrid from "@/components/CollectionItemGrid";
-import RatioBar from "@/components/RatioBar";
+import RatioBars from "@/components/RatioBars";
 import VideoPlaylist from "@/components/VideoPlaylist";
 import BackToTop from "vue-backtotop";
 
@@ -266,7 +268,7 @@ export default {
     FilterList,
     ZoomSlider,
     CollectionItemGrid,
-    RatioBar,
+    RatioBars,
     VideoPlaylist,
     BackToTop,
   },
