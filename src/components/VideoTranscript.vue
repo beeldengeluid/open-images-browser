@@ -1,5 +1,5 @@
 <template>
-  <div class="overflow-scroll">
+  <div class="overflow-auto">
     <div
       class="sequence flex font-mono"
       v-for="seq in asrSequences"
@@ -13,7 +13,7 @@
       <div class="words i measure">{{ seq.words }}</div>
       <div v-if="nerSequences.length" class="ner w4">
         <span
-          class="entity concept"
+          class="dib"
           v-for="(concept, index) in nerSequences[seq.sequenceNr].concepts"
           v-bind:key="index"
         >{{concept}}</span>
