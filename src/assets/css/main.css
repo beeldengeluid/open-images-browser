@@ -40,8 +40,10 @@ a {
   background-color: var(--primary-accent-color);
 }
 
-.dflex {
-  display: flex;
+.flex {
+  /* set flex to initial so tachyons' .flex class works as expected, 
+     uninterrupted by Vuetify's styles */
+  flex: initial;
 }
 
 .theme--dark.v-label {

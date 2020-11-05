@@ -1,5 +1,5 @@
 <template>
-  <div class="relative dflex flex-wrap">
+  <div class="relative flex flex-wrap">
     <CollectionItem
       v-for="(item, index) in items"
       :key="item['id']"
