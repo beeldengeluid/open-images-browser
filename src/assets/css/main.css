@@ -6,7 +6,7 @@
   /* VideoTranscript */
   --active-bg-color: yellow;
   --active-text-color: black;
-  --highlight-bg-color: rgba(255, 255, 0, 0.2);
+  --highlight-bg-color: rgba(255, 255, 0, 0.5);
   --entity-concept-bg-color: #CDECFF;
   --entity-concept-text-color: #00449E;
 }
