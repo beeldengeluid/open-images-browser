@@ -17,7 +17,7 @@
             activeLength: itemsFilteredSorted.length,
             totalLength: items.length,
           }"
-          v-on:toggle-active-filter="onToggleActiveFilter"
+          @toggle-active-filter="onToggleActiveFilter"
           class="f3"
         />
       </div>
@@ -33,7 +33,7 @@
       <PeriodChart
         :barSeries="decadeCounts"
         :lineSeries="decadeCountsForSelection"
-        v-on:decade-click="onDecadeClick"
+        @decade-click="onDecadeClick"
         :decadeIndex="state.decadeIndex"
         :colors="{
           bar: $options.static.colors.inactive,
@@ -55,13 +55,13 @@
             <FilterList
               :filters="filtersForSelection['subjects']"
               :activeFilters="state.activeFilters['subjects']"
-              v-on:toggle-active-filter="
+              @toggle-active-filter="
                 onToggleActiveFilter({
                   type: 'subjects',
                   value: $event.value,
                 })
               "
-              v-on:toggle-tail="onToggleTail"
+              @toggle-tail="onToggleTail"
               activeClass="teal"
             />
           </v-col>
@@ -77,13 +77,13 @@
             <FilterList
               :filters="filtersForSelection['locations']"
               :activeFilters="state.activeFilters['locations']"
-              v-on:toggle-active-filter="
+              @toggle-active-filter="
                 onToggleActiveFilter({
                   type: 'locations',
                   value: $event.value,
                 })
               "
-              v-on:toggle-tail="onToggleTail"
+              @toggle-tail="onToggleTail"
               activeClass="teal"
             />
           </v-col>
@@ -173,8 +173,8 @@
               :activeFilters="state.activeFilters"
               :filterCountsForSelection="filterCountsForSelection"
               :touchMode="state.touchMode"
-              v-on:toggle-active-filter="onToggleActiveFilter"
-              v-on:open-playlist-at="openPlaylist"
+              @toggle-active-filter="onToggleActiveFilter"
+              @open-playlist-at="openPlaylist"
             />
           </v-col>
         </v-row>
@@ -205,8 +205,8 @@
         :filterCountsForSelection="filterCountsForSelection"
         :activeFilters="state.activeFilters"
         :isShown="state.showPlaylist"
-        v-on:close-playlist="closePlaylist"
-        v-on:preview-click="loadPlaylist"
+        @close-playlist="closePlaylist"
+        @preview-click="loadPlaylist"
         color="orange darken-2"
         class="h-100 justify-center"
         ref="videoPlaylist"

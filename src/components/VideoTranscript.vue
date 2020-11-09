@@ -3,11 +3,11 @@
     <div
       class="sequence flex font-mono"
       v-for="seq in asrSequences"
-      v-bind:id="seq.sequenceNr"
-      v-bind:key="seq.sequenceNr"
-      v-bind:data-start="seq.start"
-      v-bind:class="currentSequence === seq.sequenceNr ? 'active' : ''"
-      v-on:click="$emit('jumpToTimecode', seq.start/1000)"
+      :id="seq.sequenceNr"
+      :key="seq.sequenceNr"
+      :data-start="seq.start"
+      :class="currentSequence === seq.sequenceNr ? 'active' : ''"
+      @click="$emit('jumpToTimecode', seq.start/1000)"
     >
       <div class="start">{{ convertTimecodeToClockString(seq.start/1000)}}</div>
       <div class="words i measure">{{ seq.words }}</div>
@@ -15,7 +15,7 @@
         <span
           class="dib"
           v-for="(concept, index) in nerSequences[seq.sequenceNr].concepts"
-          v-bind:key="index"
+          :key="index"
         >{{concept}}</span>
       </div>
     </div>

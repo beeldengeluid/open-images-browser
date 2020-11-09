@@ -11,16 +11,16 @@
       <div
         class="flex flex-column font-mono"
         v-for="concept in concepts"
-        v-bind:id="'ner-'+concept.name"
-        v-bind:key="concept.name"
+        :id="'ner-'+concept.name"
+        :key="concept.name"
       >
         <div
           class="entity concept dib"
           v-for="(start, index) in concept.starts"
-          v-bind:key="concept.name + '-' + index"
-          v-bind:data-start="start"
-          v-on:click="$emit('jumpToTimecode', start/1000)"
-          v-bind:class="currentSequence === concept.sequenceNrs[index] ? 'active' : ''"
+          :key="concept.name + '-' + index"
+          :data-start="start"
+          @click="$emit('jumpToTimecode', start/1000)"
+          :class="currentSequence === concept.sequenceNrs[index] ? 'active' : ''"
         >{{concept.name}}</div>
       </div>
     </div>

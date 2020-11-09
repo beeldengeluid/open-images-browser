@@ -5,8 +5,8 @@
         v-if="nerSequences.length"
         class="ma2"
         ref="videoEntities"
-        v-bind:nerSequences="this.nerSequences"
-        v-on:jumpToTimecode="onJumpToTimecode"
+        :nerSequences="this.nerSequences"
+        @jumpToTimecode="onJumpToTimecode"
       />
     </div>
     <div class="flex flex-column flex-md-row">
@@ -14,9 +14,9 @@
         <h2>Video Player</h2>
         <VideoPlayer
           ref="videoPlayer"
-          v-bind:videoSrc="this.videoSrc"
-          v-bind:thumbSrc="this.thumbSrc"
-          v-on:timeUpdate="onTimeUpdate"
+          :videoSrc="this.videoSrc"
+          :thumbSrc="this.thumbSrc"
+          @timeUpdate="onTimeUpdate"
         />
       </div>
       <div class="ma2">
@@ -30,9 +30,9 @@
         <VideoTranscript
           class="vh-50"
           ref="videoTranscript"
-          v-on:jumpToTimecode="onJumpToTimecode"
-          v-bind:asrSequences="this.asrSequences"
-          v-bind:nerSequences="this.nerSequences"
+          @jumpToTimecode="onJumpToTimecode"
+          :asrSequences="this.asrSequences"
+          :nerSequences="this.nerSequences"
         />
       </div>
     </div>

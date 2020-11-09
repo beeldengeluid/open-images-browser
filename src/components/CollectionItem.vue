@@ -6,7 +6,7 @@
   >
     <CollectionItemThumbnail
       v-if="!isExpanded"
-      v-on:toggle-expanded="toggleExpanded"
+      @toggle-expanded="toggleExpanded"
       :thumbSrc="item.thumbSrc"
       :title="item.title"
       :year="year"
@@ -16,9 +16,9 @@
     />
     <CollectionItemCard
       v-else
-      v-on:toggle-expanded="toggleExpanded"
-      v-on:toggle-active-filter="$emit('toggle-active-filter', $event)"
-      v-on:open-playlist="$emit('open-playlist')"
+      @toggle-expanded="toggleExpanded"
+      @toggle-active-filter="$emit('toggle-active-filter', $event)"
+      @open-playlist="$emit('open-playlist')"
       :item="item"
       :year="year"
       :videoMaxWidth="videoMaxWidth"

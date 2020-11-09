@@ -105,7 +105,7 @@
       <VideoPlaylistPreview
         v-if="canCurrentItemLinkToMore('locations')"
         :thumbItem="currentItem"
-        v-on:preview-click="
+        @preview-click="
           onPreviewClick({
             type: 'locations',
             value: currentItem.locations[0],
@@ -127,7 +127,7 @@
       <VideoPlaylistPreview
         v-if="canCurrentItemLinkToMore('subjects')"
         :thumbItem="currentItem"
-        v-on:preview-click="
+        @preview-click="
           onPreviewClick({
             type: 'subjects',
             value: currentItem.subjects[0],

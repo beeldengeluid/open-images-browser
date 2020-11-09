@@ -1,7 +1,7 @@
 <template>
   <div>
     <video controls width="100%" ref="video" 
-      v-on:timeupdate="onTimeUpdate"
+      @timeupdate="onTimeUpdate"
       :poster="thumbSrc"
       controls
       controlsList="nodownload noremoteplayback"

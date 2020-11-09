@@ -11,8 +11,8 @@
       :activeFilters="activeFilters"
       :filterCountsForSelection="filterCountsForSelection"
       :touchMode="touchMode"
-      v-on:toggle-active-filter="$emit('toggle-active-filter', $event)"
-      v-on:open-playlist="$emit('open-playlist-at', index)"
+      @toggle-active-filter="$emit('toggle-active-filter', $event)"
+      @open-playlist="$emit('open-playlist-at', index)"
     />
   </div>
 </template>
