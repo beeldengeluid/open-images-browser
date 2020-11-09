@@ -15,8 +15,8 @@
         class="outline-0 bg-black"
       ></video>
     </div>
-    <div class="expansion-right pa3 pr4 relative grey darken-3">
-      <h2 class="mt0 f4">
+    <div class="expansion-right pa3 relative grey darken-3">
+      <h2 class="mt0 f4 mr4">
         {{ item.title }} <span class="fw1">({{ year }})</span>
       </h2>
       <div v-if="item.subjects.length" class="mv2">
@@ -115,7 +115,7 @@
             <a :href="item.url" target="_blank">See item on Open Images ↗︎</a>
           </div>
         </div>
-        <div class="flex justify-end items-end flex-grow-0">
+        <div class="flex justify-end items-end flex-grow-0 ml2">
           <v-btn @click="onPlaylistClick" color="orange darken-2">
             <v-icon left>mdi-playlist-play</v-icon>Start Playlist
           </v-btn>

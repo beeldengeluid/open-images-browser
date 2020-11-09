@@ -109,8 +109,8 @@
                 <v-icon left>mdi-close-circle</v-icon>Clear Selection
               </v-btn>
             </div>
-            <div class="dflex flex-wrap mb3 items-center">
-              <div class="dflex items-center mr3 mr4-l">
+            <div class="flex flex-wrap mb3 items-center">
+              <div class="flex items-center mr3 mr4-l">
                 <span class="mr2 fw7">Sort by</span>
                 <v-chip-group
                   v-model="state.sortBy"
@@ -132,7 +132,7 @@
                   }}</v-icon>
                 </v-btn>
               </div>
-              <div class="dflex items-center mr3 mr4-l">
+              <div class="flex items-center mr3 mr4-l">
                 <span class="pr2 fw7">Display</span>
                 <v-chip-group
                   v-model="state.displayFieldsSelected"
