@@ -62,9 +62,7 @@ build Storybook as static site to `/docs` directory (auto deployed via GitHub Pa
 
     npm run build-storybook
 
-currently the project is being deployed via [Vercel](https://vercel.com/)'s git integration by running
-
-    now
+the project is deployed via [Vercel](https://vercel.com/)'s git integration. A push to master triggers a production deploy. A push to any other branch triggers a deployment preview on a unique URL.
 
 ## Data
 
