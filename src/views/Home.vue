@@ -194,11 +194,7 @@
         <span v-html="snackbar.markup"></span>
       </v-snackbar>
     </v-main>
-    <div
-      v-show="state.showPlaylist"
-      class="fixed w-100 h-100 bg-black-90 top-0 flex items-center flex-wrap z-9999"
-      :class="state.showPlaylist ? 'overflow-y-auto' : ''"
-    >
+    <ModalContainer v-show="state.showPlaylist">
       <VideoPlaylist
         :items="itemsFilteredSorted"
         :stretchVideo="false"
@@ -211,7 +207,7 @@
         class="h-100 justify-center"
         ref="videoPlaylist"
       />
-    </div>
+    </ModalContainer>
   </v-app>
 </template>
 
@@ -227,6 +223,7 @@ import PeriodChart from "@/components/PeriodChart";
 import FilterList from "@/components/FilterList";
 import ZoomSlider from "@/components/ZoomSlider";
 import CollectionItemGrid from "@/components/CollectionItemGrid";
+import ModalContainer from "@/components/ModalContainer";
 import VideoPlaylist from "@/components/VideoPlaylist";
 import BackToTop from "vue-backtotop";
 
@@ -242,6 +239,7 @@ export default {
     FilterList,
     ZoomSlider,
     CollectionItemGrid,
+    ModalContainer,
     VideoPlaylist,
     BackToTop,
   },
