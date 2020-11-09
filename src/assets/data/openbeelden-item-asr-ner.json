@@ -1,0 +1,299 @@
+{
+  "_index": "open-beelden-beeldengeluid-asr",
+  "_type": "rdf",
+  "_id": "oai:openimages.eu:1253071",
+  "_score": 1.0,
+  "_source": {
+    "@context": {
+      "cc": "http://creativecommons.org/ns#",
+      "dc": "http://purl.org/dc/elements/1.1/",
+      "dcterms": "http://purl.org/dc/terms/",
+      "oai_oi": "http://www.openbeelden.nl/feeds/oai/",
+      "oaipmh": "http://www.openarchives.org/OAI/2.0/",
+      "oi": "http://www.openbeelden.nl/oai/",
+      "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+      "xsi": "http://www.w3.org/2001/XMLSchema-instance"
+    },
+    "@graph": {
+      "@id": "oai:openimages.eu:1253071",
+      "cc:attributionName": {
+        "@language": "nl",
+        "@value": "Polygoon Hollands Nieuws (producent) / Nederlands Instituut voor Beeld en Geluid (beheerder)"
+      },
+      "cc:attributionURL": "https://www.openbeelden.nl/media/1253071",
+      "cc:license": "https://creativecommons.org/publicdomain/mark/1.0/",
+      "dcterms:abstract": {
+        "@language": "nl",
+        "@value": "Viering van het 10-jarige jubileum van het Bio-vakantieoord in 'Russenduin' te Bergen aan Zee. In het Bio-Vakantieoord konden kinderen van lagere sociale afkomst ('bleekneusjes') een zesweekse vakantie houden. De kinderen waren meestal afkomstig uit de grotere steden waar in de bioscopen werd gecollecteerd. SHOTS: - wapperende vlag van de stichting Bio-vakantieoord; - ext. Bio-vakantioord; - toespraak van de voorzitter van de stichting Bio-vakantieoord, J. ter Linden in 'Russenduin' waarin hij oa zijn dank uitspreekt aan het Nederlandse volk; - toespraak A. de Hoop over de plannen mbt de bouw van een lighal waar de kinderen kunnen rusten; - patiëntjes brengen een bloemen- en zanghulde; - kinderen, aan tafels gezeten, drinken en eten taart."
+      },
+      "dcterms:creator": {
+        "@language": "nl",
+        "@value": "Polygoon Hollands Nieuws (producent) / Nederlands Instituut voor Beeld en Geluid (beheerder)"
+      },
+      "dcterms:date": "1937-03-22",
+      "dcterms:description": {
+        "@language": "nl",
+        "@value": "Weekjournaal van Polygoon Hollands Nieuws van week 13 uit 1937."
+      },
+      "dcterms:extent": "PT2M4S",
+      "dcterms:hasFormat": [
+        "https://www.openbeelden.nl/files/12/53/1266232.1253075.WEEKNUMMER371-HRE0001A3A2_1921000_2044960.mp4",
+        "https://www.openbeelden.nl/files/12/53/1266238.1253075.WEEKNUMMER371-HRE0001A3A2_1921000_2044960.ogv",
+        "https://www.openbeelden.nl/files/12/53/1266240.1253075.WEEKNUMMER371-HRE0001A3A2_1921000_2044960.ogv",
+        "https://www.openbeelden.nl/files/12/53/1266236.1253075.WEEKNUMMER371-HRE0001A3A2_1921000_2044960.webm",
+        "https://www.openbeelden.nl/files/12/53/1266255.1253075.WEEKNUMMER371_HRE0001A3A2_1921000_2044960.m3u8",
+        "https://www.openbeelden.nl/files/12/53/1266234.1253075.WEEKNUMMER371-HRE0001A3A2_1921000_2044960.mp4",
+        "https://www.openbeelden.nl/images/1270641/10-jarig_bestaan_bio-vacantie_oord_%281_02%29.png",
+        "https://www.openbeelden.nl/files/12/53/1253075.WEEKNUMMER371-HRE0001A3A2_1921000_2044960.mp4"
+      ],
+      "dcterms:identifier": "PGM4011460",
+      "dcterms:language": "nl",
+      "dcterms:publisher": "https://www.openbeelden.nl/users/beeldengeluid",
+      "dcterms:source": {
+        "@language": "nl",
+        "@value": "WEEKNUMMER371-HRE0001A3A2"
+      },
+      "dcterms:spatial": [
+        {
+          "@language": "nl",
+          "@value": "Bergen aan Zee"
+        },
+        {
+          "@language": "nl",
+          "@value": "Nederland"
+        }
+      ],
+      "dcterms:subject": [
+        {
+          "@language": "nl",
+          "@value": "jubilea"
+        },
+        {
+          "@language": "nl",
+          "@value": "vakantiehuizen"
+        }
+      ],
+      "dcterms:title": {
+        "@language": "nl",
+        "@value": "10-jarig bestaan bio-vacantie oord"
+      },
+      "dcterms:type": "Moving Image"
+    },
+    "mediaType": [
+      "video"
+    ],
+    "curatedDate": "1937-03-22",
+    "playable": true,
+    "layer__asr": [
+      {
+        "wordTimes": [
+          16560,
+          17190,
+          18340,
+          18840,
+          19140,
+          19230,
+          19410,
+          19530,
+          20640,
+          21150,
+          21960,
+          22140,
+          22390,
+          22830,
+          25220,
+          25510,
+          25620,
+          26000,
+          26100,
+          26190,
+          28020,
+          28200,
+          28740,
+          29700,
+          29820,
+          30180,
+          30370,
+          30560,
+          31470,
+          31650,
+          32130
+        ],
+        "sequenceNr": 0,
+        "start": 16000.0,
+        "fragmentId": "0008",
+        "words": "De heren mee valt de eer te beurt hartelijk welkom in ons gastenboek antwoord het is vandaag op de stichting een bijzondere dag de dag dat wij denken het tienjarig bestaan.",
+        "carrierId": "WEEKNUMMER371-HRE0001A3A2"
+      },
+      {
+        "wordTimes": [
+          34540,
+          34720,
+          34820,
+          35320,
+          36630,
+          36910,
+          37060,
+          37540,
+          38660,
+          38990,
+          39950,
+          40150,
+          40330,
+          40930,
+          41440,
+          41590,
+          41830
+        ],
+        "sequenceNr": 1,
+        "start": 33000.0,
+        "fragmentId": "0009",
+        "words": "Op de allereerste plaats moet het nederlandse publiek duidelijk zeggen dat was altijd ieder naar zijn vermogen.",
+        "carrierId": "WEEKNUMMER371-HRE0001A3A2"
+      },
+      {
+        "wordTimes": [
+          43880,
+          44810,
+          45020,
+          45570,
+          45770,
+          46820,
+          47000,
+          47090,
+          47980,
+          48420,
+          48760,
+          48890,
+          49440,
+          50970
+        ],
+        "sequenceNr": 2,
+        "start": 42000.0,
+        "fragmentId": "0010",
+        "words": "Ondersteunen met kerstmis een mager als de bekende bus door de verschillende theaters gepresenteerd.",
+        "carrierId": "WEEKNUMMER371-HRE0001A3A2"
+      },
+      {
+        "wordTimes": [
+          54390,
+          54930,
+          55380,
+          56390,
+          56520,
+          56800,
+          57300,
+          57530,
+          59210,
+          59650,
+          59800,
+          59890,
+          60310,
+          60430,
+          60520,
+          60830,
+          61030
+        ],
+        "sequenceNr": 3,
+        "start": 54000.0,
+        "fragmentId": "0011",
+        "words": "Pillen helpen bij de bouw van een lichthal hal waar de kinderen daar 's middags kunnen slaan.",
+        "carrierId": "WEEKNUMMER371-HRE0001A3A2"
+      },
+      {
+        "wordTimes": [
+          62430,
+          62580,
+          62880,
+          63100,
+          63870,
+          64019,
+          64349,
+          65550,
+          66000,
+          66990,
+          67110,
+          68240,
+          68850,
+          69150,
+          69420,
+          70290,
+          70670,
+          70980,
+          71520,
+          72840,
+          73020,
+          73080,
+          73590,
+          74580,
+          74730,
+          75060,
+          75370,
+          75990,
+          76110,
+          76590,
+          76830,
+          77070,
+          77370,
+          77510,
+          77610,
+          78300,
+          78450,
+          79550
+        ],
+        "sequenceNr": 4,
+        "start": 61000.0,
+        "fragmentId": "0012",
+        "words": "En wanneer we straks een beroep doen om geld te geven voor ons nieuwe ideaal dan is het een dan een spoedige inrichting van deze ligt al de kinderen dus nog meer als het kan hun gezondheid terugkrijgen.",
+        "carrierId": "WEEKNUMMER371-HRE0001A3A2"
+      }
+    ],
+    "layer__ner": [
+      {
+        "sequenceNr": 0,
+        "start": 16000.0,
+        "fragmentId": "0008",
+        "carrierId": "WEEKNUMMER371-HRE0001A3A2",
+        "concepts": ["gastenboek", "stichting", "tienjarig bestaan"],
+        "persons": [],
+        "places": []
+      },
+      {
+        "sequenceNr": 1,
+        "start": 33000.0,
+        "fragmentId": "0009",
+        "carrierId": "WEEKNUMMER371-HRE0001A3A2",
+        "concepts": ["publiek"],
+        "persons": [],
+        "places": ["Nederland"]
+      },
+      {
+        "sequenceNr": 2,
+        "start": 42000.0,
+        "fragmentId": "0010",
+        "carrierId": "WEEKNUMMER371-HRE0001A3A2",
+        "concepts": ["kerstmis", "theater"],
+        "persons": [],
+        "places": []
+      },
+      {
+        "sequenceNr": 3,
+        "start": 54000.0,
+        "fragmentId": "0011",
+        "carrierId": "WEEKNUMMER371-HRE0001A3A2",
+        "concepts": ["kind", "middag"],
+        "persons": [],
+        "places": []
+      },
+      {
+        "sequenceNr": 4,
+        "start": 61000.0,
+        "fragmentId": "0012",
+        "carrierId": "WEEKNUMMER371-HRE0001A3A2",
+        "concepts": ["geld", "kind", "gezondheid"],
+        "persons": [],
+        "places": []
+      }
+    ]
+  }
+}
