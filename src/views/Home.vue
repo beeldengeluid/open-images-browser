@@ -175,6 +175,7 @@
               :touchMode="state.touchMode"
               @toggle-active-filter="onToggleActiveFilter"
               @open-playlist-at="openPlaylist"
+              @open-transcript="openTranscript"
             />
           </v-col>
         </v-row>
@@ -194,18 +195,33 @@
         <span v-html="snackbar.markup"></span>
       </v-snackbar>
     </v-main>
-    <ModalContainer v-show="state.showPlaylist">
+    <ModalContainer 
+      v-show="state.showPlaylist"
+      @close-modal="closePlaylist"
+    >
       <VideoPlaylist
         :items="itemsFilteredSorted"
         :stretchVideo="false"
         :filterCountsForSelection="filterCountsForSelection"
         :activeFilters="state.activeFilters"
         :isShown="state.showPlaylist"
-        @close-playlist="closePlaylist"
         @preview-click="loadPlaylist"
         color="orange darken-2"
         class="h-100 justify-center"
         ref="videoPlaylist"
+      />
+    </ModalContainer>
+    <ModalContainer 
+      v-show="state.showTranscript"
+      @close-modal="closeTranscript"
+    >
+      <VideoComposition
+        :videoSrc="itemsFilteredSorted[0].videoSrc"
+        :thumbSrc="itemsFilteredSorted[0].thumbSrc"
+        :nerSequences="itemsFilteredSorted[0].layer__ner"
+        :asrSequences="itemsFilteredSorted[0].layer__asr"
+        :isShown="state.showTranscript"
+        ref="videoComposition"
       />
     </ModalContainer>
   </v-app>
@@ -225,6 +241,7 @@ import ZoomSlider from "@/components/ZoomSlider";
 import CollectionItemGrid from "@/components/CollectionItemGrid";
 import ModalContainer from "@/components/ModalContainer";
 import VideoPlaylist from "@/components/VideoPlaylist";
+import VideoComposition from "@/components/VideoComposition";
 import BackToTop from "vue-backtotop";
 
 export default {
@@ -241,6 +258,7 @@ export default {
     CollectionItemGrid,
     ModalContainer,
     VideoPlaylist,
+    VideoComposition,
     BackToTop,
   },
   data() {
@@ -256,6 +274,7 @@ export default {
           subjects: [],
         },
         showPlaylist: false,
+        showTranscript: false,
         playlistIndex: 0,
         touchMode: false,
         surveyMode: false,
@@ -566,8 +585,18 @@ export default {
       this.state.showPlaylist = true;
       this.addHTMLClass("overflow-y-hidden");
     },
+    openTranscript() {
+      this.state.showTranscript = true;
+      this.addHTMLClass("overflow-y-hidden");
+    },
     closePlaylist() {
       this.state.showPlaylist = false;
+      this.$refs.videoPlaylist.pauseVideo();
+      this.removeHTMLClass("overflow-y-hidden");
+    },
+    closeTranscript() {
+      this.state.showTranscript = false;
+      this.$refs.videoComposition.pauseVideo();
       this.removeHTMLClass("overflow-y-hidden");
     },
     loadPlaylist({ type, value }) {

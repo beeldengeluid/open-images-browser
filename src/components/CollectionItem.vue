@@ -19,6 +19,7 @@
       @toggle-expanded="toggleExpanded"
       @toggle-active-filter="$emit('toggle-active-filter', $event)"
       @open-playlist="$emit('open-playlist')"
+      @open-transcript="$emit('open-transcript')"
       :item="item"
       :year="year"
       :videoMaxWidth="videoMaxWidth"

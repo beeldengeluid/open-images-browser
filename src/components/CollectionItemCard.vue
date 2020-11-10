@@ -115,6 +115,11 @@
             <a :href="item.url" target="_blank">See item on Open Images ↗︎</a>
           </div>
         </div>
+        <div v-if="item.layer__asr" class="flex justify-end items-end flex-grow-0 ml2">
+          <v-btn @click="onTranscriptClick" color="orange darken-2">
+            <v-icon left>mdi-subtitles</v-icon>Play Transcript
+          </v-btn>
+        </div>
         <div class="flex justify-end items-end flex-grow-0 ml2">
           <v-btn @click="onPlaylistClick" color="orange darken-2">
             <v-icon left>mdi-playlist-play</v-icon>Start Playlist
@@ -157,6 +162,12 @@ export default {
     },
     onPlaylistClick() {
       this.$emit("open-playlist");
+      if (this.isPlaying) {
+        this.videoElement.pause();
+      }
+    },
+    onTranscriptClick() {
+      this.$emit("open-transcript");
       if (this.isPlaying) {
         this.videoElement.pause();
       }

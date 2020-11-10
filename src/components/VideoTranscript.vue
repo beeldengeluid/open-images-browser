@@ -1,5 +1,5 @@
 <template>
-  <div class="overflow-auto">
+  <div v-if="asrSequences.length" class="overflow-auto">
     <div
       class="sequence flex font-mono"
       v-for="seq in asrSequences"
@@ -20,6 +20,9 @@
       </div>
     </div>
   </div>
+  <div v-else>
+    <p class="i mt3">Sorry, no Automatic Speech Recognition transcript available ¯\_(ツ)_/¯</p>
+  </div>
 </template>
 
 <script>
@@ -29,6 +32,16 @@ export default {
     return {
       currentTime: 0
     };
+  },
+  props: {
+    asrSequences: {
+      type: Array,
+      default: () => [],
+    },
+    nerSequences: {
+      type: Array,
+      default: () => [],
+    },
   },
   computed: {
     currentSequence: function() {
@@ -46,16 +59,6 @@ export default {
     currentSequence: function(newIndex) {
       this.scrollTo(newIndex);
     }
-  },
-  props: {
-    asrSequences: {
-      type: Array,
-      default: () => [],
-    },
-    nerSequences: {
-      type: Array,
-      default: () => [],
-    },
   },
   methods: {
     setCurrentTime(tc) {

@@ -1,6 +1,6 @@
 <template>
   <div
-    class="fixed w-100 h-100 bg-black-90 top-0 flex items-center flex-wrap z-9999 overflow-y-auto"
+    class="fixed w-100 h-100 bg-black-90 top-0 flex items-center flex-wrap z-9999 overflow-y-auto justify-center"
   >
     <div class="absolute ma3 top-0 right-0 z-1">
       <v-icon @click="onModalCloseRequested">mdi-close</v-icon>

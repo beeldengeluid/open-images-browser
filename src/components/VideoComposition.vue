@@ -79,6 +79,9 @@ export default {
         this.$refs.videoEntities.setCurrentTime(tc);
       }
     },
+    pauseVideo() {
+      this.$refs.videoPlayer.pauseVideo();
+    },
   },
 };
 </script>
