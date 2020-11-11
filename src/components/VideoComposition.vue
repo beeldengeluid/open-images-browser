@@ -5,7 +5,7 @@
         v-if="nerSequences.length"
         class="ma2"
         ref="videoEntities"
-        :nerSequences="this.nerSequences"
+        :nerSequences="nerSequences"
         @jumpToTimecode="onJumpToTimecode"
       />
     </div>
@@ -14,8 +14,8 @@
         <h2>Video Player</h2>
         <VideoPlayer
           ref="videoPlayer"
-          :videoSrc="this.videoSrc"
-          :thumbSrc="this.thumbSrc"
+          :videoSrc="videoSrc"
+          :thumbSrc="thumbSrc"
           @timeUpdate="onTimeUpdate"
         />
       </div>
@@ -31,8 +31,8 @@
           class="vh-50"
           ref="videoTranscript"
           @jumpToTimecode="onJumpToTimecode"
-          :asrSequences="this.asrSequences"
-          :nerSequences="this.nerSequences"
+          :asrSequences="asrSequences"
+          :nerSequences="nerSequences"
         />
       </div>
     </div>
