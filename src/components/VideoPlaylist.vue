@@ -1,8 +1,5 @@
 <template>
   <div class="flex">
-    <div class="absolute ma3 top-0 right-0 z-1">
-      <v-icon @click="onPlaylistCloseRequested">mdi-close</v-icon>
-    </div>
     <div class="flex flex-1-1-80 flex-column justify-between ma3">
       <h2 class="f4 tc mv3">
         {{ currentItem.title }}
@@ -105,7 +102,7 @@
       <VideoPlaylistPreview
         v-if="canCurrentItemLinkToMore('locations')"
         :thumbItem="currentItem"
-        v-on:preview-click="
+        @preview-click="
           onPreviewClick({
             type: 'locations',
             value: currentItem.locations[0],
@@ -127,7 +124,7 @@
       <VideoPlaylistPreview
         v-if="canCurrentItemLinkToMore('subjects')"
         :thumbItem="currentItem"
-        v-on:preview-click="
+        @preview-click="
           onPreviewClick({
             type: 'subjects',
             value: currentItem.subjects[0],
@@ -226,6 +223,11 @@ export default {
         this.videoElement.pause();
       }
     },
+    pauseVideo() {
+      if (!this.videoElement.paused) {
+        this.videoElement.pause();
+      } 
+    },
     setCurrentItemIndex(index) {
       this.currentItemIndex = index;
     },
@@ -246,12 +248,6 @@ export default {
         this.activeFilters[type][0] != this.currentItem[type][0]
       );
     },
-    onPlaylistCloseRequested() {
-      if (!this.isPaused) {
-        this.videoElement.pause();
-      }
-      this.$emit('close-playlist');
-    },
   },
   mounted() {
     this.videoElement = this.$refs.playlistVideo;
@@ -262,9 +258,6 @@ export default {
       }
       if (e.key === "ArrowRight") {
         this.nextVideo();
-      }
-      if (e.key === "Escape") {
-        this.onPlaylistCloseRequested();
       }
     };
     document.addEventListener("keydown", this._keyListener.bind(this));
