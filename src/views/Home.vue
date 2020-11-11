@@ -175,7 +175,7 @@
               :touchMode="state.touchMode"
               @toggle-active-filter="onToggleActiveFilter"
               @open-playlist-at="openPlaylist"
-              @open-transcript="openTranscript"
+              @open-transcript-at="openTranscript"
             />
           </v-col>
         </v-row>
@@ -195,10 +195,7 @@
         <span v-html="snackbar.markup"></span>
       </v-snackbar>
     </v-main>
-    <ModalContainer 
-      v-show="state.showPlaylist"
-      @close-modal="closePlaylist"
-    >
+    <ModalContainer v-show="state.showPlaylist" @close-modal="closePlaylist">
       <VideoPlaylist
         :items="itemsFilteredSorted"
         :stretchVideo="false"
@@ -211,15 +208,12 @@
         ref="videoPlaylist"
       />
     </ModalContainer>
-    <ModalContainer 
-      v-show="state.showTranscript"
-      @close-modal="closeTranscript"
-    >
+    <ModalContainer v-if="state.showTranscript" @close-modal="closeTranscript">
       <VideoComposition
-        :videoSrc="itemsFilteredSorted[0].videoSrc"
-        :thumbSrc="itemsFilteredSorted[0].thumbSrc"
-        :nerSequences="itemsFilteredSorted[0].layer__ner"
-        :asrSequences="itemsFilteredSorted[0].layer__asr"
+        :videoSrc="itemsFilteredSorted[state.transcriptIndex].videoSrc"
+        :thumbSrc="itemsFilteredSorted[state.transcriptIndex].thumbSrc"
+        :nerSequences="itemsFilteredSorted[state.transcriptIndex].layer__ner"
+        :asrSequences="itemsFilteredSorted[state.transcriptIndex].layer__asr"
         :isShown="state.showTranscript"
         ref="videoComposition"
       />
@@ -278,6 +272,7 @@ export default {
         playlistIndex: 0,
         touchMode: false,
         surveyMode: false,
+        transcriptIndex: 0,
       },
       zoom: {
         value: 3,
@@ -585,7 +580,10 @@ export default {
       this.state.showPlaylist = true;
       this.addHTMLClass("overflow-y-hidden");
     },
-    openTranscript() {
+    openTranscript(event) {
+      if (typeof event === "number") {
+        this.state.transcriptIndex = event;
+      }
       this.state.showTranscript = true;
       this.addHTMLClass("overflow-y-hidden");
     },

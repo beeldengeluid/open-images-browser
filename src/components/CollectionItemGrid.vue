@@ -13,7 +13,7 @@
       :touchMode="touchMode"
       @toggle-active-filter="$emit('toggle-active-filter', $event)"
       @open-playlist="$emit('open-playlist-at', index)"
-      @open-transcript="$emit('open-transcript')"
+      @open-transcript="$emit('open-transcript-at', index)"
     />
   </div>
 </template>
