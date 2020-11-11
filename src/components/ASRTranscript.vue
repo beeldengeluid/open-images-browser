@@ -27,7 +27,6 @@
 
 <script>
 export default {
-  name: "VideoTranscript",
   data: function() {
     return {
       currentTime: 0

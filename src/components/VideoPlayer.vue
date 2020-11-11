@@ -1,11 +1,14 @@
 <template>
   <div>
-    <video controls width="100%" ref="video" 
-      v-on:timeupdate="onTimeUpdate"
+    <video 
+      width="100%" 
+      ref="video" 
+      @timeupdate="onTimeUpdate"
       :poster="thumbSrc"
-      controls
+      controls 
       controlsList="nodownload noremoteplayback"
       disablePictureInPicture
+      class="outline-0 bg-black"
     >
       <source :src="videoSrc" type="video/mp4" />
       Your browser doesn't support the video element.
@@ -35,6 +38,11 @@ export default {
     },
     setCurrentTime(tc) {
       this.$refs.video.currentTime = tc;
+    },
+    pauseVideo() {
+      if (!this.$refs.video.paused) {
+        this.$refs.video.pause();
+      } 
     },
   },
 };

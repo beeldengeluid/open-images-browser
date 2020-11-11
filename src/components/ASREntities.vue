@@ -29,7 +29,7 @@
 
 <script>
 export default {
-  name: "VideoEntities",
+  name: "ASREntities",
   data: function() {
     return {
       currentTime: 0

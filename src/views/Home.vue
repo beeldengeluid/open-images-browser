@@ -17,7 +17,7 @@
             activeLength: itemsFilteredSorted.length,
             totalLength: items.length,
           }"
-          v-on:toggle-active-filter="onToggleActiveFilter"
+          @toggle-active-filter="onToggleActiveFilter"
           class="f3"
         />
       </div>
@@ -33,7 +33,7 @@
       <PeriodChart
         :barSeries="decadeCounts"
         :lineSeries="decadeCountsForSelection"
-        v-on:decade-click="onDecadeClick"
+        @decade-click="onDecadeClick"
         :decadeIndex="state.decadeIndex"
         :colors="{
           bar: $options.static.colors.inactive,
@@ -55,13 +55,13 @@
             <FilterList
               :filters="filtersForSelection['subjects']"
               :activeFilters="state.activeFilters['subjects']"
-              v-on:toggle-active-filter="
+              @toggle-active-filter="
                 onToggleActiveFilter({
                   type: 'subjects',
                   value: $event.value,
                 })
               "
-              v-on:toggle-tail="onToggleTail"
+              @toggle-tail="onToggleTail"
               activeClass="teal"
             />
           </v-col>
@@ -77,13 +77,13 @@
             <FilterList
               :filters="filtersForSelection['locations']"
               :activeFilters="state.activeFilters['locations']"
-              v-on:toggle-active-filter="
+              @toggle-active-filter="
                 onToggleActiveFilter({
                   type: 'locations',
                   value: $event.value,
                 })
               "
-              v-on:toggle-tail="onToggleTail"
+              @toggle-tail="onToggleTail"
               activeClass="teal"
             />
           </v-col>
@@ -173,8 +173,9 @@
               :activeFilters="state.activeFilters"
               :filterCountsForSelection="filterCountsForSelection"
               :touchMode="state.touchMode"
-              v-on:toggle-active-filter="onToggleActiveFilter"
-              v-on:open-playlist-at="openPlaylist"
+              @toggle-active-filter="onToggleActiveFilter"
+              @open-playlist-at="openPlaylist"
+              @open-transcript-at="openTranscript"
             />
           </v-col>
         </v-row>
@@ -194,24 +195,29 @@
         <span v-html="snackbar.markup"></span>
       </v-snackbar>
     </v-main>
-    <div
-      v-show="state.showPlaylist"
-      class="fixed w-100 h-100 bg-black-90 top-0 flex items-center flex-wrap z-9999"
-      :class="state.showPlaylist ? 'overflow-y-auto' : ''"
-    >
+    <ModalContainer v-show="state.showPlaylist" @close-modal="closePlaylist">
       <VideoPlaylist
         :items="itemsFilteredSorted"
         :stretchVideo="false"
         :filterCountsForSelection="filterCountsForSelection"
         :activeFilters="state.activeFilters"
         :isShown="state.showPlaylist"
-        v-on:close-playlist="closePlaylist"
-        v-on:preview-click="loadPlaylist"
+        @preview-click="loadPlaylist"
         color="orange darken-2"
         class="h-100 justify-center"
         ref="videoPlaylist"
       />
-    </div>
+    </ModalContainer>
+    <ModalContainer v-if="state.showTranscript" @close-modal="closeTranscript">
+      <ASRComposition
+        :videoSrc="itemsFilteredSorted[state.transcriptIndex].videoSrc"
+        :thumbSrc="itemsFilteredSorted[state.transcriptIndex].thumbSrc"
+        :nerSequences="itemsFilteredSorted[state.transcriptIndex].layer__ner"
+        :asrSequences="itemsFilteredSorted[state.transcriptIndex].layer__asr"
+        :isShown="state.showTranscript"
+        ref="asrComposition"
+      />
+    </ModalContainer>
   </v-app>
 </template>
 
@@ -227,7 +233,9 @@ import PeriodChart from "@/components/PeriodChart";
 import FilterList from "@/components/FilterList";
 import ZoomSlider from "@/components/ZoomSlider";
 import CollectionItemGrid from "@/components/CollectionItemGrid";
+import ModalContainer from "@/components/ModalContainer";
 import VideoPlaylist from "@/components/VideoPlaylist";
+import ASRComposition from "@/components/ASRComposition";
 import BackToTop from "vue-backtotop";
 
 export default {
@@ -242,7 +250,9 @@ export default {
     FilterList,
     ZoomSlider,
     CollectionItemGrid,
+    ModalContainer,
     VideoPlaylist,
+    ASRComposition,
     BackToTop,
   },
   data() {
@@ -258,9 +268,11 @@ export default {
           subjects: [],
         },
         showPlaylist: false,
+        showTranscript: false,
         playlistIndex: 0,
         touchMode: false,
         surveyMode: false,
+        transcriptIndex: 0,
       },
       zoom: {
         value: 3,
@@ -568,8 +580,21 @@ export default {
       this.state.showPlaylist = true;
       this.addHTMLClass("overflow-y-hidden");
     },
+    openTranscript(event) {
+      if (typeof event === "number") {
+        this.state.transcriptIndex = event;
+      }
+      this.state.showTranscript = true;
+      this.addHTMLClass("overflow-y-hidden");
+    },
     closePlaylist() {
       this.state.showPlaylist = false;
+      this.$refs.videoPlaylist.pauseVideo();
+      this.removeHTMLClass("overflow-y-hidden");
+    },
+    closeTranscript() {
+      this.state.showTranscript = false;
+      this.$refs.asrComposition.pauseVideo();
       this.removeHTMLClass("overflow-y-hidden");
     },
     loadPlaylist({ type, value }) {

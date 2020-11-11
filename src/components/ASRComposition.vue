@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>
-      <VideoEntities
+      <ASREntities
         v-if="nerSequences.length"
         class="ma2"
         ref="videoEntities"
@@ -27,7 +27,7 @@
             <span class="font-mono i">recognised from video</span> 🤖)
           </span>
         </h2>
-        <VideoTranscript
+        <ASRTranscript
           class="vh-50"
           ref="videoTranscript"
           @jumpToTimecode="onJumpToTimecode"
@@ -41,12 +41,11 @@
 
 <script>
 import VideoPlayer from "./VideoPlayer";
-import VideoTranscript from "./VideoTranscript";
-import VideoEntities from "./VideoEntities";
+import ASRTranscript from "./ASRTranscript";
+import ASREntities from "./ASREntities";
 
 export default {
-  name: "VideoComposition",
-  components: { VideoPlayer, VideoTranscript, VideoEntities },
+  components: { VideoPlayer, ASRTranscript, ASREntities },
   data: function() {
     return {
       currentTime: 0,
