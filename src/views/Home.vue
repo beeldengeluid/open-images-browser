@@ -209,13 +209,13 @@
       />
     </ModalContainer>
     <ModalContainer v-if="state.showTranscript" @close-modal="closeTranscript">
-      <VideoComposition
+      <ASRComposition
         :videoSrc="itemsFilteredSorted[state.transcriptIndex].videoSrc"
         :thumbSrc="itemsFilteredSorted[state.transcriptIndex].thumbSrc"
         :nerSequences="itemsFilteredSorted[state.transcriptIndex].layer__ner"
         :asrSequences="itemsFilteredSorted[state.transcriptIndex].layer__asr"
         :isShown="state.showTranscript"
-        ref="videoComposition"
+        ref="asrComposition"
       />
     </ModalContainer>
   </v-app>
@@ -235,7 +235,7 @@ import ZoomSlider from "@/components/ZoomSlider";
 import CollectionItemGrid from "@/components/CollectionItemGrid";
 import ModalContainer from "@/components/ModalContainer";
 import VideoPlaylist from "@/components/VideoPlaylist";
-import VideoComposition from "@/components/VideoComposition";
+import ASRComposition from "@/components/ASRComposition";
 import BackToTop from "vue-backtotop";
 
 export default {
@@ -252,7 +252,7 @@ export default {
     CollectionItemGrid,
     ModalContainer,
     VideoPlaylist,
-    VideoComposition,
+    ASRComposition,
     BackToTop,
   },
   data() {
@@ -594,7 +594,7 @@ export default {
     },
     closeTranscript() {
       this.state.showTranscript = false;
-      this.$refs.videoComposition.pauseVideo();
+      this.$refs.asrComposition.pauseVideo();
       this.removeHTMLClass("overflow-y-hidden");
     },
     loadPlaylist({ type, value }) {
