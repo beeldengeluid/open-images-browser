@@ -713,7 +713,7 @@ export default {
     window.addEventListener("resize", _.debounce(this.onResize), 400);
   },
   mounted() {
-    if (this.touchMode) {
+    if (this.state.touchMode) {
       document
         .querySelector("meta[name='viewport']")
         .setAttribute(
