@@ -505,7 +505,7 @@ export default {
       return typeof objValue === "number"
         ? parseInt(srcValue, 10)
         : typeof objValue === "boolean"
-        ? srcValue == "1"
+        ? srcValue === "1"
         : srcValue;
     },
     resetState() {
