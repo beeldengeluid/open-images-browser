@@ -265,7 +265,6 @@ export default {
         max: 6,
         step: 1,
       },
-      clientWidth: this.getClientWidth(),
       chartSeries: [],
       snackbar: {
         state: false,
@@ -423,12 +422,6 @@ export default {
     },
     dateToDecade(date) {
       return date.slice(0, 3) + "0s";
-    },
-    getClientWidth() {
-      return document.body.clientWidth || document.documentElement.clientWidth;
-    },
-    onResize() {
-      this.clientWidth = this.getClientWidth();
     },
     onToggleActiveFilter(event) {
       if (this.state.activeFilters[event.type].includes(event.value)) {
@@ -699,8 +692,6 @@ export default {
       this.$options.static.defaultState.activeFilters,
       queryParams.activeFilters
     );
-
-    window.addEventListener("resize", _.debounce(this.onResize), 400);
   },
   mounted() {
     if (this.touchMode) {
@@ -711,9 +702,6 @@ export default {
           "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
         );
     }
-  },
-  destroyed() {
-    window.removeEventListener("resize", this.onResize);
   },
 };
 </script>
