@@ -99,32 +99,28 @@
           </v-chip>
         </v-chip-group>
       </div>
-      <div class="flex justify-between">
-        <div class="flex-grow-1">
-          <div v-if="item.creators.length" class="mt2">
-            <span class="fw6">
-              <v-icon small>mdi-video</v-icon>
-              <span class="v-mid"> {{ item.creators.length }} Creator</span
-              ><span v-if="item.creators.length > 1">s</span>
-            </span>
-            <div v-for="creator in item.creators" :key="creator">
-              {{ creator }}
-            </div>
-          </div>
-          <div v-if="!touchMode" class="mt3">
-            <a :href="item.url" target="_blank">See item on Open Images ↗︎</a>
-          </div>
+      <div v-if="item.creators.length" class="mv2">
+        <span class="fw6">
+          <v-icon small>mdi-video</v-icon>
+          <span class="v-mid"> {{ item.creators.length }} Creator</span
+          ><span v-if="item.creators.length > 1">s</span>
+        </span>
+        <div v-for="creator in item.creators" :key="creator">
+          {{ creator }}
         </div>
-        <div v-if="item.layer__asr" class="flex justify-end items-end flex-grow-0 ml2">
-          <v-btn @click="onTranscriptClick" color="orange darken-2">
-            <v-icon left>mdi-subtitles</v-icon>Play Transcript
-          </v-btn>
+      </div>
+      <div class="flex justify-between flex-wrap">
+        <div v-if="!touchMode" class="mr2 mb2">
+          <a :href="item.url" target="_blank">See item on Open Images ↗︎</a>
         </div>
-        <div class="flex justify-end items-end flex-grow-0 ml2">
-          <v-btn @click="onPlaylistClick" color="orange darken-2">
-            <v-icon left>mdi-playlist-play</v-icon>Start Playlist
-          </v-btn>
-        </div>
+        
+        <v-btn v-if="item.layer__asr" @click="onTranscriptClick" color="orange darken-2 mr2 mb2">
+          <v-icon left>mdi-subtitles</v-icon>Play Transcript
+        </v-btn>
+      
+        <v-btn @click="onPlaylistClick" color="orange darken-2">
+          <v-icon left>mdi-playlist-play</v-icon>Start Playlist
+        </v-btn>
       </div>
 
       <div class="absolute ma3 top-0 right-0">

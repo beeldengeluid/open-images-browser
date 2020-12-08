@@ -68,7 +68,7 @@ export default {
       return this.filters.filter((filter) => filter.count > 1);
     },
     tail() {
-      return this.filters.filter((filter) => filter.count == 1);
+      return this.filters.filter((filter) => filter.count === 1);
     },
     hasLongTail() {
       return this.tail.length > this.threshold;

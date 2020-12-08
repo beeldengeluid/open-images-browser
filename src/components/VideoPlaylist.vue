@@ -3,7 +3,7 @@
     <div class="flex flex-1-1-80 flex-column justify-between ma3">
       <h2 class="f4 tc mv3">
         {{ currentItem.title }}
-        <span class="fw1">({{ this.dateToYear(currentItem.date) }})</span>
+        <span class="fw1">({{ dateToYear(currentItem.date) }})</span>
       </h2>
       <div class="relative tc">
         <video
@@ -226,7 +226,7 @@ export default {
     pauseVideo() {
       if (!this.videoElement.paused) {
         this.videoElement.pause();
-      } 
+      }
     },
     setCurrentItemIndex(index) {
       this.currentItemIndex = index;
@@ -245,7 +245,7 @@ export default {
       return (
         this.currentItem[type].length &&
         this.filterCountsForSelection[type][this.currentItem[type][0]] > 1 &&
-        this.activeFilters[type][0] != this.currentItem[type][0]
+        this.activeFilters[type][0] !== this.currentItem[type][0]
       );
     },
   },
