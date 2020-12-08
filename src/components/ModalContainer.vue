@@ -1,6 +1,6 @@
 <template>
   <div
-    class="fixed w-100 h-100 bg-black-90 top-0 flex items-center flex-wrap z-9999 overflow-y-auto justify-center"
+    class="fullscreen fixed bg-black-90 top-0 flex items-center flex-wrap z-9999 overflow-y-auto justify-center"
   >
     <div class="absolute ma3 top-0 right-0 z-1">
       <v-icon @click="onModalCloseRequested">mdi-close</v-icon>
@@ -30,4 +30,13 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.fullscreen {
+  width: 100vw;
+  height: 100vh;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+}
+</style>
