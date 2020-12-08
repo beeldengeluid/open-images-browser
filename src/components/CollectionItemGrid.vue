@@ -26,11 +26,26 @@ export default {
     CollectionItem,
   },
   props: {
-    items: Array,
-    noThumbsPerRow: Number,
-    displayFieldsSelected: Array,
-    activeFilters: Object,
-    filterCountsForSelection: Object,
+    items: {
+      type: Array,
+      default: () => [],
+    },
+    noThumbsPerRow: {
+      type: Number,
+      default: 8
+    },
+    displayFieldsSelected: {
+      type: Array,
+      default: () => [],
+    },
+    activeFilters: {
+      type: Object,
+      default: () => ({}),
+    },
+    filterCountsForSelection: {
+      type: Object,
+      default: () => ({}),
+    },
     touchMode: {
       type: Boolean,
       default: false,

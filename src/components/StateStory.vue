@@ -1,7 +1,10 @@
 <template>
   <p>
     The current selection, spanning the
-    <span class="ph1 bg-primary-accent white--text font-mono">{{computed.selectedDecade}}</span>,
+    <span class="ph1 bg-primary-accent white--text font-mono">{{
+      computed.selectedDecade
+    }}</span
+    >,
     <span
       v-if="
         state.activeFilters['locations'].length ||
@@ -72,9 +75,15 @@ export default {
   props: {
     state: {
       type: Object,
+      default: () => ({ activeFilters: { locations: [], subjects: [] } }),
     },
     computed: {
       type: Object,
+      default: () => ({
+        selectedDecade: "1970s",
+        activeLength: 511,
+        totalLength: 3489,
+      }),
     },
   },
 };

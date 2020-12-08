@@ -46,8 +46,14 @@ export default {
     };
   },
   props: {
-    width: String,
-    item: Object,
+    width: {
+      type: String,
+      default: "50%",
+    },
+    item: {
+      type: Object,
+      default: () => ({}),
+    },
     displayTitle: {
       type: Boolean,
       default: false,
@@ -60,8 +66,14 @@ export default {
       type: Boolean,
       default: true,
     },
-    activeFilters: Object,
-    filterCountsForSelection: Object,
+    activeFilters: {
+      type: Object,
+      default: () => ({}),
+    },
+    filterCountsForSelection: {
+      type: Object,
+      default: () => ({}),
+    },
     touchMode: {
       type: Boolean,
       default: false,

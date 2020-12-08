@@ -25,8 +25,14 @@ export default {
     };
   },
   props: {
-    videoSrc: { type: String },
-    thumbSrc: { type: String },
+    videoSrc: { 
+      type: String,
+      default: "",
+    },
+    thumbSrc: { 
+      type: String,
+      default: "",
+    },
   },
   methods: {
     onTimeUpdate() {
