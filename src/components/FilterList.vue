@@ -11,11 +11,6 @@
       <v-chip
         v-for="filter in filtersToDisplay"
         :key="filter.name"
-        @click="
-          $emit('toggle-active-filter', {
-            value: filter.name,
-          })
-        "
         :value="filter.name"
         :class="
           activeFilters.includes(filter.name)
@@ -26,14 +21,19 @@
         small
         class="font-mono ma0"
         :title="`${filter.name} (${filter.count})`"
+        @click="
+          $emit('toggle-active-filter', {
+            value: filter.name,
+          })
+        "
       >
         <strong class="mr1">{{ filter.name }}</strong
         ><span>{{ filter.count }}</span>
         <v-icon right small
           >{{
             activeFilters.includes(filter.name)
-              ? "mdi-close-circle"
-              : "mdi-filter-variant"
+              ? 'mdi-close-circle'
+              : 'mdi-filter-variant'
           }}
         </v-icon>
       </v-chip>
@@ -42,8 +42,8 @@
       <div v-show="isTailHidden" class="w4-5 f6 mb2">
         ... long tail of {{ tail.length }} single occurrences hidden
       </div>
-      <v-btn v-if="hasLongTail" @click="toggleTail" outlined>
-        {{ isTailHidden ? "Show all" : "Hide long tail" }}
+      <v-btn v-if="hasLongTail" outlined @click="toggleTail">
+        {{ isTailHidden ? 'Show all' : 'Hide long tail' }}
       </v-btn>
     </div>
   </div>
@@ -51,50 +51,51 @@
 
 <script>
 export default {
-  name: "FilterList",
-  data: function() {
+  name: 'FilterList',
+  props: {
+    filters: {
+      type: Array,
+      default: () => [],
+    },
+    activeFilters: {
+      type: Array,
+      default: () => [],
+    },
+    activeClass: {
+      type: String,
+      default: '',
+    },
+  },
+  data() {
     return {
       threshold: 30,
       isTailDesired: false,
-    };
-  },
-  props: {
-    filters: { 
-      type: Array,
-      default: () => [],
-    },
-    activeFilters: { 
-      type: Array,
-      default: () => [],
-    },
-    activeClass: { 
-      type: String, default: "" 
-    },
+    }
   },
   computed: {
     head() {
-      return this.filters.filter((filter) => filter.count > 1);
+      return this.filters.filter((filter) => filter.count > 1)
     },
     tail() {
-      return this.filters.filter((filter) => filter.count === 1);
+      return this.filters.filter((filter) => filter.count === 1)
     },
     hasLongTail() {
-      return this.tail.length > this.threshold;
+      return this.tail.length > this.threshold
     },
     isTailHidden() {
-      return this.hasLongTail && !this.isTailDesired;
+      return this.hasLongTail && !this.isTailDesired
     },
     filtersToDisplay() {
-      return this.isTailHidden ? this.head : this.filters;
+      return this.isTailHidden ? this.head : this.filters
     },
   },
   methods: {
     toggleTail() {
-      this.isTailDesired = !this.isTailDesired;
-      this.$emit("toggle-tail", this.isTailDesired);
+      this.isTailDesired = !this.isTailDesired
+      this.$emit('toggle-tail', this.isTailDesired)
     },
   },
-};
+}
 </script>
 <style scoped>
 .w4-5 {
