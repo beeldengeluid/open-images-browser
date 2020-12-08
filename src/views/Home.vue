@@ -1,6 +1,5 @@
 <template>
   <v-app id="app">
-    <TheNavBar v-if="!touchMode" />
     <v-main class="ma2 ma3-ns">
       <OpenImagesBrowser 
         :items="items" 
@@ -16,12 +15,10 @@
 
 <script>
 import dataItems from "@/assets/data/openbeelden-items-clean.json";
-import TheNavBar from "@/components/TheNavBar";
 import OpenImagesBrowser from "@/components/OpenImagesBrowser";
 
 export default {
   components: {
-    TheNavBar,
     OpenImagesBrowser,
   },
   data() {
