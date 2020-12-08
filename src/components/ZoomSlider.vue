@@ -34,11 +34,11 @@ export default {
     return {};
   },
   props: {
-    value: { type: Number },
+    value: { type: Number, default: 0 },
     min: { type: Number, default: 0 },
     max: { type: Number, default: 6 },
     step: { type: Number, default: 1 },
-    tickLabels: { type: Array },
+    tickLabels: { type: Array, default: () => [1, 2, 4, 8, 16, 32, 64] },
     color: { type: String, default: "orange" },
   },
   methods: {

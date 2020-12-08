@@ -39,9 +39,18 @@
 export default {
   name: "CollectionItemThumbnail",
   props: {
-    thumbSrc: String,
-    title: String,
-    year: String,
+    thumbSrc: {
+      type: String,
+      default: "",
+    },
+    title: {
+      type: String,
+      default: "unknown title",
+    },
+    year: {
+      type: String,
+      default: "unknown year",
+    },
     displayTitle: { type: Boolean, default: false },
     displayYear: { type: Boolean, default: false },
     displayThumb: { type: Boolean, default: true },

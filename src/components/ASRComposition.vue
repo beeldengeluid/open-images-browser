@@ -54,9 +54,11 @@ export default {
   props: {
     videoSrc: {
       type: String,
+      default: "",
     },
     thumbSrc: {
       type: String,
+      default: "",
     },
     asrSequences: {
       type: Array,

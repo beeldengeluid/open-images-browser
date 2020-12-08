@@ -21,10 +21,22 @@ export default {
     return {};
   },
   props: {
-    decadeIndex: { type: Number },
-    barSeries: { type: Object },
-    lineSeries: { type: Object },
-    colors: { type: Object },
+    decadeIndex: {
+      type: Number,
+      default: 0,
+    },
+    barSeries: {
+      type: Object,
+      default: () => ({}),
+    },
+    lineSeries: {
+      type: Object,
+      default: () => ({}),
+    },
+    colors: {
+      type: Object,
+      default: () => ({ bar: "#555", line: "#009688", background: "#121212" }),
+    },
   },
   mounted() {
     this.$refs.apexPeriodChart.toggleDataPointSelection(0, this.decadeIndex);
@@ -57,11 +69,12 @@ export default {
               if (config.dataPointIndex >= 0) {
                 if (config.dataPointIndex !== this.decadeIndex) {
                   this.$emit("decade-click", config.dataPointIndex);
-                }
-                else { 
+                } else {
                   // prevent deselecting selected bar for more consistent UX
-                  let bars = document.querySelectorAll('.apexcharts-series path')[config.dataPointIndex];
-                  bars.setAttribute('selected', true)
+                  let bars = document.querySelectorAll(
+                    ".apexcharts-series path"
+                  )[config.dataPointIndex];
+                  bars.setAttribute("selected", true);
                 }
               }
             },
