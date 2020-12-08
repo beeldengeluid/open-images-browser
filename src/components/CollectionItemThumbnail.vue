@@ -1,9 +1,9 @@
 <template>
-  <div @click="$emit('toggle-expanded')" class="bg-black pointer relative overflow-hidden">
-    <v-lazy
-      :options="{ threshold: 0.1 }"
-      transition="fade-transition"
-    >
+  <div
+    class="bg-black pointer relative overflow-hidden"
+    @click="$emit('toggle-expanded')"
+  >
+    <v-lazy :options="{ threshold: 0.1 }" transition="fade-transition">
       <v-hover>
         <div slot-scope="{ hover }">
           <img
@@ -37,25 +37,25 @@
 
 <script>
 export default {
-  name: "CollectionItemThumbnail",
+  name: 'CollectionItemThumbnail',
   props: {
     thumbSrc: {
       type: String,
-      default: "",
+      default: '',
     },
     title: {
       type: String,
-      default: "unknown title",
+      default: 'unknown title',
     },
     year: {
       type: String,
-      default: "unknown year",
+      default: 'unknown year',
     },
     displayTitle: { type: Boolean, default: false },
     displayYear: { type: Boolean, default: false },
     displayThumb: { type: Boolean, default: true },
   },
-};
+}
 </script>
 
 <style scoped>

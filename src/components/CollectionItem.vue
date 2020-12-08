@@ -6,49 +6,43 @@
   >
     <CollectionItemThumbnail
       v-if="!isExpanded"
-      @toggle-expanded="toggleExpanded"
-      :thumbSrc="item.thumbSrc"
+      :thumb-src="item.thumbSrc"
       :title="item.title"
       :year="year"
-      :displayTitle="displayTitle"
-      :displayYear="displayYear"
-      :displayThumb="displayThumb"
+      :display-title="displayTitle"
+      :display-year="displayYear"
+      :display-thumb="displayThumb"
+      @toggle-expanded="toggleExpanded"
     />
     <CollectionItemCard
       v-else
+      :item="item"
+      :year="year"
+      :video-max-width="videoMaxWidth"
+      :active-filters="activeFilters"
+      :filter-counts-for-selection="filterCountsForSelection"
+      :touch-mode="touchMode"
       @toggle-expanded="toggleExpanded"
       @toggle-active-filter="$emit('toggle-active-filter', $event)"
       @open-playlist="$emit('open-playlist')"
       @open-transcript="$emit('open-transcript')"
-      :item="item"
-      :year="year"
-      :videoMaxWidth="videoMaxWidth"
-      :activeFilters="activeFilters"
-      :filterCountsForSelection="filterCountsForSelection"
-      :touchMode="touchMode"
     />
   </div>
 </template>
 
 <script>
-import CollectionItemThumbnail from "./CollectionItemThumbnail";
-import CollectionItemCard from "./CollectionItemCard";
+import CollectionItemThumbnail from './CollectionItemThumbnail'
+import CollectionItemCard from './CollectionItemCard'
 export default {
-  name: "CollectionItem",
+  name: 'CollectionItem',
   components: {
     CollectionItemThumbnail,
     CollectionItemCard,
   },
-  data: function() {
-    return {
-      isExpanded: false,
-      videoMaxWidth: 320,
-    };
-  },
   props: {
     width: {
       type: String,
-      default: "50%",
+      default: '50%',
     },
     item: {
       type: Object,
@@ -79,17 +73,23 @@ export default {
       default: false,
     },
   },
+  data() {
+    return {
+      isExpanded: false,
+      videoMaxWidth: 320,
+    }
+  },
   computed: {
     year() {
-      return this.item.date.slice(0, 4);
+      return this.item.date.slice(0, 4)
     },
   },
   methods: {
-    toggleExpanded: function() {
-      this.isExpanded = !this.isExpanded;
+    toggleExpanded() {
+      this.isExpanded = !this.isExpanded
     },
   },
-};
+}
 </script>
 
 <style scoped>

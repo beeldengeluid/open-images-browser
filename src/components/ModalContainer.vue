@@ -11,23 +11,23 @@
 
 <script>
 export default {
-  methods: {
-    onModalCloseRequested() {
-      this.$emit("close-modal");
-    },
-  },
   mounted() {
-    this._keyListener = function(e) {
-      if (e.key === "Escape") {
-        this.onModalCloseRequested();
+    this._keyListener = function (e) {
+      if (e.key === 'Escape') {
+        this.onModalCloseRequested()
       }
-    };
-    document.addEventListener("keydown", this._keyListener.bind(this));
+    }
+    document.addEventListener('keydown', this._keyListener.bind(this))
   },
   beforeDestroy() {
-    document.removeEventListener("keydown", this._keyListener);
+    document.removeEventListener('keydown', this._keyListener)
   },
-};
+  methods: {
+    onModalCloseRequested() {
+      this.$emit('close-modal')
+    },
+  },
+}
 </script>
 
 <style scoped>

@@ -33,5 +33,5 @@ export default {
   props: {
     touchMode: { type: Boolean, default: false },
   },
-};
+}
 </script>

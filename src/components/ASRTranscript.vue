@@ -1,37 +1,37 @@
 <template>
   <div v-if="asrSequences.length" class="overflow-auto">
     <div
-      class="sequence flex font-mono"
       v-for="seq in asrSequences"
       :id="seq.sequenceNr"
       :key="seq.sequenceNr"
+      class="sequence flex font-mono"
       :data-start="seq.start"
       :class="currentSequence === seq.sequenceNr ? 'active' : ''"
-      @click="$emit('jumpToTimecode', seq.start/1000)"
+      @click="$emit('jumpToTimecode', seq.start / 1000)"
     >
-      <div class="start">{{ convertTimecodeToClockString(seq.start/1000)}}</div>
+      <div class="start">
+        {{ convertTimecodeToClockString(seq.start / 1000) }}
+      </div>
       <div class="words i measure">{{ seq.words }}</div>
       <div v-if="nerSequences.length" class="ner w4">
         <span
-          class="dib"
           v-for="(concept, index) in nerSequences[seq.sequenceNr].concepts"
           :key="index"
-        >{{concept}}</span>
+          class="dib"
+          >{{ concept }}</span
+        >
       </div>
     </div>
   </div>
   <div v-else>
-    <p class="i mt3">Sorry, no Automatic Speech Recognition transcript available ¯\_(ツ)_/¯</p>
+    <p class="i mt3">
+      Sorry, no Automatic Speech Recognition transcript available ¯\_(ツ)_/¯
+    </p>
   </div>
 </template>
 
 <script>
 export default {
-  data: function() {
-    return {
-      currentTime: 0
-    };
-  },
   props: {
     asrSequences: {
       type: Array,
@@ -42,41 +42,46 @@ export default {
       default: () => [],
     },
   },
+  data() {
+    return {
+      currentTime: 0,
+    }
+  },
   computed: {
-    currentSequence: function() {
+    currentSequence() {
       return this.asrSequences.reduce(
         (accumulator, currentValue, currentIndex) => {
           return this.currentTime >= currentValue.start / 1000
             ? currentIndex
-            : accumulator;
+            : accumulator
         },
         0
-      );
-    }
+      )
+    },
   },
   watch: {
-    currentSequence: function(newIndex) {
-      this.scrollTo(newIndex);
-    }
+    currentSequence(newIndex) {
+      this.scrollTo(newIndex)
+    },
   },
   methods: {
     setCurrentTime(tc) {
-      this.currentTime = tc;
+      this.currentTime = tc
     },
     convertTimecodeToClockString(tc) {
-      return this.padDigit(Math.floor(tc / 60)) + ":" + this.padDigit(tc % 60);
+      return this.padDigit(Math.floor(tc / 60)) + ':' + this.padDigit(tc % 60)
     },
     padDigit(digit) {
-      return ("0" + digit).slice(-2);
+      return ('0' + digit).slice(-2)
     },
     scrollTo(seqIndex) {
       document.getElementById(seqIndex).scrollIntoView({
-        behavior: "smooth",
-        block: "center"
-      });
+        behavior: 'smooth',
+        block: 'center',
+      })
     },
-  }
-};
+  },
+}
 </script>
 
 <style scoped>

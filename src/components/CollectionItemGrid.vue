@@ -5,12 +5,12 @@
       :key="item['id']"
       :width="100 / noThumbsPerRow + '%'"
       :item="item"
-      :displayTitle="displayTitle"
-      :displayYear="displayYear"
-      :displayThumb="displayThumb"
-      :activeFilters="activeFilters"
-      :filterCountsForSelection="filterCountsForSelection"
-      :touchMode="touchMode"
+      :display-title="displayTitle"
+      :display-year="displayYear"
+      :display-thumb="displayThumb"
+      :active-filters="activeFilters"
+      :filter-counts-for-selection="filterCountsForSelection"
+      :touch-mode="touchMode"
       @toggle-active-filter="$emit('toggle-active-filter', $event)"
       @open-playlist="$emit('open-playlist-at', index)"
       @open-transcript="$emit('open-transcript-at', index)"
@@ -19,9 +19,9 @@
 </template>
 
 <script>
-import CollectionItem from "./CollectionItem";
+import CollectionItem from './CollectionItem'
 export default {
-  name: "CollectionItemGrid",
+  name: 'CollectionItemGrid',
   components: {
     CollectionItem,
   },
@@ -32,7 +32,7 @@ export default {
     },
     noThumbsPerRow: {
       type: Number,
-      default: 8
+      default: 8,
     },
     displayFieldsSelected: {
       type: Array,
@@ -53,14 +53,14 @@ export default {
   },
   computed: {
     displayTitle() {
-      return this.displayFieldsSelected.includes("title");
+      return this.displayFieldsSelected.includes('title')
     },
     displayYear() {
-      return this.displayFieldsSelected.includes("year");
+      return this.displayFieldsSelected.includes('year')
     },
     displayThumb() {
-      return this.displayFieldsSelected.includes("thumb");
+      return this.displayFieldsSelected.includes('thumb')
     },
   },
-};
+}
 </script>

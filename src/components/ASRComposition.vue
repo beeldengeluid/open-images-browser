@@ -3,9 +3,9 @@
     <div>
       <ASREntities
         v-if="nerSequences.length"
-        class="ma2"
         ref="videoEntities"
-        :nerSequences="nerSequences"
+        class="ma2"
+        :ner-sequences="nerSequences"
         @jumpToTimecode="onJumpToTimecode"
       />
     </div>
@@ -14,8 +14,8 @@
         <h2>Video Player</h2>
         <VideoPlayer
           ref="videoPlayer"
-          :videoSrc="videoSrc"
-          :thumbSrc="thumbSrc"
+          :video-src="videoSrc"
+          :thumb-src="thumbSrc"
           @timeUpdate="onTimeUpdate"
         />
       </div>
@@ -28,11 +28,11 @@
           </span>
         </h2>
         <ASRTranscript
-          class="vh-50"
           ref="videoTranscript"
+          class="vh-50"
+          :asr-sequences="asrSequences"
+          :ner-sequences="nerSequences"
           @jumpToTimecode="onJumpToTimecode"
-          :asrSequences="asrSequences"
-          :nerSequences="nerSequences"
         />
       </div>
     </div>
@@ -40,25 +40,20 @@
 </template>
 
 <script>
-import VideoPlayer from "./VideoPlayer";
-import ASRTranscript from "./ASRTranscript";
-import ASREntities from "./ASREntities";
+import VideoPlayer from './VideoPlayer'
+import ASRTranscript from './ASRTranscript'
+import ASREntities from './ASREntities'
 
 export default {
   components: { VideoPlayer, ASRTranscript, ASREntities },
-  data: function() {
-    return {
-      currentTime: 0,
-    };
-  },
   props: {
     videoSrc: {
       type: String,
-      default: "",
+      default: '',
     },
     thumbSrc: {
       type: String,
-      default: "",
+      default: '',
     },
     asrSequences: {
       type: Array,
@@ -69,20 +64,25 @@ export default {
       default: () => [],
     },
   },
+  data() {
+    return {
+      currentTime: 0,
+    }
+  },
   methods: {
     onJumpToTimecode(tc) {
       // set videoPlayer CurrentTime to Timecode tc in seconds
-      this.$refs.videoPlayer.setCurrentTime(tc);
+      this.$refs.videoPlayer.setCurrentTime(tc)
     },
     onTimeUpdate(tc) {
-      this.$refs.videoTranscript.setCurrentTime(tc);
+      this.$refs.videoTranscript.setCurrentTime(tc)
       if (this.nerSequences.length) {
-        this.$refs.videoEntities.setCurrentTime(tc);
+        this.$refs.videoEntities.setCurrentTime(tc)
       }
     },
     pauseVideo() {
-      this.$refs.videoPlayer.pauseVideo();
+      this.$refs.videoPlayer.pauseVideo()
     },
   },
-};
+}
 </script>

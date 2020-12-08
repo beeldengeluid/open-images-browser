@@ -9,19 +9,23 @@
     </h2>
     <div class="flex flex-wrap">
       <div
-        class="flex flex-column font-mono"
         v-for="concept in concepts"
-        :id="'ner-'+concept.name"
+        :id="'ner-' + concept.name"
         :key="concept.name"
+        class="flex flex-column font-mono"
       >
         <div
-          class="entity concept dib"
           v-for="(start, index) in concept.starts"
           :key="concept.name + '-' + index"
+          class="entity concept dib"
           :data-start="start"
-          @click="$emit('jumpToTimecode', start/1000)"
-          :class="currentSequence === concept.sequenceNrs[index] ? 'active' : ''"
-        >{{concept.name}}</div>
+          :class="
+            currentSequence === concept.sequenceNrs[index] ? 'active' : ''
+          "
+          @click="$emit('jumpToTimecode', start / 1000)"
+        >
+          {{ concept.name }}
+        </div>
       </div>
     </div>
   </div>
@@ -29,57 +33,57 @@
 
 <script>
 export default {
-  name: "ASREntities",
-  data: function() {
-    return {
-      currentTime: 0
-    };
-  },
-  computed: {
-    concepts: function() {
-      var conceptsWithData = {};
-      for (let i = 0; i < this.nerSequences.length; i++) {
-        const seq = this.nerSequences[i];
-        let concepts = seq.concepts;
-        for (let j = 0; j < concepts.length; j++) {
-          const concept = concepts[j];
-          if (!conceptsWithData[concept]) {
-            conceptsWithData[concept] = {
-              name: concept,
-              starts: [seq.start],
-              sequenceNrs: [seq.sequenceNr]
-            };
-          } else {
-            conceptsWithData[concept].starts.push(seq.start);
-            conceptsWithData[concept].sequenceNrs.push(seq.sequenceNr);
-          }
-        }
-      }
-      return conceptsWithData;
-    },
-    currentSequence: function() {
-      return this.nerSequences.reduce(
-        (accumulator, currentValue, currentIndex) => {
-          return this.currentTime >= currentValue.start / 1000
-            ? currentIndex
-            : accumulator;
-        },
-        0
-      );
-    }
-  },
+  name: 'ASREntities',
   props: {
     nerSequences: {
       type: Array,
       default: () => [],
     },
   },
+  data() {
+    return {
+      currentTime: 0,
+    }
+  },
+  computed: {
+    concepts() {
+      const conceptsWithData = {}
+      for (let i = 0; i < this.nerSequences.length; i++) {
+        const seq = this.nerSequences[i]
+        const concepts = seq.concepts
+        for (let j = 0; j < concepts.length; j++) {
+          const concept = concepts[j]
+          if (!conceptsWithData[concept]) {
+            conceptsWithData[concept] = {
+              name: concept,
+              starts: [seq.start],
+              sequenceNrs: [seq.sequenceNr],
+            }
+          } else {
+            conceptsWithData[concept].starts.push(seq.start)
+            conceptsWithData[concept].sequenceNrs.push(seq.sequenceNr)
+          }
+        }
+      }
+      return conceptsWithData
+    },
+    currentSequence() {
+      return this.nerSequences.reduce(
+        (accumulator, currentValue, currentIndex) => {
+          return this.currentTime >= currentValue.start / 1000
+            ? currentIndex
+            : accumulator
+        },
+        0
+      )
+    },
+  },
   methods: {
     setCurrentTime(tc) {
-      this.currentTime = tc;
-    }
-  }
-};
+      this.currentTime = tc
+    },
+  },
+}
 </script>
 
 <style scoped>

@@ -7,18 +7,18 @@
       </h2>
       <div class="relative tc">
         <video
+          ref="playlistVideo"
           :src="currentItem.videoSrc"
           :poster="currentItem.thumbSrc"
           :autoplay="autoplayEnabled && isShown"
-          @playing="onVideoPlayChange"
-          @pause="onVideoPlayChange"
-          @ended="onVideoEnded"
-          ref="playlistVideo"
           controls
           :class="stretchVideo ? 'w-100' : ''"
           controlsList="nodownload nofullscreen noremoteplayback"
           disablePictureInPicture
           class="outline-0 mh-50vh db mh-auto w-100"
+          @playing="onVideoPlayChange"
+          @pause="onVideoPlayChange"
+          @ended="onVideoEnded"
         ></video>
 
         <!-- playback controls -->
@@ -31,7 +31,7 @@
           </v-btn>
           <v-btn class="mh2 pe-all" fab @click="toggleVideoPlay()">
             <v-icon>
-              {{ isPaused ? "mdi-play" : "mdi-pause" }}
+              {{ isPaused ? 'mdi-play' : 'mdi-pause' }}
             </v-icon>
           </v-btn>
           <v-btn class="mh2 pe-all" fab @click="nextVideo()">
@@ -68,7 +68,7 @@
             <span
               v-show="
                 index - 1 == currentItemIndexWindowed &&
-                  currentItemIndex < items.length - 3
+                currentItemIndex < items.length - 3
               "
               class="absolute"
             >
@@ -76,7 +76,6 @@
             </span>
           </div>
           <img
-            @click="setCurrentItemIndex(index + listWindowStart)"
             :src="item.thumbSrc"
             :alt="item.title"
             :title="item.title"
@@ -84,6 +83,7 @@
               index == currentItemIndexWindowed ? 'active-border-color' : ''
             "
             class="contain-height pointer hover-border-color mh-30vh"
+            @click="setCurrentItemIndex(index + listWindowStart)"
           />
           <div v-show="index == currentItemIndexWindowed" class="tc pv2">
             {{ `${currentItemIndex + 1} of ${items.length}` }}
@@ -101,16 +101,16 @@
       <!-- related playlists -->
       <VideoPlaylistPreview
         v-if="canCurrentItemLinkToMore('locations')"
-        :thumbItem="currentItem"
+        :thumb-item="currentItem"
+        :title="`More ${currentItem.locations[0]}`"
+        :class="isPaused ? 'opaque' : ''"
+        class="hover-opacity-semi"
         @preview-click="
           onPreviewClick({
             type: 'locations',
             value: currentItem.locations[0],
           })
         "
-        :title="`More ${currentItem.locations[0]}`"
-        :class="isPaused ? 'opaque' : ''"
-        class="hover-opacity-semi"
       >
         <h4 class="mb2 grey--text">
           More
@@ -123,16 +123,16 @@
 
       <VideoPlaylistPreview
         v-if="canCurrentItemLinkToMore('subjects')"
-        :thumbItem="currentItem"
+        :thumb-item="currentItem"
+        :title="`More ${currentItem.subjects[0]}`"
+        :class="isPaused ? 'opaque' : ''"
+        class="ma3 hover-opacity-semi"
         @preview-click="
           onPreviewClick({
             type: 'subjects',
             value: currentItem.subjects[0],
           })
         "
-        :title="`More ${currentItem.subjects[0]}`"
-        :class="isPaused ? 'opaque' : ''"
-        class="ma3 hover-opacity-semi"
       >
         <h4 class="mb2 grey--text">
           More
@@ -147,20 +147,11 @@
 </template>
 
 <script>
-import VideoPlaylistPreview from "./VideoPlaylistPreview";
+import VideoPlaylistPreview from './VideoPlaylistPreview'
 export default {
-  name: "VideoPlaylist",
+  name: 'VideoPlaylist',
   components: {
     VideoPlaylistPreview,
-  },
-  data: function() {
-    return {
-      videoElement: null,
-      currentItemIndex: 0,
-      isPaused: true,
-      listWindowLength: 7,
-      autoplayEnabled: false,
-    };
   },
   props: {
     items: {
@@ -185,105 +176,114 @@ export default {
     },
     color: {
       type: String,
-      default: "orange",
+      default: 'orange',
     },
+  },
+  data() {
+    return {
+      videoElement: null,
+      currentItemIndex: 0,
+      isPaused: true,
+      listWindowLength: 7,
+      autoplayEnabled: false,
+    }
   },
   computed: {
     currentItem() {
-      return this.items[this.currentItemIndex];
+      return this.items[this.currentItemIndex]
     },
     windowOffset() {
-      return Math.floor((this.listWindowLength - 1) / 2);
+      return Math.floor((this.listWindowLength - 1) / 2)
     },
     listWindowStart() {
       return Math.min(
         Math.max(0, this.currentItemIndex - this.windowOffset),
         Math.max(0, this.items.length - this.listWindowLength)
-      );
+      )
     },
     listWindowEnd() {
-      return this.listWindowStart + this.listWindowLength;
+      return this.listWindowStart + this.listWindowLength
     },
     itemsWindowed() {
-      return this.items.slice(this.listWindowStart, this.listWindowEnd);
+      return this.items.slice(this.listWindowStart, this.listWindowEnd)
     },
     currentItemIndexWindowed() {
-      return this.currentItemIndex - this.listWindowStart;
+      return this.currentItemIndex - this.listWindowStart
     },
+  },
+  mounted() {
+    this.videoElement = this.$refs.playlistVideo
+
+    this._keyListener = function (e) {
+      if (e.key === 'ArrowLeft') {
+        this.prevVideo()
+      }
+      if (e.key === 'ArrowRight') {
+        this.nextVideo()
+      }
+    }
+    document.addEventListener('keydown', this._keyListener.bind(this))
+  },
+  beforeDestroy() {
+    document.removeEventListener('keydown', this._keyListener)
   },
   methods: {
     onVideoPlayChange(event) {
-      this.isPaused = event.target.paused;
+      this.isPaused = event.target.paused
     },
     onVideoEnded() {
-      this.nextVideo();
+      this.nextVideo()
     },
     prevVideo() {
-      this.advanceVideo(-1);
+      this.advanceVideo(-1)
     },
     nextVideo() {
-      this.advanceVideo(1);
+      this.advanceVideo(1)
     },
     advanceVideo(amount) {
-      let newIndex = this.currentItemIndex + amount;
+      let newIndex = this.currentItemIndex + amount
       if (newIndex >= this.items.length) {
-        newIndex = 0;
+        newIndex = 0
       } else if (newIndex < 0) {
-        newIndex = this.items.length - 1;
+        newIndex = this.items.length - 1
       }
-      this.currentItemIndex = newIndex;
-      this.isPaused = true;
+      this.currentItemIndex = newIndex
+      this.isPaused = true
     },
     toggleVideoPlay() {
       if (this.videoElement.paused) {
-        this.videoElement.play();
+        this.videoElement.play()
       } else {
-        this.videoElement.pause();
+        this.videoElement.pause()
       }
     },
     pauseVideo() {
       if (!this.videoElement.paused) {
-        this.videoElement.pause();
+        this.videoElement.pause()
       }
     },
     setCurrentItemIndex(index) {
-      this.currentItemIndex = index;
+      this.currentItemIndex = index
     },
     dateToYear(date) {
-      return date.slice(0, 4);
+      return date.slice(0, 4)
     },
     onPreviewClick({ type, value }) {
-      this.currentItemIndex = 0;
-      this.$emit("preview-click", {
-        type: type,
-        value: value,
-      });
+      this.currentItemIndex = 0
+      this.$emit('preview-click', {
+        type,
+        value,
+      })
     },
     canCurrentItemLinkToMore(type) {
       return (
         this.currentItem[type].length &&
         this.filterCountsForSelection[type][this.currentItem[type][0]] > 1 &&
         this.activeFilters[type][0] !== this.currentItem[type][0]
-      );
+      )
     },
   },
-  mounted() {
-    this.videoElement = this.$refs.playlistVideo;
-
-    this._keyListener = function(e) {
-      if (e.key === "ArrowLeft") {
-        this.prevVideo();
-      }
-      if (e.key === "ArrowRight") {
-        this.nextVideo();
-      }
-    };
-    document.addEventListener("keydown", this._keyListener.bind(this));
-  },
-  beforeDestroy() {
-    document.removeEventListener("keydown", this._keyListener);
-  },
-};
+}
 </script>
 
 <style scoped>

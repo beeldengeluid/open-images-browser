@@ -1,14 +1,14 @@
 <template>
   <div>
-    <video 
-      width="100%" 
-      ref="video" 
-      @timeupdate="onTimeUpdate"
+    <video
+      ref="video"
+      width="100%"
       :poster="thumbSrc"
-      controls 
+      controls
       controlsList="nodownload noremoteplayback"
       disablePictureInPicture
       class="outline-0 bg-black"
+      @timeupdate="onTimeUpdate"
     >
       <source :src="videoSrc" type="video/mp4" />
       Your browser doesn't support the video element.
@@ -18,38 +18,38 @@
 
 <script>
 export default {
-  name: "VideoPlayer",
-  data: function() {
+  name: 'VideoPlayer',
+  props: {
+    videoSrc: {
+      type: String,
+      default: '',
+    },
+    thumbSrc: {
+      type: String,
+      default: '',
+    },
+  },
+  data() {
     return {
       currentTime: 0,
-    };
-  },
-  props: {
-    videoSrc: { 
-      type: String,
-      default: "",
-    },
-    thumbSrc: { 
-      type: String,
-      default: "",
-    },
+    }
   },
   methods: {
     onTimeUpdate() {
-      this.currentTime = this.$refs.video.currentTime;
-      this.$emit("timeUpdate", this.$refs.video.currentTime);
+      this.currentTime = this.$refs.video.currentTime
+      this.$emit('timeUpdate', this.$refs.video.currentTime)
     },
     getCurrentTime() {
-      this.currentTime = this.$refs.video.currentTime;
+      this.currentTime = this.$refs.video.currentTime
     },
     setCurrentTime(tc) {
-      this.$refs.video.currentTime = tc;
+      this.$refs.video.currentTime = tc
     },
     pauseVideo() {
       if (!this.$refs.video.paused) {
-        this.$refs.video.pause();
-      } 
+        this.$refs.video.pause()
+      }
     },
   },
-};
+}
 </script>
