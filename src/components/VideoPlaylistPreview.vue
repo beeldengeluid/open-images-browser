@@ -26,7 +26,10 @@
 export default {
   name: "VideoPlaylistPreview",
   props: {
-    thumbItem: Object,
+    thumbItem: {
+      type: Object,
+      default: () => ({}),
+    },
   },
   computed: {},
   methods: {},

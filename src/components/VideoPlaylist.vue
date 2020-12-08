@@ -163,12 +163,30 @@ export default {
     };
   },
   props: {
-    items: Array,
-    filterCountsForSelection: Object,
-    activeFilters: Object,
-    stretchVideo: { type: Boolean, default: false },
-    isShown: { type: Boolean, default: false },
-    color: { type: String, default: "orange" },
+    items: {
+      type: Array,
+      default: () => [],
+    },
+    filterCountsForSelection: {
+      type: Object,
+      default: () => ({ locations: {}, subjects: {} }),
+    },
+    activeFilters: {
+      type: Object,
+      default: () => ({ locations: [], subjects: [] }),
+    },
+    stretchVideo: {
+      type: Boolean,
+      default: false,
+    },
+    isShown: {
+      type: Boolean,
+      default: false,
+    },
+    color: {
+      type: String,
+      default: "orange",
+    },
   },
   computed: {
     currentItem() {

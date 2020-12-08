@@ -59,9 +59,17 @@ export default {
     };
   },
   props: {
-    filters: { type: Array },
-    activeFilters: { type: Array },
-    activeClass: { type: String, default: "" },
+    filters: { 
+      type: Array,
+      default: () => [],
+    },
+    activeFilters: { 
+      type: Array,
+      default: () => [],
+    },
+    activeClass: { 
+      type: String, default: "" 
+    },
   },
   computed: {
     head() {

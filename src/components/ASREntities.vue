@@ -70,7 +70,8 @@ export default {
   },
   props: {
     nerSequences: {
-      type: Array
+      type: Array,
+      default: () => [],
     },
   },
   methods: {

@@ -142,11 +142,26 @@ export default {
     };
   },
   props: {
-    item: Object,
-    year: String,
-    videoMaxWidth: Number,
-    activeFilters: Object,
-    filterCountsForSelection: Object,
+    item: {
+      type: Object,
+      default: () => ({}),
+    },
+    year: {
+      type: String,
+      default: "unknown year",
+    },
+    videoMaxWidth: {
+      type: Number,
+      default: 320,
+    },
+    activeFilters: {
+      type: Object,
+      default: () => ({}),
+    },
+    filterCountsForSelection: {
+      type: Object,
+      default: () => ({}),
+    },
     touchMode: {
       type: Boolean,
       default: false,
