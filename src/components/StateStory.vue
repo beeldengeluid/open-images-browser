@@ -8,7 +8,7 @@
     <span
       v-if="
         state.activeFilters['locations'].length ||
-          state.activeFilters['subjects'].length
+        state.activeFilters['subjects'].length
       "
     >
       <br />
@@ -68,10 +68,7 @@
 
 <script>
 export default {
-  name: "StateStory",
-  data: function() {
-    return {};
-  },
+  name: 'StateStory',
   props: {
     state: {
       type: Object,
@@ -80,11 +77,14 @@ export default {
     computed: {
       type: Object,
       default: () => ({
-        selectedDecade: "1970s",
+        selectedDecade: '1970s',
         activeLength: 511,
         totalLength: 3489,
       }),
     },
   },
-};
+  data() {
+    return {}
+  },
+}
 </script>

@@ -3,7 +3,6 @@
     <v-slider
       label="Items per row"
       :value="value"
-      @input="$emit('input', $event)"
       :min="min"
       :max="max"
       :step="step"
@@ -12,6 +11,7 @@
       :tick-labels="tickLabels"
       :color="color"
       hide-details
+      @input="$emit('input', $event)"
     >
       <template v-slot:prepend>
         <v-btn icon @click="$emit('input', value - 1)">
@@ -29,24 +29,24 @@
 
 <script>
 export default {
-  name: "ZoomSlider",
-  data: function() {
-    return {};
-  },
+  name: 'ZoomSlider',
   props: {
     value: { type: Number, default: 0 },
     min: { type: Number, default: 0 },
     max: { type: Number, default: 6 },
     step: { type: Number, default: 1 },
     tickLabels: { type: Array, default: () => [1, 2, 4, 8, 16, 32, 64] },
-    color: { type: String, default: "orange" },
+    color: { type: String, default: 'orange' },
+  },
+  data() {
+    return {}
   },
   methods: {
     increment(amount) {
-      this.$emit("increment-zoom", amount);
+      this.$emit('increment-zoom', amount)
     },
   },
-};
+}
 </script>
 
 <style>
