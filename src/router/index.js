@@ -29,7 +29,6 @@ const router = new VueRouter({
   },
   stringifyQuery(query) {
     var result = qs.stringify(query);
-
     return result ? "?" + result : "";
   },
 });
