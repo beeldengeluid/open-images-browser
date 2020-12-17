@@ -186,7 +186,11 @@
       <span v-html="snackbar.markup"></span>
     </v-snackbar>
 
-    <ModalContainer v-show="state.showPlaylist" @close-modal="closePlaylist">
+    <ModalContainer
+      v-if="itemsFilteredSorted.length"
+      v-show="state.showPlaylist"
+      @close-modal="closePlaylist"
+    >
       <VideoPlaylist
         ref="videoPlaylist"
         :items="itemsFilteredSorted"
