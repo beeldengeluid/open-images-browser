@@ -410,23 +410,27 @@ export default {
     },
   },
   watch: {
+    state: {
+      deep: true,
+      handler(newValue) {
+        this.$router.push({
+          query: Object.assign({}, this.$route.query, {
+            ...newValue,
+          }),
+        })
+      },
+    },
     'state.sortBy'(newValue) {
       this.showSnackbar(
         `${
           this.state.sortAscending ? '☝️' : '👇'
         } Sorting by <strong>${newValue}</strong>`
       )
-      this.$router.push({
-        query: Object.assign({}, this.$route.query, { sortBy: newValue }),
-      })
     },
     'state.decadeIndex'(newValue) {
       this.showSnackbar(
         `✅ Selected <strong>${this.decades[newValue].name}</strong> decade`
       )
-      this.$router.push({
-        query: Object.assign({}, this.$route.query, { decadeIndex: newValue }),
-      })
     },
     'state.sortAscending'(newValue) {
       this.showSnackbar(
@@ -434,11 +438,6 @@ export default {
           newValue ? 'ascending' : 'descending'
         }</strong> order`
       )
-      this.$router.push({
-        query: Object.assign({}, this.$route.query, {
-          sortAscending: newValue,
-        }),
-      })
     },
     'state.activeFilters.locations'(newValue, oldValue) {
       this.handleFilterUpdate(newValue, oldValue, 'locations')
@@ -456,11 +455,6 @@ export default {
           this.showSnackbar(`🙈 Not displaying <strong>${removed[0]}</strong>`)
         }
       }
-      this.$router.push({
-        query: Object.assign({}, this.$route.query, {
-          displayFieldsSelected: newValue,
-        }),
-      })
     },
   },
   created() {
@@ -676,29 +670,6 @@ export default {
           )
         }
       }
-
-      this.$router
-        .push({
-          query: Object.assign({}, this.$route.query, {
-            activeFilters: {
-              ...this.state.activeFilters,
-              [filterType]: newValue,
-            },
-          }),
-        })
-        .catch((err) => {
-          // Ignore the vuex err regarding  navigating to the page they are already on.
-          if (
-            err.name !== 'NavigationDuplicated' &&
-            !err.message.includes(
-              'Avoided redundant navigation to current location'
-            )
-          ) {
-            // But print any other errors to the console
-            // eslint-disable-next-line
-            console.error(err);
-          }
-        })
     },
   },
 }
