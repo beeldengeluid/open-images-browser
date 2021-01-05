@@ -458,6 +458,10 @@ export default {
     },
   },
   created() {
+    // load random selection
+    this.randomizeSelection()
+
+    // set State from query params if present
     const queryParams = _.assignWith(
       this.state,
       this.$route.query,
