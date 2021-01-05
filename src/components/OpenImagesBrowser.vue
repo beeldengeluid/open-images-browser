@@ -303,26 +303,26 @@ export default {
   },
   computed: {
     itemsPerDecade() {
-      return _.groupBy(this.items, (i) => this.dateToDecade(i.date))
+      return _.groupBy(this.items, i => this.dateToDecade(i.date))
     },
     noThumbsPerRow() {
       return Math.pow(2, this.zoom.value)
     },
     zoomLabels() {
-      return _.range(this.zoom.max + 1).map((value) => Math.pow(2, value))
+      return _.range(this.zoom.max + 1).map(value => Math.pow(2, value))
     },
     itemsFiltered() {
       return this.itemsPerDecade[
         this.decades[this.state.decadeIndex].name
-      ].filter((i) =>
-        this.filterFields.every((filterField) =>
+      ].filter(i =>
+        this.filterFields.every(filterField =>
           this.filterByFilterField(filterField, i)
         )
       )
     },
     itemsFilteredAllDecades() {
-      return this.items.filter((i) =>
-        this.filterFields.every((filterField) =>
+      return this.items.filter(i =>
+        this.filterFields.every(filterField =>
           this.filterByFilterField(filterField, i)
         )
       )
@@ -342,10 +342,10 @@ export default {
       return this.decades[this.state.decadeIndex].name
     },
     yearMin() {
-      return Math.min(...this.items.map((i) => i.date.slice(0, 4)))
+      return Math.min(...this.items.map(i => i.date.slice(0, 4)))
     },
     yearMax() {
-      return Math.max(...this.items.map((i) => i.date.slice(0, 4)))
+      return Math.max(...this.items.map(i => i.date.slice(0, 4)))
     },
     decadeMin() {
       return Math.floor(this.yearMin / 10) * 10
@@ -355,12 +355,12 @@ export default {
     },
     filterCountsForSelection() {
       const getCounts = (items, fieldName) => {
-        const names = _.flatMap(items, (i) => i[fieldName])
+        const names = _.flatMap(items, i => i[fieldName])
         return _.countBy(names)
       }
 
       const filterCounts = {}
-      this.filterFields.forEach((filterField) => {
+      this.filterFields.forEach(filterField => {
         filterCounts[filterField] = getCounts(
           this.itemsFilteredSorted,
           filterField
@@ -369,7 +369,7 @@ export default {
       return filterCounts
     },
     filtersForSelection() {
-      const getFiltersOrdered = (filterCounts) => {
+      const getFiltersOrdered = filterCounts => {
         const filtersForSelection = this.objectToCollection(
           filterCounts,
           'name',
@@ -486,7 +486,7 @@ export default {
   },
   methods: {
     objectToCollection(countsObject, keyForKey, keyForValue) {
-      return Object.keys(countsObject).map((k) => {
+      return Object.keys(countsObject).map(k => {
         return {
           [keyForKey]: k,
           [keyForValue]: countsObject[k],
@@ -519,7 +519,7 @@ export default {
     removeActiveFilter(filterType, filterValue) {
       this.state.activeFilters[filterType] = this.state.activeFilters[
         filterType
-      ].filter((lf) => lf !== filterValue)
+      ].filter(lf => lf !== filterValue)
     },
     filterByYear(item) {
       return (
@@ -529,7 +529,7 @@ export default {
     },
     filterByFilterField(FilterField, item) {
       return (
-        this.state.activeFilters[FilterField].every((lf) =>
+        this.state.activeFilters[FilterField].every(lf =>
           item[FilterField].includes(lf)
         ) || !this.state.activeFilters[FilterField].length
       )
@@ -540,10 +540,10 @@ export default {
     },
     getDecadeCounts(items, decadeMin, decadeMax) {
       // get decades present in data
-      const decadesPresent = _.countBy(items, (i) => this.dateToDecade(i.date))
+      const decadesPresent = _.countBy(items, i => this.dateToDecade(i.date))
 
       // add intermediary decades
-      _.range(decadeMin, decadeMax + 10, 10).map((d) => {
+      _.range(decadeMin, decadeMax + 10, 10).map(d => {
         const decade = d + 's'
         if (!Object.keys(decadesPresent).includes(decade)) {
           decadesPresent[decade] = 0
@@ -554,7 +554,7 @@ export default {
       const decadesSorted = {}
       Object.keys(decadesPresent)
         .sort()
-        .forEach(function (key) {
+        .forEach(function(key) {
           decadesSorted[key] = decadesPresent[key]
         })
 
@@ -594,14 +594,14 @@ export default {
     },
     randomizeDecade() {
       const decadeIndicesAvailable = _.range(_.size(this.decades)).filter(
-        (index) =>
+        index =>
           this.decades[index].count > 0 && index !== this.state.decadeIndex
       )
       this.state.decadeIndex = this.randomItemFromArray(decadeIndicesAvailable)
     },
     randomizeFilter(filterType) {
       const filtersAvailable = this.filtersForSelection[filterType].filter(
-        (filter) => filter.count > 1
+        filter => filter.count > 1
       )
       if (filtersAvailable.length) {
         const randomFilter = this.randomItemFromArray(filtersAvailable).name
