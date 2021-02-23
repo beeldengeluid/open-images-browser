@@ -10,7 +10,7 @@
     "build-storybook": "build-storybook -o docs"
   },
   "dependencies": {
-    "apexcharts": "^3.20.0",
+    "apexcharts": "^3.24.0",
     "core-js": "^3.6.5",
     "lodash": "^4.17.20",
     "qs": "^6.9.4",
