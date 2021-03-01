@@ -2,7 +2,7 @@
 
 ### Live demo
 
-[mediascape.now.sh](https://mediascape.now.sh/)
+[https://open-images-browser.vercel.app](https://open-images-browser.vercel.app)
 
 ### Component documentation
 
