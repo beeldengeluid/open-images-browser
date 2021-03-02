@@ -2,11 +2,11 @@
 
 ### Live demo
 
-[mediascape.now.sh](https://mediascape.now.sh/)
+[https://open-images-browser.vercel.app](https://open-images-browser.vercel.app)
 
 ### Component documentation
 
-[![Storybook](https://cdn.jsdelivr.net/gh/storybookjs/brand@master/badge/badge-storybook.svg)](https://beeldengeluid.github.io/MediaScape)
+[![Storybook](https://cdn.jsdelivr.net/gh/storybookjs/brand@master/badge/badge-storybook.svg)](https://beeldengeluid.github.io/open-images-browser/)
 
 ### About
 
