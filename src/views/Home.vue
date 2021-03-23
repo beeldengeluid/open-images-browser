@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import axios from "axios";
+// import axios from "axios";
 import dataItems from "@/assets/data/openbeelden-items-clean.json";
 import OpenImagesBrowser from "@/components/OpenImagesBrowser";
 export default {
@@ -36,27 +36,28 @@ export default {
       },
     };
   },
-  created () {
-    /*eslint-disable*/
-    let axiosConfig = {
-      url: "/api/open-beelden-beeldengeluid",
-      method: "post",
-      data: {
-        query: {
-          match_all: {},
-        },
-        size: 77,
-      },
-    };
+  // TODO: fetch data from Search API via serverless function
+  // created () {
+  //   /*eslint-disable*/
+  //   let axiosConfig = {
+  //     url: "/api/open-beelden-beeldengeluid",
+  //     method: "post",
+  //     data: {
+  //       query: {
+  //         match_all: {},
+  //       },
+  //       size: 77,
+  //     },
+  //   };
 
-    axios(axiosConfig)
-      .then((response) => {
-        // JSON responses are automatically parsed.
-        console.log(response.data);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  },
+  //   axios(axiosConfig)
+  //     .then((response) => {
+  //       // JSON responses are automatically parsed.
+  //       console.log(response.data);
+  //     })
+  //     .catch((e) => {
+  //       console.log(e);
+  //     });
+  // },
 };
 </script>
