@@ -66,6 +66,12 @@ the project is deployed via [Vercel](https://vercel.com/)'s git integration. A p
 
 ## Data
 
+### Via API
+
+To load Open Beelden data via the NISV Search API, contact us to acquire secret API credentials and fill them into an `.env.local` file (see `.env.local.example`).
+
+### Via static data exports
+
 The `src/assets/data/` directory contains sample data from the public [Open Beelden](https://openbeelden.nl/) collection, acquired from the ElasticSearch API via the (internal) [labs notebooks](https://github.com/beeldengeluid/labs-notebooks):
 
 - `openbeelden-item.json`: example item pretty printed for manual inspection
