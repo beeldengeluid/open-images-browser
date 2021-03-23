@@ -10,7 +10,7 @@
     "build-storybook": "build-storybook -o docs"
   },
   "dependencies": {
-    "apexcharts": "^3.20.0",
+    "apexcharts": "^3.24.0",
     "axios": "^0.20.0",
     "core-js": "^3.6.5",
     "lodash": "^4.17.20",
@@ -24,13 +24,13 @@
   "devDependencies": {
     "@babel/preset-react": "^7.10.4",
     "@mdi/font": "^4.5.95",
-    "@storybook/addon-a11y": "^5.3.21",
-    "@storybook/addon-actions": "^5.3.21",
-    "@storybook/addon-knobs": "^5.3.21",
+    "@storybook/addon-a11y": "^6.1.19",
+    "@storybook/addon-actions": "^6.1.19",
+    "@storybook/addon-knobs": "^6.1.19",
     "@storybook/addon-notes": "^5.3.21",
-    "@storybook/addon-viewport": "^5.3.21",
-    "@storybook/addons": "^5.3.21",
-    "@storybook/vue": "^5.3.21",
+    "@storybook/addon-viewport": "^6.1.19",
+    "@storybook/addons": "^6.1.19",
+    "@storybook/vue": "^6.1.19",
     "@vue/cli-plugin-babel": "^4.5.4",
     "@vue/cli-plugin-eslint": "^4.5.4",
     "@vue/cli-plugin-router": "^4.5.4",
@@ -47,7 +47,7 @@
     "tachyons": "^4.12.0",
     "vue-cli-plugin-vuetify": "^2.0.7",
     "vue-cli-plugin-vuetify-storybook": "~0.2.0",
-    "vue-storybook": "^1.1.0",
+    "vue-storybook": "^1.2.0",
     "vue-template-compiler": "^2.6.12",
     "vuetify-loader": "^1.6.0"
   },

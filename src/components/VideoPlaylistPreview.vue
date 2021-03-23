@@ -1,10 +1,7 @@
 <template>
   <div>
     <slot></slot>
-    <div
-      @click="$emit('preview-click')"
-      class="pointer hover-border-color"
-    >
+    <div class="pointer hover-border-color" @click="$emit('preview-click')">
       <div class="relative mr4 mb4">
         <img
           :src="thumbItem.thumbSrc"
@@ -24,13 +21,16 @@
 
 <script>
 export default {
-  name: "VideoPlaylistPreview",
+  name: 'VideoPlaylistPreview',
   props: {
-    thumbItem: Object,
+    thumbItem: {
+      type: Object,
+      default: () => ({}),
+    },
   },
   computed: {},
   methods: {},
-};
+}
 </script>
 
 <style scoped></style>

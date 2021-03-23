@@ -1,51 +1,53 @@
 <template>
   <div
-    :style="[!isExpanded ? { width: width, height: height } : {}]"
+    :style="[!isExpanded ? { width: width } : {}]"
     :class="{ 'is-expanded': isExpanded }"
-    class="collection-item relative mr1 mb1 shadow-2 overflow-hidden"
+    class="collection-item relative pa1 shadow-2 overflow-hidden"
   >
     <CollectionItemThumbnail
       v-if="!isExpanded"
-      v-on:toggle-expanded="toggleExpanded"
-      :thumbSrc="item.thumbSrc"
+      :thumb-src="item.thumbSrc"
       :title="item.title"
       :year="year"
-      :displayTitle="displayTitle"
-      :displayYear="displayYear"
-      :displayThumb="displayThumb"
+      :display-title="displayTitle"
+      :display-year="displayYear"
+      :display-thumb="displayThumb"
+      @toggle-expanded="toggleExpanded"
     />
     <CollectionItemCard
       v-else
-      v-on:toggle-expanded="toggleExpanded"
-      v-on:toggle-active-filter="$emit('toggle-active-filter', $event)"
       :item="item"
       :year="year"
-      :videoMaxWidth="videoMaxWidth"
-      :activeFilters="activeFilters"
-      :filterCountsForSelection="filterCountsForSelection"
+      :video-max-width="videoMaxWidth"
+      :active-filters="activeFilters"
+      :filter-counts-for-selection="filterCountsForSelection"
+      :touch-mode="touchMode"
+      @toggle-expanded="toggleExpanded"
+      @toggle-active-filter="$emit('toggle-active-filter', $event)"
+      @open-playlist="$emit('open-playlist')"
+      @open-transcript="$emit('open-transcript')"
     />
   </div>
 </template>
 
 <script>
-import CollectionItemThumbnail from "./CollectionItemThumbnail";
-import CollectionItemCard from "./CollectionItemCard";
+import CollectionItemThumbnail from './CollectionItemThumbnail'
+import CollectionItemCard from './CollectionItemCard'
 export default {
-  name: "CollectionItem",
+  name: 'CollectionItem',
   components: {
     CollectionItemThumbnail,
     CollectionItemCard,
   },
-  data: function() {
-    return {
-      isExpanded: false,
-      videoMaxWidth: 320,
-    };
-  },
   props: {
-    width: String,
-    height: String,
-    item: Object,
+    width: {
+      type: String,
+      default: '50%',
+    },
+    item: {
+      type: Object,
+      default: () => ({}),
+    },
     displayTitle: {
       type: Boolean,
       default: false,
@@ -58,20 +60,36 @@ export default {
       type: Boolean,
       default: true,
     },
-    activeFilters: Object,
-    filterCountsForSelection: Object,
+    activeFilters: {
+      type: Object,
+      default: () => ({}),
+    },
+    filterCountsForSelection: {
+      type: Object,
+      default: () => ({}),
+    },
+    touchMode: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  data() {
+    return {
+      isExpanded: false,
+      videoMaxWidth: 320,
+    }
   },
   computed: {
     year() {
-      return this.item.date.slice(0, 4);
+      return this.item.date.slice(0, 4)
     },
   },
   methods: {
-    toggleExpanded: function() {
-      this.isExpanded = !this.isExpanded;
+    toggleExpanded() {
+      this.isExpanded = !this.isExpanded
     },
   },
-};
+}
 </script>
 
 <style scoped>

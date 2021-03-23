@@ -3,6 +3,12 @@
   --primary-color: #5e35b1;
   --primary-accent-color: #7e57c2;
   --secondary-color: #009688;
+  /* VideoTranscript */
+  --active-bg-color: yellow;
+  --active-text-color: black;
+  --highlight-bg-color: rgba(255, 255, 0, 0.5);
+  --entity-concept-bg-color: #CDECFF;
+  --entity-concept-text-color: #00449E;
 }
 
 @import url("https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@200;400;700&display=swap");
@@ -34,8 +40,10 @@ a {
   background-color: var(--primary-accent-color);
 }
 
-.dflex {
-  display: flex;
+.flex {
+  /* set flex to initial so tachyons' .flex class works as expected, 
+     uninterrupted by Vuetify's styles */
+  flex: initial;
 }
 
 .theme--dark.v-label {

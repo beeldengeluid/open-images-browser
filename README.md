@@ -2,11 +2,11 @@
 
 ### Live demo
 
-[mediascape.now.sh](https://mediascape.now.sh/)
+[https://open-images-browser.vercel.app](https://open-images-browser.vercel.app)
 
 ### Component documentation
 
-[![Storybook](https://cdn.jsdelivr.net/gh/storybookjs/brand@master/badge/badge-storybook.svg)](https://beeldengeluid.github.io/MediaScape)
+[![Storybook](https://cdn.jsdelivr.net/gh/storybookjs/brand@master/badge/badge-storybook.svg)](https://beeldengeluid.github.io/open-images-browser/)
 
 ### About
 
@@ -62,9 +62,7 @@ build Storybook as static site to `/docs` directory (auto deployed via GitHub Pa
 
     npm run build-storybook
 
-## Deployment
-
-The project is being deployed via the [Vercel for GitHub integration](https://vercel.com/docs/git-integrations/vercel-for-github), by pushing changes to any branch. Pushes to the main branch trigger a production deploy.
+the project is deployed via [Vercel](https://vercel.com/)'s git integration. A push to master triggers a production deploy. A push to any other branch triggers a deployment preview on a unique URL.
 
 ## Data
 

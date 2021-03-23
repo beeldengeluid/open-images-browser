@@ -1,18 +1,14 @@
 <template>
-  <div>
-    The current selection, ranging from
+  <p>
+    The current selection, spanning the
     <span class="ph1 bg-primary-accent white--text font-mono">{{
-      computed.selectedYearRange[0]
-    }}</span>
-    to
-    <span class="ph1 bg-primary-accent white--text font-mono">{{
-      computed.selectedYearRange[1]
+      computed.selectedDecade
     }}</span
     >,
     <span
       v-if="
         state.activeFilters['locations'].length ||
-          state.activeFilters['subjects'].length
+        state.activeFilters['subjects'].length
       "
     >
       <br />
@@ -23,7 +19,6 @@
           :key="location"
           :value="location"
           label
-          small
           class="ml1 teal white--text font-mono"
           @click="
             $emit('toggle-active-filter', {
@@ -43,7 +38,6 @@
           :key="subject"
           :value="subject"
           label
-          small
           class="ml1 teal white--text font-mono"
           @click="
             $emit('toggle-active-filter', {
@@ -61,7 +55,7 @@
     </span>
     <br />
     contains
-    <span class="ph1 white black--text f3 fw5 font-mono">{{
+    <span class="ph1 white black--text font-mono">{{
       computed.activeLength
     }}</span>
     out of
@@ -69,22 +63,28 @@
       computed.totalLength
     }}</span>
     videos.
-  </div>
+  </p>
 </template>
 
 <script>
 export default {
-  name: "StateStory",
-  data: function() {
-    return {};
-  },
+  name: 'StateStory',
   props: {
     state: {
       type: Object,
+      default: () => ({ activeFilters: { locations: [], subjects: [] } }),
     },
     computed: {
       type: Object,
+      default: () => ({
+        selectedDecade: '1970s',
+        activeLength: 511,
+        totalLength: 3489,
+      }),
     },
   },
-};
+  data() {
+    return {}
+  },
+}
 </script>
