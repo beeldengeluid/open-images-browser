@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "apexcharts": "^3.24.0",
-    "axios": "^0.20.0",
+    "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "lodash": "^4.17.21",
     "qs": "^6.9.4",
