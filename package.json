@@ -20,7 +20,7 @@
     "vue-apexcharts": "^1.6.2",
     "vue-backtotop": "^1.6.1",
     "vue-router": "^3.5.4",
-    "vuetify": "^2.6.7"
+    "vuetify": "^2.6.10"
   },
   "devDependencies": {
     "@babel/preset-react": "^7.18.6",
